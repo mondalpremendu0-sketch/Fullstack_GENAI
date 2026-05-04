@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-
+const blackListModel = require('../model/blacklist.model.js')
 const AppError = require('../utils/error.utils.js')
 
 
@@ -11,6 +11,10 @@ const isLogedIn = async (req,res,next) => {
     //console.log(req.body);
     if (!token) {
       return next(new AppError("Unauthorised!!",401))
+    }
+    const isBlackListToken = await blackListModel.findOne({token})
+    if (isBlackListToken) {
+      return next(new AppError("Token is blacklisted",401))
     }
     
     const decode = await jwt.verify(token,process.env.JWT_SERECT);

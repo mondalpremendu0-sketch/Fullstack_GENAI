@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const cookie = require('cookie-parser');
 const authModel = require('../model/auth.model.js');
+const blackListModel = require('../model/blacklist.model.js')
 const AppError = require('../utils/error.utils.js')
 
 
@@ -112,7 +113,10 @@ async function getMe_controller(req,res,next) {
 }
 
 async function logout_controller(req,res,next) {
-  
+  const token = req.cookies.token;
+  if (token) {
+     await blackListModel.create({token})
+  }
   res.clearCookie("token",undefined);
   res.status(200).json({
     success:true,
