@@ -87,7 +87,9 @@ async function login_controller(req,res,next) {
 }
 
 async function getMe_controller(req,res,next) {
-  
+  if (!req.user) {
+    return next(new AppError("Unauthorised!!",400))
+  }
   const userId = req.user.id;
   
   if (!userId) {
@@ -109,9 +111,19 @@ async function getMe_controller(req,res,next) {
   });
 }
 
+async function logout_controller(req,res,next) {
+  
+  res.clearCookie("token",undefined);
+  res.status(200).json({
+    success:true,
+    message:"logout Successfully",
+    });
+}
+
 module.exports = {
   register_controller,
   login_controller,
-  getMe_controller
+  getMe_controller,
+  logout_controller
 }
 
