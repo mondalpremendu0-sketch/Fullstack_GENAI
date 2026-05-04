@@ -3,22 +3,23 @@ const mongoose = require('mongoose');
 const authSchema = mongoose.Schema({
   firstname:{
     type:String,
-    unique: true,
-    required: true
+    required: [true,"First name is required"]
   },
   lastname:{
     type:String,
-    unique: true,
-    required: true
+    required: [true,"Last name is required"]
   },
   email:{
     type:String,
-    unique: true,
-    required: true
+    unique: [true,"This email is already taken"],
+    required: [true,"Email is required"],
+    match:[/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,"Email is invaild"]
   },
   password:{
     type:String,
-    required: true
+    select:false,
+    required: [true,"Password is required"],
+    minLength:[6,"Password atleast 6 charector"]
   },
 },{timestamps:true});
 

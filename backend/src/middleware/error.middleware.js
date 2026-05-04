@@ -1,4 +1,4 @@
-export default function errMiddleware (err,req,res,next){
+ function errMiddleware (err,req,res,next){
   
   err.statusCode = err.statusCode || 500;
   err.message = err.message || "Something went wrong";
@@ -9,3 +9,5 @@ export default function errMiddleware (err,req,res,next){
     stack:err.stack
   });
 }
+
+module.exports = errMiddleware;
