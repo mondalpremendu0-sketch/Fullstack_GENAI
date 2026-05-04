@@ -86,15 +86,32 @@ async function login_controller(req,res,next) {
   }
 }
 
-const getMe = async (req,res,next) =>{
+async function getMe_controller(req,res,next) {
+  
+  const userId = req.user.id;
+  
+  if (!userId) {
+    return next(new AppError("User not found",401))
+    
+  }
+  
+  const user = await authModel.findById({_id:userId}).select("-password");
+  
+  if (!user) {
+    return next(new AppError("User not found",401))
+  }
+  
   res.status(200).json({ 
-    message:"data fetched"
+    success:true,
+    message:"data fetched successfully",
+    user
+    
   });
 }
 
 module.exports = {
   register_controller,
   login_controller,
-  getMe
+  getMe_controller
 }
 
