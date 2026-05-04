@@ -17,7 +17,8 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 //routes
 app.use("/api/auth",authRouter);
-app.get((req,res) => {
+
+app.use((req,res) => {
   res.status(404).json({ message :"OOPS!! PAGE NOT FOUND"});
 })
 

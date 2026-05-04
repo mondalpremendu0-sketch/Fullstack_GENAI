@@ -73,7 +73,7 @@ async function login_controller(req,res,next) {
   }, process.env.JWT_SERECT);
   
   res.cookie("token",token);
- 
+ // console.log(token);
   
   res.status(200).json({ 
     message:"Loged In Successfully",
@@ -86,10 +86,15 @@ async function login_controller(req,res,next) {
   }
 }
 
-
+const getMe = async (req,res,next) =>{
+  res.status(200).json({ 
+    message:"data fetched"
+  });
+}
 
 module.exports = {
   register_controller,
-  login_controller
+  login_controller,
+  getMe
 }
 
