@@ -1,0 +1,249 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+}
+
+// ==========================================
+// Global CSS Variables for Theming
+// ==========================================
+:root {
+  --bg-color: #e0e5ec;
+  --shadow-dark: rgba(163, 177, 198, 0.6);
+  --shadow-light: rgba(255, 255, 255, 0.8);
+  --text-main: #4a5568;
+  --text-light: #a0aec0;
+  --accent-color: #3182ce;
+  --accent-active: #2b6cb0; 
+  --error-color: #e53e3e;
+  --icon-color: #5b6b7c;
+  --icon-hover: #2d3748;
+  --theme-icon: #ffb74d;
+}
+
+html.dark-theme {
+  --bg-color: #2d3748;
+  --shadow-dark: rgba(15, 22, 36, 0.7);
+  --shadow-light: rgba(66, 75, 90, 0.5);
+  --text-main: #e2e8f0;
+  --text-light: #a0aec0;
+  --accent-color: #63b3ed;
+  --accent-active: #4299e1;
+  --error-color: #fc8181;
+  --icon-color: #a0aec0;
+  --icon-hover: #cbd5e0;
+  --theme-icon: #ffd700;
+}
+
+// Apply background to the actual body tag for full-page coverage
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+// ==========================================
+// Component Styles
+// ==========================================
+
+.neo-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  // Background removed here because the body handles it globally
+}
+
+.neo-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  border-radius: 24px;
+  background-color: var(--bg-color);
+  box-shadow: 9px 9px 16px var(--shadow-dark), -9px -9px 16px var(--shadow-light);
+  position: relative;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+  h2 {
+    text-align: center;
+    color: var(--text-main);
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 35px;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 20px;
+    .input-group {
+      flex: 1;
+    }
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    label {
+      font-size: 13px;
+      color: var(--text-main);
+      font-weight: 500;
+      margin-left: 5px;
+      transition: color 0.3s ease;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      input {
+        width: 100%;
+        padding: 14px 18px 14px 48px;
+        border-radius: 12px;
+        border: none;
+        outline: none;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        font-size: 14px;
+        box-shadow: inset 6px 6px 10px 0 var(--shadow-dark),
+                    inset -6px -6px 10px 0 var(--shadow-light);
+        transition: all 0.3s ease;
+
+        &::placeholder {
+          color: var(--text-light);
+        }
+
+        &:focus {
+          box-shadow: inset 8px 8px 12px 0 var(--shadow-dark),
+                      inset -8px -8px 12px 0 var(--shadow-light);
+        }
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 16px;
+        color: var(--icon-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        transition: color 0.3s ease;
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: 12px;
+        border: none;
+        background: transparent;
+        color: var(--icon-color);
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s ease, color 0.2s ease;
+
+        &:hover {
+          transform: scale(1.1);
+          color: var(--icon-hover);
+        }
+      }
+
+      &.with-password input {
+        padding-right: 48px;
+      }
+    }
+
+    .error-text {
+      color: var(--error-color);
+      font-size: 11px;
+      margin-left: 5px;
+      font-weight: 500;
+    }
+  }
+
+  .neo-button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--bg-color);
+    color: var(--accent-color);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 6px 6px 10px 0 var(--shadow-dark),
+               -6px -6px 10px 0 var(--shadow-light);
+    transition: all 0.3s ease;
+
+    &:active {
+      box-shadow: inset 4px 4px 6px 0 var(--shadow-dark),
+                  inset -4px -4px 6px 0 var(--shadow-light);
+      color: var(--accent-active);
+    }
+  }
+
+  .theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+    color: var(--theme-icon);
+    transition: all 0.3s ease;
+
+    &:active {
+      box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+    }
+
+    svg {
+      transition: transform 0.4s ease;
+    }
+
+    &:hover svg {
+      transform: scale(1.15) rotate(15deg);
+    }
+  }
+}
+
+// Responsiveness
+@media (max-width: 480px) {
+  .neo-card {
+    padding: 30px 25px;
+    .input-row {
+      flex-direction: column;
+      gap: 24px;
+    }
+    .theme-toggle {
+      top: 15px;
+      right: 15px;
+    }
+  }
+}
