@@ -10,7 +10,7 @@ const AppError = require('../utils/error.utils.js')
 async function register_controller(req,res,next) {
   try {
     const { firstname,lastname,email, password } = req.body;
-    console.log(req.body);
+    //console.log(req.body);
   if (!firstname || !lastname || !email || !password) {
     return next(new AppError("All fields are required",401))
   }
@@ -36,6 +36,7 @@ async function register_controller(req,res,next) {
   
   res.cookie("token",token);
   res.status(201).json({ 
+    success:true,
     message:"User registered Successfully",
     user
   });

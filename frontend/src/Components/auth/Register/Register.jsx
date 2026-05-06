@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import axios from "axios"
+import {toast} from "react-toastify"
 import './Register.scss';
 import GoogleSignInButton from './GoogleSignInButton.jsx'
 
@@ -76,7 +77,7 @@ const Register =  () => {
   };
 
   const onSubmit = async (user) => {
-    console.log('Neumorphic Registration Data:', user);
+    //console.log('Neumorphic Registration Data:', user);
     
       const res = await axios.post("http://localhost:3000/api/auth/register",{
         firstname:user.firstName,
@@ -85,6 +86,7 @@ const Register =  () => {
         password:user.password,
       },{withCredentials:true})
     console.log(res);
+    res.data.success == true ? toast.success(res.data.message):toast.error(res.data.message);
   };
 
   const containerVariants = {
