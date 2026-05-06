@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
+import axios from "axios"
 import './Register.scss';
 import GoogleSignInButton from './GoogleSignInButton.jsx'
+
 // SVG Icons
 const IconUser = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -46,7 +48,7 @@ const IconMoon = () => (
   </svg>
 );
 
-const Register = () => {
+const Register =  () => {
   const [theme, setTheme] = useState(localStorage.getItem('neo-theme') || 'light');
   const [showPassword, setShowPassword] = useState(false);
 
@@ -66,13 +68,23 @@ const Register = () => {
       root.classList.remove('dark-theme');
     }
   }, [theme]);
+  
+
 
   const toggleTheme = () => {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  const onSubmit = (data) => {
-    console.log('Neumorphic Registration Data:', data);
+  const onSubmit = async (user) => {
+    console.log('Neumorphic Registration Data:', user);
+    
+      const res = await axios.post("http://localhost:3000/api/auth/register",{
+        firstname:user.firstName,
+        lastname:user.lastName,
+        email:user.email,
+        password:user.password,
+      },{withCredentials:true})
+    console.log(res);
   };
 
   const containerVariants = {
@@ -121,7 +133,7 @@ const Register = () => {
                 <input
                   type="text"
                   placeholder="John"
-                  {...register('firstName', { required: 'Required' })}
+                  {...register('firstName', { required: 'Firstname is required' })}
                 />
               </div>
               {errors.firstName && (
@@ -136,7 +148,7 @@ const Register = () => {
                 <input
                   type="text"
                   placeholder="Doe"
-                  {...register('lastName', { required: 'Required' })}
+                  {...register('lastName', { required: 'Lastname is required' })}
                 />
               </div>
               {errors.lastName && (
