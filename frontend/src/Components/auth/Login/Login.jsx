@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router";
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import axios from "axios"
-import {toast} from "react-toastify"
-import './Register.scss';
-import GoogleSignInButton from './GoogleSignInButton.jsx'
+//import { useGoogleLogin } from '@react-oauth/google'; // Remove if you are using Firebase instead
 
-// SVG Icons
-const IconUser = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-  </svg>
-);
+import './Login.scss'; // Uses the same SCSS as the register page
+import GoogleSignInButton from '../Register/GoogleSignInButton.jsx';
 
+// ==========================================
+// SVG Icons 
+// ==========================================
 const IconEmail = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
@@ -50,8 +45,10 @@ const IconMoon = () => (
   </svg>
 );
 
-const Register =  () => {
-  let navigate = useNavigate();
+// ==========================================
+// Main Login Component
+// ==========================================
+const Login = () => {
   const [theme, setTheme] = useState(localStorage.getItem('neo-theme') || 'light');
   const [showPassword, setShowPassword] = useState(false);
 
@@ -61,48 +58,39 @@ const Register =  () => {
     formState: { errors },
   } = useForm();
 
-  // Applies the theme globally to the document root
+  // Theme Sync Logic
   useEffect(() => {
     localStorage.setItem('neo-theme', theme);
-    const root = document.documentElement; // Targets the <html> tag
+    const root = document.documentElement; 
     if (theme === 'dark') {
       root.classList.add('dark-theme');
     } else {
       root.classList.remove('dark-theme');
     }
   }, [theme]);
-  
-
 
   const toggleTheme = () => {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  const onSubmit = async (user) => {
-    //console.log('Neumorphic Registration Data:', user);
-    
-      const res = await axios.post("http://localhost:3000/api/auth/register",{
-        firstname:user.firstName,
-        lastname:user.lastName,
-        email:user.email,
-        password:user.password,
-      },{withCredentials:true})
-    console.log(res);
-    res.data.success == true ? toast.success(res.data.message):toast.error(res.data.message);
-    res.data.success == true? navigate("/"):"";
+  // Standard Email/Password Submission
+  const onSubmit = (data) => {
+    console.log('Login Data Submitted:', data);
+    // Add your API call here
   };
 
+  // Google Login Handler
+  const handleGoogleLogin = () => {
+    console.log("google btn was clicked");
+  }
+
+  // Framer Motion Animation Settings
   const containerVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        duration: 0.7,
-        ease: "easeOut",
-        when: "beforeChildren",
-        staggerChildren: 0.12,
-      },
+      transition: { duration: 0.7, ease: "easeOut", staggerChildren: 0.12 },
     },
   };
 
@@ -127,41 +115,10 @@ const Register =  () => {
           {theme === 'light' ? <IconMoon /> : <IconSun />}
         </button>
 
-        <motion.h2 variants={itemVariants}>Sign Up</motion.h2>
+        <motion.h2 variants={itemVariants}>Welcome Back</motion.h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <motion.div className="input-row" variants={itemVariants}>
-            <div className="input-group">
-              <label>First Name</label>
-              <div className="input-wrapper">
-                <span className="input-icon"><IconUser /></span>
-                <input
-                  type="text"
-                  placeholder="John"
-                  {...register('firstName', { required: 'Firstname is required' })}
-                />
-              </div>
-              {errors.firstName && (
-                <span className="error-text">{errors.firstName.message}</span>
-              )}
-            </div>
-
-            <div className="input-group">
-              <label>Last Name</label>
-              <div className="input-wrapper">
-                <span className="input-icon"><IconUser /></span>
-                <input
-                  type="text"
-                  placeholder="Doe"
-                  {...register('lastName', { required: 'Lastname is required' })}
-                />
-              </div>
-              {errors.lastName && (
-                <span className="error-text">{errors.lastName.message}</span>
-              )}
-            </div>
-          </motion.div>
-
+          
           <motion.div className="input-group" variants={itemVariants}>
             <label>Email Address</label>
             <div className="input-wrapper">
@@ -178,9 +135,7 @@ const Register =  () => {
                 })}
               />
             </div>
-            {errors.email && (
-              <span className="error-text">{errors.email.message}</span>
-            )}
+            {errors.email && <span className="error-text">{errors.email.message}</span>}
           </motion.div>
 
           <motion.div className="input-group" variants={itemVariants}>
@@ -190,13 +145,7 @@ const Register =  () => {
               <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
-                {...register('password', {
-                  required: 'Password is required',
-                  minLength: {
-                    value: 8,
-                    message: 'Must be at least 8 characters',
-                  },
-                })}
+                {...register('password', { required: 'Password is required' })}
               />
               <button
                 type="button"
@@ -207,9 +156,18 @@ const Register =  () => {
                 {showPassword ? <IconEyeOff /> : <IconEye />}
               </button>
             </div>
-            {errors.password && (
-              <span className="error-text">{errors.password.message}</span>
-            )}
+            {errors.password && <span className="error-text">{errors.password.message}</span>}
+          </motion.div>
+
+          {/* New Login Actions Row */}
+          <motion.div className="login-actions" variants={itemVariants}>
+            <label className="remember-me">
+              <input type="checkbox" {...register('rememberMe')} />
+              Remember me
+            </label>
+            <a href="/forgot-password" className="forgot-link">
+              Forgot Password?
+            </a>
           </motion.div>
 
           <motion.button
@@ -219,13 +177,19 @@ const Register =  () => {
             whileTap={{ scale: 0.975 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
-            CREATE ACCOUNT
+            SIGN IN
           </motion.button>
+
+          {/* The Independent Google Component */}
+          <GoogleSignInButton 
+            onClick={handleGoogleLogin} 
+            variants={itemVariants} 
+          />
+
         </form>
-        <GoogleSignInButton />
       </motion.div>
     </div>
   );
 };
 
-export default Register;
+export default Login;
