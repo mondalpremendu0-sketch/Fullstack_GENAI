@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router";
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import axios from "axios"
 import {toast} from "react-toastify"
 import './Register.scss';
 import GoogleSignInButton from '../components/GoogleSignInButton.jsx'
+import {useAuth} from '../hooks/useAuthContext.js'
 
 // SVG Icons
 const IconUser = () => (
@@ -51,14 +51,20 @@ const IconMoon = () => (
 );
 
 const Register =  () => {
+  const { loading, handleRegister } = useAuth;
   let navigate = useNavigate();
   const [theme, setTheme] = useState(localStorage.getItem('neo-theme') || 'light');
   const [showPassword, setShowPassword] = useState(false);
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm();
 
   // Applies the theme globally to the document root
@@ -78,18 +84,13 @@ const Register =  () => {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  const onSubmit = async (user) => {
-    //console.log('Neumorphic Registration Data:', user);
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const res = await handleRegister({firstname,lastname,email, password});
     
-      const res = await axios.post("http://localhost:3000/api/auth/register",{
-        firstname:user.firstName,
-        lastname:user.lastName,
-        email:user.email,
-        password:user.password,
-      },{withCredentials:true})
-    console.log(res);
     res.data.success == true ? toast.success(res.data.message):toast.error(res.data.message);
     res.data.success == true? navigate("/"):"";
+    reset();
   };
 
   const containerVariants = {
@@ -137,6 +138,7 @@ const Register =  () => {
                 <span className="input-icon"><IconUser /></span>
                 <input
                   type="text"
+                  onChange={(e) => setFirstname(e.target.value)}
                   placeholder="John"
                   {...register('firstName', { required: 'Firstname is required' })}
                 />
@@ -152,6 +154,7 @@ const Register =  () => {
                 <span className="input-icon"><IconUser /></span>
                 <input
                   type="text"
+                  onChange={(e) => setLastname(e.target.value)}
                   placeholder="Doe"
                   {...register('lastName', { required: 'Lastname is required' })}
                 />
@@ -168,6 +171,7 @@ const Register =  () => {
               <span className="input-icon"><IconEmail /></span>
               <input
                 type="email"
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="john.doe@example.com"
                 {...register('email', {
                   required: 'Email is required',
@@ -189,6 +193,7 @@ const Register =  () => {
               <span className="input-icon"><IconLock /></span>
               <input
                 type={showPassword ? 'text' : 'password'}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 {...register('password', {
                   required: 'Password is required',
