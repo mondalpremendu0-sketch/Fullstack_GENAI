@@ -12,9 +12,8 @@ export const useAuth = () => {
 
     setLoading(true);
     const data = await register({firstname,lastname,email,password});
-    console.log("data",data);
-    setUser(data.user);
-    console.log("user",user);
+    console.log(data);
+    setUser(data);
     setLoading(false);
   }
   

@@ -38,7 +38,9 @@ async function register_controller(req,res,next) {
   res.status(201).json({ 
     success:true,
     message:"User registered Successfully",
-    user
+    user:{
+      firstname,lastname,email
+    }
   });
   } catch (err) {
     return next(new AppError(err.message,500));

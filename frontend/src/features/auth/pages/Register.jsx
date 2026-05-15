@@ -51,14 +51,9 @@ const IconMoon = () => (
 );
 
 const Register =  () => {
-  const { loading, handleRegister } = useAuth;
+  const { loading, handleRegister } = useAuth();
   let navigate = useNavigate();
   const [theme, setTheme] = useState(localStorage.getItem('neo-theme') || 'light');
-  const [showPassword, setShowPassword] = useState(false);
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
   const {
     register,
@@ -84,11 +79,16 @@ const Register =  () => {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    await handleRegister({firstname,lastname,email, password});
+  const onSubmit = async (data) => {
+   // console.log("from data:",data);
+    data.preventDefault();
+   await handleRegister(data)
+    //console.log("res",res);
     reset();
   };
+  if(loading){
+    return(<main><h1>Loading...</h1></main>)
+  }
 
   const containerVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -127,7 +127,9 @@ const Register =  () => {
 
         <motion.h2 variants={itemVariants}>Sign Up</motion.h2>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={
+        handleSubmit(onSubmit)
+        }>
           <motion.div className="input-row" variants={itemVariants}>
             <div className="input-group">
               <label>First Name</label>
@@ -135,13 +137,13 @@ const Register =  () => {
                 <span className="input-icon"><IconUser /></span>
                 <input
                   type="text"
-                  onChange={(e) => setFirstname(e.target.value)}
+                  
                   placeholder="John"
-                  {...register('firstName', { required: 'Firstname is required' })}
+                  {...register('firstname', { required: 'Firstname is required' })}
                 />
               </div>
-              {errors.firstName && (
-                <span className="error-text">{errors.firstName.message}</span>
+              {errors.firstname && (
+                <span className="error-text">{errors.firstname.message}</span>
               )}
             </div>
 
@@ -151,13 +153,13 @@ const Register =  () => {
                 <span className="input-icon"><IconUser /></span>
                 <input
                   type="text"
-                  onChange={(e) => setLastname(e.target.value)}
+                  
                   placeholder="Doe"
-                  {...register('lastName', { required: 'Lastname is required' })}
+                  {...register('lastname', { required: 'Lastname is required' })}
                 />
               </div>
-              {errors.lastName && (
-                <span className="error-text">{errors.lastName.message}</span>
+              {errors.lastname && (
+                <span className="error-text">{errors.lastname.message}</span>
               )}
             </div>
           </motion.div>
@@ -168,7 +170,7 @@ const Register =  () => {
               <span className="input-icon"><IconEmail /></span>
               <input
                 type="email"
-                onChange={(e) => setEmail(e.target.value)}
+                
                 placeholder="john.doe@example.com"
                 {...register('email', {
                   required: 'Email is required',
@@ -190,7 +192,7 @@ const Register =  () => {
               <span className="input-icon"><IconLock /></span>
               <input
                 type={showPassword ? 'text' : 'password'}
-                onChange={(e) => setPassword(e.target.value)}
+                
                 placeholder="••••••••"
                 {...register('password', {
                   required: 'Password is required',
