@@ -24,11 +24,19 @@ export const useAuth = () => {
     setLoading(false);
   }
   
-  const handlegetMe = async ({email,password}) => {
+  const handlegetMe = async () => {
 
     setLoading(true);
-    const data = await login({email,password});
+    const data = await getMe();
     setUser(data.user);
+    setLoading(false);
+  }
+  
+  const handleLogout = async () => {
+
+    setLoading(true);
+    const data = await logout();
+    setUser(null);
     setLoading(false);
   }
 
