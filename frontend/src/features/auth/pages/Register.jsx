@@ -86,10 +86,7 @@ const Register =  () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const res = await handleRegister({firstname,lastname,email, password});
-    
-    res.data.success == true ? toast.success(res.data.message):toast.error(res.data.message);
-    res.data.success == true? navigate("/"):"";
+    await handleRegister({firstname,lastname,email, password});
     reset();
   };
 
