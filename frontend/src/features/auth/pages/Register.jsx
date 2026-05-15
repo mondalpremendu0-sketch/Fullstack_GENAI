@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import axios from "axios"
 import {toast} from "react-toastify"
 import './Register.scss';
-import GoogleSignInButton from './GoogleSignInButton.jsx'
+import GoogleSignInButton from '../components/GoogleSignInButton.jsx'
 
 // SVG Icons
 const IconUser = () => (

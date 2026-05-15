@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 //import { useGoogleLogin } from '@react-oauth/google'; // Remove if you are using Firebase instead
 
 import './Login.scss'; // Uses the same SCSS as the register page
-import GoogleSignInButton from '../Register/GoogleSignInButton.jsx';
+import GoogleSignInButton from '../components/GoogleSignInButton.jsx';
 
 // ==========================================
 // SVG Icons 
