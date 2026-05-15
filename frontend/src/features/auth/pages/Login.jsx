@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
+import {useNavigate} from "react-router"
 //import { useGoogleLogin } from '@react-oauth/google'; // Remove if you are using Firebase instead
 
 import './Login.scss'; // Uses the same SCSS as the register page
 import GoogleSignInButton from '../components/GoogleSignInButton.jsx';
-
+import {useAuth} from '../hooks/useAuthContext.js'
 // ==========================================
 // SVG Icons 
 // ==========================================
@@ -49,6 +50,8 @@ const IconMoon = () => (
 // Main Login Component
 // ==========================================
 const Login = () => {
+  const {loading,handleLogin} = useAuth();
+  const navigate = useNavigate();
   const [theme, setTheme] = useState(localStorage.getItem('neo-theme') || 'light');
   const [showPassword, setShowPassword] = useState(false);
 
@@ -56,6 +59,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm();
 
   // Theme Sync Logic
@@ -74,10 +78,16 @@ const Login = () => {
   };
 
   // Standard Email/Password Submission
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log('Login Data Submitted:', data);
     // Add your API call here
+    await handleLogin(data)
+    reset();
+    navigate("/");
   };
+  if (loading) {
+    return(<main><h1>loading...</h1></main>)
+  }
 
   // Google Login Handler
   const handleGoogleLogin = () => {

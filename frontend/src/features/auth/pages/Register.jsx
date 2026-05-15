@@ -54,6 +54,7 @@ const Register =  () => {
   const { loading, handleRegister } = useAuth();
   let navigate = useNavigate();
   const [theme, setTheme] = useState(localStorage.getItem('neo-theme') || 'light');
+  const [showPassword,setShowPassword] = useState(false)
 
   const {
     register,
@@ -81,10 +82,11 @@ const Register =  () => {
 
   const onSubmit = async (data) => {
    // console.log("from data:",data);
-    data.preventDefault();
+   // data.preventDefault();
    await handleRegister(data)
     //console.log("res",res);
     reset();
+    navigate("/login")
   };
   if(loading){
     return(<main><h1>Loading...</h1></main>)

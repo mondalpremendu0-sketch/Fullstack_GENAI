@@ -80,9 +80,14 @@ async function login_controller(req,res,next) {
   res.cookie("token",token);
  // console.log(token);
   
-  res.status(200).json({ 
+  res.status(200).json({
+    success:true,
     message:"Loged In Successfully",
-    userInfo 
+    user: {
+     firstname:userInfo.firstname,
+     lastname:userInfo.lastname,
+     email:userInfo.email
+   }
     
   });
   } catch (err) {
