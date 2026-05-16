@@ -78,7 +78,7 @@ async function login_controller(req,res,next) {
   }, process.env.JWT_SERECT);
   
   res.cookie("token",token);
- // console.log(token);
+  //console.log(token);
   
   res.status(200).json({
     success:true,
@@ -107,17 +107,20 @@ async function getMe_controller(req,res,next) {
     
   }
   
-  const user = await authModel.findById({_id:userId}).select("-password");
+  const userInfo = await authModel.findById({_id:userId}).select("-password");
   
-  if (!user) {
+  if (!userInfo) {
     return next(new AppError("User not found",401))
   }
   
   res.status(200).json({ 
     success:true,
     message:"data fetched successfully",
-    user
-    
+    user:{
+      firstname:userInfo.firstname,
+      lastname:userInfo.lastname,
+      email:userInfo.email
+    }
   });
 }
 

@@ -1,4 +1,4 @@
-import {useContext} from "react";
+import {useContext,useEffect} from "react";
 import {AuthContext} from '../auth.context.jsx';
 import {login,register,logout,getMe} from '../services/auth.api.js'
 
@@ -28,9 +28,9 @@ export const useAuth = () => {
     try {
       setLoading(true);
       const data = await login({email,password});
-      console.log(data);
+      //console.log(data);
       setUser(data.user);
-      console.log(user);
+      //console.log(user);
       
     } catch (err) {
       //console.error('Error:', err);
@@ -40,20 +40,6 @@ export const useAuth = () => {
     }
   }
   
-  const handlegetMe = async () => {
-    
-    try {
-      setLoading(true);
-      const data = await getMe();
-      setUser(data.user);
-      
-    } catch (err) {
-      //console.error('Error:', err);
-      
-    }finally{
-       setLoading(false);
-    }
-  }
   
   const handleLogout = async () => {
     
@@ -70,6 +56,27 @@ export const useAuth = () => {
     }
   }
   
-  return {user,loading,handleRegister,handleLogin,handleLogout,handlegetMe}
+  useEffect(() => {
+    const getAndSetUser = async() => {
+      try {
+        const data = await getMe();
+        setUser(data.user);
+        //console.log(data);
+      } catch (err) {
+        //console.error('Error:', err);
+      }finally{
+      setLoading(false);
+      }
+    }
+    
+    getAndSetUser();
+  },[])
+  
+  
+  
+  
+  
+  
+  return {user,loading,handleRegister,handleLogin,handleLogout}
 
 }

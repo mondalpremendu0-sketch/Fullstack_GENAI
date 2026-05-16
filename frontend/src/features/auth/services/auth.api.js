@@ -34,6 +34,7 @@ export const login = async ({email, password}) => {
 export const getMe = async () => {
   try {
     const response = await api.get("/api/auth/getMe");
+    //console.log("getMe data:",response);
     return response.data;
   } catch (err) {
     console.error('Error:', err);

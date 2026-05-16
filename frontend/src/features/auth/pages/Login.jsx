@@ -175,8 +175,8 @@ const Login = () => {
               <input type="checkbox" {...register('rememberMe')} />
               Remember me
             </label>
-            <a href="/forgot-password" className="forgot-link">
-              Forgot Password?
+            <a href="/register" className="forgot-link">
+              First Register
             </a>
           </motion.div>
 

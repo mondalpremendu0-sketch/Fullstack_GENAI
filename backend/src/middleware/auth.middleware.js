@@ -8,7 +8,7 @@ const isLogedIn = async (req,res,next) => {
     const {token} = req.cookies;
    // const  token  = req.body;
     
-    //console.log(req.body);
+    //console.log(token);
     if (!token) {
       return next(new AppError("Unauthorised!!",401))
     }
