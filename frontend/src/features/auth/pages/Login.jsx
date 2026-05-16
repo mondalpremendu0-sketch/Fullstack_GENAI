@@ -7,6 +7,7 @@ import {useNavigate} from "react-router"
 import './Login.scss'; // Uses the same SCSS as the register page
 import GoogleSignInButton from '../components/GoogleSignInButton.jsx';
 import {useAuth} from '../hooks/useAuthContext.js'
+import InfiniteLoader from '../components/InfiniteLoader.jsx'
 // ==========================================
 // SVG Icons 
 // ==========================================
@@ -79,14 +80,14 @@ const Login = () => {
 
   // Standard Email/Password Submission
   const onSubmit = async (data) => {
-    console.log('Login Data Submitted:', data);
+    //console.log('Login Data Submitted:', data);
     // Add your API call here
     await handleLogin(data)
     reset();
     navigate("/");
   };
   if (loading) {
-    return(<main><h1>loading...</h1></main>)
+    return(<InfiniteLoader />)
   }
 
   // Google Login Handler

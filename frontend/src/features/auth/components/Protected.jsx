@@ -1,11 +1,11 @@
 import {Navigate} from "react-router"
 import {useAuth} from '../hooks/useAuthContext.js'
-
+import InfiniteLoader from './InfiniteLoader.jsx'
 export default function Protected({children}) {
  
   const {loading,user} = useAuth();
   if (loading) {
-    return(<main><h1>loading...</h1></main>)
+    return(<InfiniteLoader />)
   }
   
   if (!user) {

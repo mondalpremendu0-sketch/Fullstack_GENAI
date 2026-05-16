@@ -6,6 +6,9 @@ import {toast} from "react-toastify"
 import './Register.scss';
 import GoogleSignInButton from '../components/GoogleSignInButton.jsx'
 import {useAuth} from '../hooks/useAuthContext.js'
+import InfiniteLoader from '../components/InfiniteLoader.jsx'
+
+
 
 // SVG Icons
 const IconUser = () => (
@@ -89,7 +92,7 @@ const Register =  () => {
     navigate("/login")
   };
   if(loading){
-    return(<main><h1>Loading...</h1></main>)
+    return(<InfiniteLoader />);
   }
 
   const containerVariants = {
