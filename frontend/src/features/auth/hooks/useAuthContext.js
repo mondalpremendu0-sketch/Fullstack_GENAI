@@ -9,39 +9,65 @@ export const useAuth = () => {
   const {user,setUser,loading,setLoading} = context;
   
   const handleRegister = async ({firstname,lastname,email,password}) => {
-
-    setLoading(true);
-    const data = await register({firstname,lastname,email,password});
+    
+    try {
+      setLoading(true);
+      const data = await register({firstname,lastname,email,password});
     //console.log("data",data);
-    setUser(data.user);
-    //console.log("user",user);
+      setUser(data.user);
+      //console.log("user",user);
+    } catch (err) {
+     // console.error('Error:', err);
+    } finally {
     setLoading(false);
+    }
   }
   
   const handleLogin = async ({email,password}) => {
-
-    setLoading(true);
-    const data = await login({email,password});
-    console.log(data);
-    setUser(data.user);
-    console.log(user);
+    
+    try {
+      setLoading(true);
+      const data = await login({email,password});
+      console.log(data);
+      setUser(data.user);
+      console.log(user);
+      
+    } catch (err) {
+      //console.error('Error:', err);
+      
+    }finally {
     setLoading(false);
+    }
   }
   
   const handlegetMe = async () => {
-
-    setLoading(true);
-    const data = await getMe();
-    setUser(data.user);
-    setLoading(false);
+    
+    try {
+      setLoading(true);
+      const data = await getMe();
+      setUser(data.user);
+      
+    } catch (err) {
+      //console.error('Error:', err);
+      
+    }finally{
+       setLoading(false);
+    }
   }
   
   const handleLogout = async () => {
-
-    setLoading(true);
-    const data = await logout();
-    setUser(null);
-    setLoading(false);
+    
+    try {
+      setLoading(true);
+      const data = await logout();
+      setUser(null);
+      
+    } catch (err) {
+      //console.error('Error:', err);
+      
+    } finally {
+      setLoading(false);
+    }
   }
   
   return {user,loading,handleRegister,handleLogin,handleLogout,handlegetMe}
