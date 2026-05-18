@@ -110,20 +110,20 @@ const ai = new GoogleGenAI({
 });
 
 
-async function GenerateInterviewReport({resume, selfDescription,jobDescription}) {
+async function GenerateInterviewReport({Resume,SelfDescription,JobDescription}) {
   
-  
+  //console.log({Resume,SelfDescription,JobDescription});
   const prompt = `
 Generate a detailed interview report for a candidate based on the following information.
 
 Resume:
-${resume}
+${Resume}
 
 Self Description:
-${selfDescription}
+${SelfDescription}
 
 Job Description:
-${jobDescription}
+${JobDescription}
 
 Instructions:
 1. Analyze the candidate's resume carefully.
@@ -146,16 +146,16 @@ Instructions:
    - Focus topic
    - List of tasks
 11. Keep the response professional, structured, and detailed.
+12.give matchScore between 0 t0 100.
 `;
   
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: prompt,
     config: {
-    responseFormat: { text: { mimeType: "application/json", schema: zodToJsonSchema(interviewReportSchema) } },
+      responseMimeType: "application/json",responseSchema: zodToJsonSchema(interviewReportSchema)
   },
   });
- // console.log(response.text);
 console.log(JSON.parse(response.text));
 }
 
