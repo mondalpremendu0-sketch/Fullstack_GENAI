@@ -1,4 +1,4 @@
-export const resume = `
+ const Resume = `
 Name: Premendu Mondal
 Role: Full Stack MERN Developer
 
@@ -149,7 +149,7 @@ Career Objective:
 To work in a challenging software development environment where I can improve my technical skills, contribute to impactful projects, and grow as a professional full stack developer.
 `;
 
-export const jobDescription = `
+ const JobDescription = `
 Job Title:
 Full Stack MERN Developer Intern
 
@@ -212,7 +212,7 @@ Selection Process:
 4. HR Interview
 `;
 
-export const  selfDescription = `
+ const  SelfDescription = `
 I am a passionate and dedicated Full Stack Developer with a strong interest in building modern web applications and solving real-world problems through technology. I enjoy learning new technologies, improving my development skills, and working on projects that challenge my problem-solving abilities.
 
 My primary area of expertise is the MERN stack, including React.js, Node.js, Express.js, and MongoDB. I have worked on several projects involving frontend development, backend API creation, authentication systems, database integration, and real-time communication using Socket.io.
@@ -252,3 +252,12 @@ My long-term goal is to become a highly skilled software engineer capable of bui
 
 I am actively looking for opportunities where I can apply my skills, gain industry experience, contribute to development teams, and continue growing as a developer.
 `;
+
+
+
+
+module.exports = {
+  Resume,
+  JobDescription,
+  SelfDescription,
+};

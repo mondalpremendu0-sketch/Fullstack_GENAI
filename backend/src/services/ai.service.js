@@ -1,6 +1,7 @@
-import { GoogleGenAI } from "@google/genai";
-import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
+const { GoogleGenAI } = require ("@google/genai");
+const  { z } = require("zod");
+const { zodToJsonSchema } = require("zod-to-json-schema");
+
 
 
 const interviewReportSchema = z.object({
@@ -8,94 +9,95 @@ const interviewReportSchema = z.object({
     z.object({
       question: z
         .string()
-        .description(
-          "The technical question that can be asked in the interview"
+        .describe(
+          "A technical interview question related to the candidate's skills, projects, technologies, or job description."
         ),
 
       intention: z
         .string()
-        .description(
-          "The intention of interviewer behind asking this question"
+        .describe(
+          "Explain why the interviewer is asking this question and what skill or knowledge they want to evaluate."
         ),
 
       answer: z
         .string()
-        .description(
-          "How to answer this question, what points to cover, and what approach to follow"
+        .describe(
+          "A detailed ideal answer explaining important concepts, key points to cover, examples to mention, and the best way to answer the question."
         ),
     })
-  ).description(
-    "Technical questions that can be asked in the interview along with their intention and answers"
+  ).describe(
+    "List of technical interview questions with interviewer intention and ideal answers."
   ),
 
   behavioralQuestions: z.array(
     z.object({
       question: z
         .string()
-        .description(
-          "The behavioral question that can be asked in the interview"
+        .describe(
+          "A behavioral interview question related to communication, teamwork, leadership, problem-solving, or work experience."
         ),
 
       intention: z
         .string()
-        .description(
-          "The intention of interviewer behind asking this behavioral question"
+        .describe(
+          "Explain what behavior, personality trait, or soft skill the interviewer wants to evaluate."
         ),
 
       answer: z
         .string()
-        .description(
-          "How to answer this behavioral question with proper examples and structure"
+        .describe(
+          "A professional answer with examples, proper explanation, and structured response using real situations if possible."
         ),
     })
-  ).description(
-    "Behavioral questions that can be asked in the interview along with their intention and answers"
+  ).describe(
+    "List of behavioral interview questions with interviewer intention and ideal answers."
   ),
 
   skillGaps: z.array(
     z.object({
       skill: z
         .string()
-        .description(
-          "The skill where the candidate needs improvement"
+        .describe(
+          "A missing skill, weak area, or improvement area identified from the candidate profile and job description."
         ),
 
       severity: z
         .enum(["low", "medium", "high"])
-        .description(
-          "Severity level of the skill gap"
+        .describe(
+          "Importance level of the skill gap. Use low, medium, or high."
         ),
     })
-  ).description(
-    "List of missing or weak skills identified during interview analysis"
+  ).describe(
+    "List of skill gaps and weak areas that the candidate should improve."
   ),
 
   preparationPlan: z.array(
     z.object({
       day: z
         .number()
-        .description(
-          "Preparation day number"
+        .describe(
+          "Preparation day number."
         ),
 
       focus: z
         .string()
-        .description(
-          "Main topic or focus area for the day"
+        .describe(
+          "Main topic or area to focus on for the day."
         ),
 
       tasks: z.array(
-        z.string().description(
-          "Specific preparation task to complete"
+        z.string().describe(
+          "A preparation task or activity to complete."
         )
-      ).description(
-        "List of tasks for the preparation day"
+      ).describe(
+        "List of tasks to complete for the day."
       ),
     })
-  ).description(
-    "Day-wise preparation roadmap for interview improvement"
+  ).describe(
+    "Day-wise interview preparation roadmap with focus topics and tasks."
   ),
 });
+
 
 
 
@@ -108,15 +110,54 @@ const ai = new GoogleGenAI({
 });
 
 
-async function invokeGeminiAi() {
+async function GenerateInterviewReport({resume, selfDescription,jobDescription}) {
+  
+  
+  const prompt = `
+Generate a detailed interview report for a candidate based on the following information.
+
+Resume:
+${resume}
+
+Self Description:
+${selfDescription}
+
+Job Description:
+${jobDescription}
+
+Instructions:
+1. Analyze the candidate's resume carefully.
+2. Compare the candidate's skills with the job description.
+3. Understand the candidate's strengths, weaknesses, and skill gaps.
+4. Generate technical interview questions relevant to the job role and candidate profile.
+5. Generate behavioral interview questions to evaluate communication, teamwork, and problem-solving abilities.
+6. For every question, explain:
+   - Why the interviewer may ask this question
+   - What an ideal answer should include
+   - Important points the candidate should cover
+7. Identify missing skills or weak areas.
+8. Assign severity levels for each skill gap:
+   - low
+   - medium
+   - high
+9. Create a structured day-wise preparation roadmap for the candidate.
+10. The preparation roadmap should include:
+   - Day number
+   - Focus topic
+   - List of tasks
+11. Keep the response professional, structured, and detailed.
+`;
+  
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: "Explain how AI works in a few words",
+    contents: prompt,
+    config: {
+    responseFormat: { text: { mimeType: "application/json", schema: zodToJsonSchema(interviewReportSchema) } },
+  },
   });
-  console.log(response.text);
-  return response.text;
+ // console.log(response.text);
+console.log(JSON.parse(response.text));
 }
 
 
-
-module.exports = GenerateContent;
+module.exports = GenerateInterviewReport;
