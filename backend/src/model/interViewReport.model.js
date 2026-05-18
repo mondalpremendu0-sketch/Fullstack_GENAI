@@ -1,0 +1,87 @@
+const mongoose = require("mongoose");
+
+mongoose.set("strictQuery",false);
+
+
+const technicalQuestionSchema = new mongoose.Schema({
+  question:{
+    type:String,
+    required:[true,"Question is required"]
+  },
+  intension:{
+    type:String,
+    required:[true,"intension is required"]
+  },
+  answer:{
+    type:String,
+    required:[true,"answer is required"]
+  }
+},{_id:false});
+const behaviourQuestionSchema = new mongoose.Schema({
+  question:{
+    type:String,
+    required:[true,"Question is required"]
+  },
+  intension:{
+    type:String,
+    required:[true,"intension is required"]
+  },
+  answer:{
+    type:String,
+    required:[true,"answer is required"]
+  }
+},{_id:false});
+const skillGapSchema= new mongoose.Schema({
+  skill:{
+    type:String,
+    required:[true,"Question is required"]
+  },
+  serverity:{
+    type:String,
+    enum:["low","medium","high"],
+  }
+},{_id:false});
+const preparationPlainSchema= new mongoose.Schema({
+  day:{
+    type:Number,
+    required:[true,"Day is required"]
+  },
+  focus:{
+    type:String,
+    required:[true,"Focus is required"]
+  },
+  tasks:[{
+    type:String,
+    required:[true,"Tasks is required"]
+  }]
+},{_id:false});
+
+
+const InterViewReportSchema = new mongoose.Schema({
+  jobDescription:{
+    type:String,
+    required:[true,"Job Description is required"]
+  },
+  resumeText:{
+    type:String
+  },
+  selfDescription:{
+    type:String
+  },
+  matchScore:{
+    type:Number,
+    min:0,
+    max:100
+  },
+  technicalQuestion:[technicalQuestionSchema],
+  behaviourQuestion:[behaviourQuestionSchema],
+  skillGap:[skillGapSchema],
+  preparationPlain:[preparationPlainSchema]
+  
+},{timestamps:true});
+
+const reportModel = mongoose.model("report",InterViewReportSchema);
+
+
+
+module.exports = reportModel;
