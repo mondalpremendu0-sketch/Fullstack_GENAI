@@ -80,8 +80,8 @@ const InterViewReportSchema = new mongoose.Schema({
   
 },{timestamps:true});
 
-const reportModel = mongoose.model("report",InterViewReportSchema);
+const InterViewReportModel = mongoose.model("report",InterViewReportSchema);
 
 
 
-module.exports = reportModel;
+module.exports = InterViewReportModel;
