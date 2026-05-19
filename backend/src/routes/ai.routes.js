@@ -1,6 +1,13 @@
 const express = require('express');
-const router = express.Router();
+const isLogedIn = require('../middleware/auth.middleware.js')
+const interviewController = require('../controllers/interView.controller.js')
+const upload = require('../middleware/file.middleware.js')
 
-//router.post("/message",aiController)
 
-module.exports = router;
+const interViewrouter = express.Router();
+
+interViewrouter.post("/",isLogedIn,upload.single("resume"),interviewController)
+
+
+
+module.exports = interViewrouter;
