@@ -5,6 +5,11 @@ const { zodToJsonSchema } = require("zod-to-json-schema");
 
 
 const interviewReportSchema = z.object({
+  matchScore: z
+    .number()
+    .describe(
+      "Overall match score between the candidate profile and job description from 0 to 100."
+    ),
   technicalQuestions: z.array(
     z.object({
       question: z
@@ -100,10 +105,6 @@ const interviewReportSchema = z.object({
 
 
 
-
-
-
-
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const ai = new GoogleGenAI({
   apiKey:process.env.GEMINI_API_KEY
@@ -156,7 +157,7 @@ Instructions:
       responseMimeType: "application/json",responseSchema: zodToJsonSchema(interviewReportSchema)
   },
   });
-console.log(JSON.parse(response.text));
+    return JSON.parse(response.text);
 }
 
 
