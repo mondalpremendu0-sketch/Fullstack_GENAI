@@ -111,20 +111,20 @@ const ai = new GoogleGenAI({
 });
 
 
-async function GenerateInterviewReport({Resume,SelfDescription,JobDescription}) {
+async function GenerateInterviewReport({resume,selfDescription,jobDescription}) {
   
   //console.log({Resume,SelfDescription,JobDescription});
   const prompt = `
 Generate a detailed interview report for a candidate based on the following information.
 
 Resume:
-${Resume}
+${resume}
 
 Self Description:
-${SelfDescription}
+${selfDescription}
 
 Job Description:
-${JobDescription}
+${jobDescription}
 
 Instructions:
 1. Analyze the candidate's resume carefully.

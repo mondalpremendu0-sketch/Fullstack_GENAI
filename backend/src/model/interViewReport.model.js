@@ -76,11 +76,15 @@ const InterViewReportSchema = new mongoose.Schema({
   technicalQuestion:[technicalQuestionSchema],
   behaviourQuestion:[behaviourQuestionSchema],
   skillGap:[skillGapSchema],
-  preparationPlain:[preparationPlainSchema]
+  preparationPlain:[preparationPlainSchema],
+  user:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Fullstack_GenAi_user"
+  }
   
 },{timestamps:true});
 
-const InterViewReportModel = mongoose.model("report",InterViewReportSchema);
+const InterViewReportModel = mongoose.model("InterViewreport",InterViewReportSchema);
 
 
 
