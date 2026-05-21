@@ -6,7 +6,7 @@ const upload = require('../middleware/file.middleware.js')
 
 const interViewrouter = express.Router();
 
-interViewrouter.post("/",isLogedIn,upload.single("resume"),interviewController)
+interViewrouter.post("/",upload.single("resume"),interviewController)
 
 
 

@@ -1,13 +1,13 @@
 const { PDFParse } = require ('pdf-parse');
 const AppError = require('../utils/error.utils.js')
 const InterViewReportModel = require('../model/interViewReport.model.js')
+const GenerateInterviewReport = require('../services/ai.service.js')
 
 
 
 
 
-
-async function interviewController(req,res)
+async function interviewController(req,res,next)
 {
   try {
     
@@ -34,15 +34,17 @@ async function interviewController(req,res)
     selfDescription,
     jobDescription
   })
+  console.log(aiReport);
+  
   
   const interViewReport = await InterViewReportModel.create({
     jobDescription,
-    resresumeText:resumeText.text,
+    resumeText:resumeText.text,
     selfDescription,
     ...aiReport,
-    user:req.user.id
+    //user:req.user.id
   })
-  
+  //console.log(interViewReport);
   if (!interViewReport) {
     return next(new AppError("Can't generate report",401))
   }
@@ -55,6 +57,7 @@ async function interviewController(req,res)
 
   } catch (err) {
     return next(new AppError(err.message,500));
+   console.log("err: ",err.message);
     
   }
 }

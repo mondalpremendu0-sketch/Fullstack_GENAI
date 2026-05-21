@@ -8,10 +8,10 @@ const technicalQuestionSchema = new mongoose.Schema({
     type:String,
     required:[true,"Question is required"]
   },
-  intension:{
-    type:String,
-    required:[true,"intension is required"]
-  },
+  intention:{
+  type:String,
+  required:[true,"Intention is required"]
+},
   answer:{
     type:String,
     required:[true,"answer is required"]
@@ -22,10 +22,10 @@ const behaviourQuestionSchema = new mongoose.Schema({
     type:String,
     required:[true,"Question is required"]
   },
-  intension:{
-    type:String,
-    required:[true,"intension is required"]
-  },
+  intention:{
+  type:String,
+  required:[true,"Intention is required"]
+},
   answer:{
     type:String,
     required:[true,"answer is required"]
@@ -36,7 +36,7 @@ const skillGapSchema= new mongoose.Schema({
     type:String,
     required:[true,"Question is required"]
   },
-  serverity:{
+  severity:{
     type:String,
     enum:["low","medium","high"],
   }
@@ -73,14 +73,26 @@ const InterViewReportSchema = new mongoose.Schema({
     min:0,
     max:100
   },
-  technicalQuestions:[technicalQuestionSchema],
-  behavioralQuestions:[behaviourQuestionSchema],
-  skillGaps:[skillGapSchema],
-  preparationPlan:[preparationPlainSchema],
-  user:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"Fullstack_GenAi_user"
-  }
+  technicalQuestions:{
+   type: [technicalQuestionSchema],
+   default:[]
+  },
+  behavioralQuestions:{
+    type:[behaviourQuestionSchema],
+    default:[]
+  },
+  skillGaps:{
+    type:[skillGapSchema],
+    default:[]
+  },
+  preparationPlan:{
+   type: [preparationPlainSchema],
+   default:[]
+  },
+  // user:{
+  //   type:mongoose.Schema.Types.ObjectId,
+  //   ref:"Fullstack_GenAi_user"
+  // }
   
 },{timestamps:true});
 
