@@ -89,10 +89,10 @@ const InterViewReportSchema = new mongoose.Schema({
    type: [preparationPlainSchema],
    default:[]
   },
-  // user:{
-  //   type:mongoose.Schema.Types.ObjectId,
-  //   ref:"Fullstack_GenAi_user"
-  // }
+  user:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Fullstack_GenAi_user"
+  }
   
 },{timestamps:true});
 

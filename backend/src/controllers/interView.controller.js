@@ -1,64 +1,63 @@
-const { PDFParse } = require ('pdf-parse');
-const AppError = require('../utils/error.utils.js')
-const InterViewReportModel = require('../model/interViewReport.model.js')
-const GenerateInterviewReport = require('../services/ai.service.js')
+const {PDFParse} = require('pdf-parse');
+const AppError = require('../utils/error.utils.js');
+const InterViewReportModel = require('../model/interViewReport.model.js');
+const GenerateInterviewReport = require('../services/ai.service.js');
 
+async function interviewController(req, res, next) {
+    try {
 
+        // BUG FIX 1: Check file BEFORE destructuring
+        if (!req.file) {
+            return next(new AppError("You must upload your CV/resume", 400));
+        }
 
+        // BUG FIX 2: PDFParser is a function, not a class — call it directly
+        const resumeContent = new PDFParse({ data: req.file.buffer });
+        const resumedata = await resumeContent.getText();
 
+        if (!resumeContent || !resumedata) {
+            return next(new AppError("Can't read this file or it's empty", 400));
+        }
 
-async function interviewController(req,res,next)
-{
-  try {
-    
-    const {resume} = req.file;
-    if (!req.file){
-      return next(new AppError("you must upload  you cv/resume",401));
+        const resumeText = resumedata.text;
+
+        const { jobDescription, selfDescription } = req.body;
+
+        if (!jobDescription) {
+            return next(new AppError("Job description is required", 400));
+        }
+
+        const aiReport = await GenerateInterviewReport({
+            resume: resumeText,
+            selfDescription,
+            jobDescription
+        });
+
+        console.log(aiReport);
+
+        const interViewReport = await InterViewReportModel.create({
+            jobDescription,
+            resumeText,
+            selfDescription,
+            ...aiReport,
+            user:req.user.id,
+        });
+
+        if (!interViewReport) {
+            return next(new AppError("Can't generate report", 400));
+        }
+
+        return res.status(201).json({
+  success: true,
+  message: "Interview report generated successfully",
+  report: interViewReport
+});
+
+    } catch (err) {
+        // BUG FIX 3: console.log was AFTER return, so it never ran
+        console.error("Error:", err.message);
+        return next(new AppError(err.message, 500));
     }
-
-//TO READ OR EXTRACT THE PDF FILE:  
-  const resumeContent = new PDFParse({ data: req.file.buffer });
-  const resumeText = await resumeContent.getText();
-  
-  if (!resumeText) {
-    return next(new AppError("I can't read this file or its empty",401));
-  }
-  //console.log(resumeText.text);
-  const {jobDescription,selfDescription} = req.body;
-  if (!jobDescription) {
-    return next(new AppError("Job descriptions is required",401))
-  }
-  
-  const aiReport = await GenerateInterviewReport({
-    resume:resumeText.text,
-    selfDescription,
-    jobDescription
-  })
-  console.log(aiReport);
-  
-  
-  const interViewReport = await InterViewReportModel.create({
-    jobDescription,
-    resumeText:resumeText.text,
-    selfDescription,
-    ...aiReport,
-    //user:req.user.id
-  })
-  //console.log(interViewReport);
-  if (!interViewReport) {
-    return next(new AppError("Can't generate report",401))
-  }
-  
-  res.status(201).json({ 
-    success:true,
-    message:"Report generated successfully ",
-    roport:interViewReport
-  });
-
-  } catch (err) {
-    return next(new AppError(err.message,500));
-   console.log("err: ",err.message);
-    
-  }
 }
+
 module.exports = interviewController;
