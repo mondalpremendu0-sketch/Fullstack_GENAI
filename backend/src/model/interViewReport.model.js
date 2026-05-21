@@ -73,10 +73,10 @@ const InterViewReportSchema = new mongoose.Schema({
     min:0,
     max:100
   },
-  technicalQuestion:[technicalQuestionSchema],
-  behaviourQuestion:[behaviourQuestionSchema],
-  skillGap:[skillGapSchema],
-  preparationPlain:[preparationPlainSchema],
+  technicalQuestions:[technicalQuestionSchema],
+  behavioralQuestions:[behaviourQuestionSchema],
+  skillGaps:[skillGapSchema],
+  preparationPlan:[preparationPlainSchema],
   user:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Fullstack_GenAi_user"

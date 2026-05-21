@@ -15,10 +15,11 @@ async function interviewController(req,res)
     if (!req.file){
       return next(new AppError("you must upload  you cv/resume",401));
     }
-  
+
+//TO READ OR EXTRACT THE PDF FILE:  
   const resumeContent = new PDFParse({ data: req.file.buffer });
-  
   const resumeText = await resumeContent.getText();
+  
   if (!resumeText) {
     return next(new AppError("I can't read this file or its empty",401));
   }

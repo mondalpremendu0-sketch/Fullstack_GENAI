@@ -154,7 +154,8 @@ Instructions:
     model: "gemini-2.5-flash",
     contents: prompt,
     config: {
-      responseMimeType: "application/json",responseSchema: zodToJsonSchema(interviewReportSchema)
+      responseMimeType: "application/json",
+      responseSchema: zodToJsonSchema(interviewReportSchema)
   },
   });
     return JSON.parse(response.text);
