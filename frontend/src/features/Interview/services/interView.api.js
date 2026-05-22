@@ -1,0 +1,20 @@
+const axios = require("axios");
+
+const interviewApi = new axios.cteate({
+  baseUrl : "http://localhost:3000",
+  withCrendials: true,
+})
+
+
+export const reportData = async ({jobDescription, selfDescription,resume}) => 
+{
+  try {
+    const response = await interviewApi.post("/api/interview/",{
+      jobDescription, selfDescription,resume
+    })
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  } 
+  
+}
