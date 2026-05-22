@@ -1,9 +1,9 @@
 import React from "react";
-import Navbar from "./Navbar";
-import Hero from "./Hero";
-import FormCard from "./FormCard";
-import Features from "./Features";
-import "../styles/HomePage.scss";
+import Navbar from "../components/Navbar.jsx";
+import Hero from "../components/Hero.jsx";
+import FormCard from "../components/FromCard.jsx";
+import Features from "../components/Features.jsx";
+import "./Homepage.scss";
 
 export default function HomePage() {
   return (

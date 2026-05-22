@@ -1,0 +1,241 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.2px;
+
+    .label-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--accent-2);
+    }
+
+    .required {
+      color: var(--accent);
+      margin-left: 2px;
+    }
+  }
+
+  &__input,
+  &__textarea {
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    outline: none;
+
+    &::placeholder {
+      color: var(--text-muted);
+    }
+
+    &:focus {
+      border-color: var(--accent);
+      background: rgba(108, 99, 255, 0.05);
+      box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.12), 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    &:hover:not(:focus) {
+      border-color: var(--border-hover);
+    }
+  }
+
+  &__input {
+    padding: 14px 16px;
+    height: 52px;
+  }
+
+  &__textarea {
+    padding: 14px 16px;
+    resize: vertical;
+    min-height: 140px;
+    line-height: 1.6;
+  }
+
+  &__char-count {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: -4px;
+
+    &--warn {
+      color: var(--gold);
+    }
+  }
+}
+
+// File Upload
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+
+    .label-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--accent-2);
+    }
+
+    .required {
+      color: var(--accent);
+    }
+  }
+
+  &__zone {
+    background: var(--surface-3);
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius-md);
+    padding: 36px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+
+    input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    &:hover,
+    &--active {
+      border-color: var(--accent);
+      background: rgba(108, 99, 255, 0.06);
+      box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+    }
+
+    &--has-file {
+      border-style: solid;
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.05);
+    }
+  }
+
+  &__icon {
+    width: 44px;
+    height: 44px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-2);
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    &--success {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: var(--success);
+    }
+  }
+
+  &__text {
+    text-align: center;
+
+    .primary {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+
+      span {
+        color: var(--accent-2);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+    }
+
+    .secondary {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  }
+
+  &__file-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    margin-top: 4px;
+
+    .file-icon {
+      color: var(--success);
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .file-name {
+      font-size: 13px;
+      color: var(--text-primary);
+      font-weight: 500;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-size {
+      font-size: 11px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      border-radius: 4px;
+      transition: color 0.15s, background 0.15s;
+
+      &:hover {
+        color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+      }
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+}

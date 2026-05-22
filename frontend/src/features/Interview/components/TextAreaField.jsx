@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import "../styles/FormFields.scss";
+import "../styles/FromFileds.scss";
 
 export default function TextAreaField({
   label,

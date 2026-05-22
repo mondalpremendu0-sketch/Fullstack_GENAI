@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import TextAreaField from "./TextAreaField";
 import FileUpload from "./FileUpload";
 import SubmitButton from "./SubmitButton";
-import "../styles/FormCard.scss";
+import "../styles/FromCard.scss";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 32, scale: 0.98 },

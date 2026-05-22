@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "../styles/FormFields.scss";
+import "../styles/FromFileds.scss";
 
 function formatBytes(bytes) {
   if (bytes < 1024) return bytes + " B";
