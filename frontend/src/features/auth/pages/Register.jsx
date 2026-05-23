@@ -3,11 +3,11 @@ import { useNavigate } from "react-router";
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import {toast} from "react-toastify"
-import './Register.scss';
+
 import GoogleSignInButton from '../components/GoogleSignInButton.jsx'
 import {useAuth} from '../hooks/useAuthContext.js'
 import InfiniteLoader from '../components/InfiniteLoader.jsx'
-
+import './Register.scss'
 
 
 // SVG Icons

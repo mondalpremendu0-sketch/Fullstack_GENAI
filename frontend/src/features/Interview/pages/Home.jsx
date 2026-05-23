@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import './Homepage.scss';
+import '../styles/Homepage.scss';
 
 // --- Framer Motion Animation Variants ---
 const containerVariants = {

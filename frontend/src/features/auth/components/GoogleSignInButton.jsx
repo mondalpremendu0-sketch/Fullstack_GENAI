@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import './Google.scss';
+import '../styles/Google.scss';
 
 const GoogleIcon = ({ isClicked }) => (
   // The icon wrapper now animates on click for extra tactile feedback
