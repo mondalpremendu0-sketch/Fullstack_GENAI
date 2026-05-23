@@ -368,13 +368,13 @@ body {
 
   .ring-number {
     font-family: var(--font-display);
-    font-size: 24px; font-weight: 800; color: var(--text-1);
-    line-height: 1;
+    font-size: 24px; font-weight: 700; color: var(--text-1);
+    line-height: 1.5;
   }
 
   .ring-unit {
     font-size: 10px; color: var(--text-3);
-    font-weight: 500; letter-spacing: 0.5px;
+    font-weight: 500; letter-spacing: 1.5px;
   }
 }
 

@@ -15,6 +15,7 @@ export const reportData = async ({jobDescription, selfDescription,resume}) =>
     return response.data;
   } catch (err) {
     console.log(err);
+    throw new Error(err);
   } 
   
 }
