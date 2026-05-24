@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {useInterview} from '../hooks/useInterviewContext.js'
 import '../styles/interview.scss';
 
 // ─── Sample data (replace with API response) ──────────────────────────────────
-const REPORT = {
+/*const REPORT = {
   matchScore: 93,
   technicalQuestions: [
     {
@@ -112,16 +113,16 @@ const REPORT = {
       ]
     }
   ]
-};
+};*/
 
 // ─── Nav sections ─────────────────────────────────────────────────────────────
-const NAV = [
+/*const NAV = [
   { id: "overview",   label: "Overview",             icon: "📊" },
   { id: "technical",  label: "Technical Questions",  icon: "⚙️",  count: REPORT.technicalQuestions.length },
   { id: "behavioral", label: "Behavioral Questions", icon: "🧠",  count: REPORT.behavioralQuestions.length },
   { id: "roadmap",    label: "Road Map",              icon: "🗺️",  count: REPORT.preparationPlan.length },
   { id: "skillgaps",  label: "Skill Gaps",            icon: "⚡",  count: REPORT.skillGaps.length },
-];
+];*/
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function scoreLabel(s) {
@@ -225,7 +226,10 @@ function ScoreRing({ score }) {
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
-export default function Interview({ report = REPORT }) {
+export default function Interview() {
+  const {loading,Report} = useInterview();
+  const report = Report;
+  
   const [activeSection, setActiveSection] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sectionRefs = useRef({});

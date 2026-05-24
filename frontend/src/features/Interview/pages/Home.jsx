@@ -1,5 +1,8 @@
 import React, { useState, useRef } from 'react';
+import {useNavigate} from "react-router"
 import { motion, AnimatePresence } from 'framer-motion';
+import {useInterview} from '../hooks/useInterviewContext.js'
+
 import '../styles/Homepage.scss';
 
 // --- Framer Motion Animation Variants ---
@@ -32,7 +35,11 @@ const shakeVariants = {
   }
 };
 
-export default function HomePage() {
+export default  function HomePage() {
+  
+  const {loading,handleInterViewReport} = useInterview();
+  const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
     jobDescription: '',
     aboutYourself: '',
@@ -87,7 +94,7 @@ export default function HomePage() {
   };
 
   // --- Form Validation ---
-  const handleValidation = (e) => {
+  const handleValidation = async  (e) => {
     e.preventDefault();
     setSubmitCount(prev => prev + 1);
     let newErrors = {};
@@ -111,7 +118,16 @@ export default function HomePage() {
     if (Object.keys(newErrors).length === 0) {
       console.log("Form is valid! Submitting...", formData);
       // Proceed with submission API call here using formData.resume
+      await handleInterViewReport({
+        jobDescription:formData.jobDescription,
+        selfDescription:formData.aboutYourself,
+        resume:formData.resume
+      })
     }
+    if (loading) {
+    return(<InfiniteLoader />)
+  }
+  navigate("/interView");
   };
 
   return (

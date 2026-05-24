@@ -1,15 +1,15 @@
-const {createContext,useState} = require("react");
+import {createContext,useState} from "react";
 
 export const interViewContext = createContext();
 
 export const interViewProvider = ({children}) => {
   
-  const [report,setReport] = useState({});
+  const [Report,setReport] = useState(null);
   const [loading,setLoading] = useState(false);
   
   
   return  (
-    <interViewContext.Provider value={{report,setReport,loading,setLoading}} >
+    <interViewContext.Provider value={{Report,setReport,loading,setLoading}} >
       {children}
     </interViewContext.Provider>
     )

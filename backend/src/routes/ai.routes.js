@@ -1,12 +1,18 @@
 const express = require('express');
 const isLogedIn = require('../middleware/auth.middleware.js')
-const interviewController = require('../controllers/interView.controller.js')
+const {
+  interviewController,getInterviewByIdController,
+  getAllInterViewReportsController
+} = require('../controllers/interView.controller.js')
+
 const upload = require('../middleware/file.middleware.js')
 
 
 const interViewrouter = express.Router();
 
-interViewrouter.post("/",upload.single("resume"),interviewController)
+interViewrouter.post("/",isLogedIn,upload.single("resume"),interviewController)
+interViewrouter.get("/interview/: interviewId",isLogedIn,getInterviewByIdController)
+interViewrouter.get("/allInterviewReports",isLogedIn,getAllInterViewReportsController)
 
 
 

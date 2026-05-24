@@ -1,19 +1,19 @@
-const {useContext} = require("react");
-const {reportData} = require('../services/interView.api.js')
-const {interViewContext} = require('../interView.context.js')
+import {useContext} from "react";
+import {reportData} from '../services/interView.api.js'
+import {interViewContext} from '../interView.context.jsx'
 
 
 export const useInterview = async () => 
 {
   const context = useContext(interViewContext);
-  const {report,setReport,loading,setLoading} = context;
+  const {Report,setReport,loading,setLoading} = context;
   
-  const handleInterViewReport = async ({})=> 
+  const handleInterViewReport = async ({jobDescription,selfDescription,resume})=> 
   {
     try 
     {
       setLoading(true);
-      const data = await reportData({});
+      const data = await reportData({jobDescription,selfDescription,resume});
       setReport(data.report);
     } catch (err) 
     {

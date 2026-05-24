@@ -60,4 +60,30 @@ async function interviewController(req, res, next) {
     }
 }
 
-module.exports = interviewController;
+async function getInterviewByIdController(req,res,next) {
+  
+  const { interviewId } = req.params;
+  if (!interviewId) {
+    return next(new AppError("Id not found",404))
+  }
+  const interviewReport = await InterViewReportModel.findOne({
+    _id:interviewId,user:req.user.id
+  }).select("-__v,-createdAt,");
+  if (!interviewReport) {
+    return next(new AppError("You don't have any report",404))
+  }
+  
+  res.status(200).json({ 
+    success:true,
+    message:"Interview report fetched successfully",
+    report:interviewReport
+  });
+}
+
+async function getAllInterViewReportsController(req,res,next) {
+  
+  
+  
+}
+
+module.exports = {interviewController,getInterviewByIdController,getAllInterViewReportsController};

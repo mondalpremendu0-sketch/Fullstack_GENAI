@@ -1,6 +1,6 @@
-const axios = require("axios");
+import axios from "axios";
 
-const interviewApi = new axios.cteate({
+const interviewApi = new axios.create({
   baseUrl : "http://localhost:3000",
   withCrendials: true,
 })
@@ -9,7 +9,7 @@ const interviewApi = new axios.cteate({
 export const reportData = async ({jobDescription, selfDescription,resume}) => 
 {
   try {
-    const response = await interviewApi.post("/api/interview/",{
+    const response = await interviewApi.post("/api/interview",{
       jobDescription, selfDescription,resume
     })
     return response.data;
