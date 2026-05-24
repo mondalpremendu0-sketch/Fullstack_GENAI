@@ -10,11 +10,12 @@ export const useInterview =  () =>
   
   const handleGenerateInterviewReport = async ({jobDescription,selfDescription,resumeFile})=> 
   {
-      setLoading(true);
     try 
     {
+      setLoading(true);
       const data = await generateInterviewReport({jobDescription,selfDescription,resumeFile});
       setReport(data.report);
+      return data.report;
     } catch (err) 
     {
       //console.error('Error:', err);
@@ -52,5 +53,5 @@ export const useInterview =  () =>
   }
   
   
-  return {Report,loading,Reports,handleGenerateInterviewReport,handleGetInterviewById,handleGetAllInterviewReports}
+  return {Report,loading,setLoading,Reports,handleGenerateInterviewReport,handleGetInterviewById,handleGetAllInterviewReports}
 }

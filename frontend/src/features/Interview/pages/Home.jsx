@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import {useNavigate} from "react-router"
 import { motion, AnimatePresence } from 'framer-motion';
 import {useInterview} from '../hooks/useInterviewContext.js'
-
+import LoadingUi from '../components/Loading.jsx'
 import '../styles/Homepage.scss';
 
 // --- Framer Motion Animation Variants ---
@@ -116,22 +116,27 @@ export default  function HomePage() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      //console.log("Form is valid! Submitting...", formData);
-      // Proceed with submission API call here using formData.resume
-      //console.log("resume:",formData.resume);
-     const data = await handleGenerateInterviewReport({
+      try {
+        // Proceed with submission API call here using formData.resume
+        const data = await handleGenerateInterviewReport({
         jobDescription:formData.jobDescription,
         selfDescription:formData.aboutYourself,
         resumeFile:formData.resume
       })
+      
       console.log("apiData",data);
-      if(loading){
-        return (<main><h1>loading..</h1></main>);
+      navigate(`/interview/${data._id}`);
+      } catch (err) {
+        console.error('Error:', err);
       }
-      navigate(`/interView/${data._id}`);
+
+     
     }
-    
   };
+   if(loading){
+        return(<LoadingUi />);
+      }
+
 
   return (
     <div className="app-container">
@@ -300,13 +305,12 @@ export default  function HomePage() {
 
               <motion.button 
                 type="submit"
-                onClick={handleValidation}
                 className="submit-btn" 
                 variants={itemVariants}
                 whileHover={{ scale: 1.02, backgroundColor: "#8B6FFF" }}
                 whileTap={{ scale: 0.98 }}
               >
-                Generate Report
+                {loading ? "Generating...":"Generate Report"}
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
               </motion.button>
             </motion.form>

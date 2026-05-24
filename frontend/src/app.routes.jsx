@@ -12,6 +12,6 @@ const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
   { path: "/", element: <Proceted><HomePage /> </Proceted>},
   {path: "/interview/:interviewId", element: <Proceted><InterViewPage /> </Proceted>},
-]);
+])
 
 export {router}
