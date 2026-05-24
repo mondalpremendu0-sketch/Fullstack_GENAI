@@ -5,6 +5,8 @@ const GenerateInterviewReport = require('../services/ai.service.js');
 
 async function interviewController(req, res, next) {
     try {
+     // console.log(req.file);
+     // console.log(req.body);
         if (!req.file) {
             return next(new AppError("You must upload your CV/resume", 400));
         }

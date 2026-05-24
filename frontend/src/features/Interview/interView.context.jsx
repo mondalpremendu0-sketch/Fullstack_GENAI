@@ -2,7 +2,7 @@ import {createContext,useState} from "react";
 
 export const interviewContext = createContext();
 
-export const interviewProvider = ({children}) => {
+export const InterviewProvider = ({children}) => {
   
   const [Report,setReport] = useState(null);
   const [Reports,setReports] = useState([]);
@@ -13,5 +13,5 @@ export const interviewProvider = ({children}) => {
     <interviewContext.Provider value={{Report,setReport,loading,setLoading,Reports,setReports}} >
       {children}
     </interviewContext.Provider>
-    )
+    );
 }

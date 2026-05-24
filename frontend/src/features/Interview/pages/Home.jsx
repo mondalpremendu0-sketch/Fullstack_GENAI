@@ -37,7 +37,7 @@ const shakeVariants = {
 
 export default  function HomePage() {
   
-  const {loading,handleInterViewReport} = useInterview();
+  const {loading,handleGenerateInterviewReport} = useInterview();
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
@@ -116,18 +116,21 @@ export default  function HomePage() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      console.log("Form is valid! Submitting...", formData);
+      //console.log("Form is valid! Submitting...", formData);
       // Proceed with submission API call here using formData.resume
-      await handleInterViewReport({
+      //console.log("resume:",formData.resume);
+     const data = await handleGenerateInterviewReport({
         jobDescription:formData.jobDescription,
         selfDescription:formData.aboutYourself,
-        resume:formData.resume
+        resumeFile:formData.resume
       })
+      console.log("apiData",data);
+      if(loading){
+        return (<main><h1>loading..</h1></main>);
+      }
+      navigate(`/interView/${data._id}`);
     }
-    if (loading) {
-    return(<InfiniteLoader />)
-  }
-  navigate("/interView");
+    
   };
 
   return (
@@ -297,6 +300,7 @@ export default  function HomePage() {
 
               <motion.button 
                 type="submit"
+                onClick={handleValidation}
                 className="submit-btn" 
                 variants={itemVariants}
                 whileHover={{ scale: 1.02, backgroundColor: "#8B6FFF" }}

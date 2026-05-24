@@ -37,7 +37,7 @@ export const getMe = async () => {
     //console.log("getMe data:",response);
     return response.data;
   } catch (err) {
-    console.error('Error:', err);
+    //console.error('Error:', err);
     
   }
   

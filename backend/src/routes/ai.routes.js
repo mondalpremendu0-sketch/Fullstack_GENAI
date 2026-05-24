@@ -11,7 +11,7 @@ const upload = require('../middleware/file.middleware.js')
 const interViewrouter = express.Router();
 
 interViewrouter.post("/",isLogedIn,upload.single("resume"),interviewController)
-interViewrouter.get("report/:interviewId",getInterviewByIdController)
+interViewrouter.get("report/:interviewId",isLogedIn,getInterviewByIdController)
 interViewrouter.get("/allInterviewReports",isLogedIn,getAllInterViewReportsController)
 
 

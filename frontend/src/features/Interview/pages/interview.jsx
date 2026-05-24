@@ -185,7 +185,7 @@ function QCard({ q, index }) {
   );
 }
 
-// ─── Score Ring ───────────────────────────────────────────────────────────────
+
 function ScoreRing({ score }) {
   const r = 40;
   const circ = 2 * Math.PI * r;
@@ -225,7 +225,7 @@ function ScoreRing({ score }) {
   );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
+// ─── Main Component----
 export default function Interview() {
   const {loading,Report} = useInterview();
   const report = Report;

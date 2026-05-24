@@ -3,17 +3,17 @@ import {generateInterviewReport,getInerviewById,getAllInterviewReport} from '../
 import {interviewContext} from '../interView.context.jsx'
 
 
-export const useInterview = async () => 
+export const useInterview =  () => 
 {
   const context = useContext(interviewContext);
-  const {Report,setReport,loading,setLoading} = context;
+  const {Report,setReport,loading,setLoading,Reports,setReports} = context;
   
-  const handleGenerateInterviewReport = async ({jobDescription,selfDescription,resume})=> 
+  const handleGenerateInterviewReport = async ({jobDescription,selfDescription,resumeFile})=> 
   {
+      setLoading(true);
     try 
     {
-      setLoading(true);
-      const data = await generateInterviewReport({jobDescription,selfDescription,resume});
+      const data = await generateInterviewReport({jobDescription,selfDescription,resumeFile});
       setReport(data.report);
     } catch (err) 
     {
@@ -26,8 +26,8 @@ export const useInterview = async () =>
   
   const handleGetInterviewById = async (interviewId) => 
   {
-    try {
       setLoading(true);
+    try {
       const data = await getInerviewById(interviewId);
       setReport(data.report);
     } catch (err) {
@@ -39,10 +39,10 @@ export const useInterview = async () =>
   
   const handleGetAllInterviewReports = async () => 
   {
-    try {
       setLoading(true);
+    try {
       const data = await getAllInterviewReport();
-      setReport(data.reports)
+      setReports(data.reports)
     } catch (err) {
      // console.error('Error:', err);
       
@@ -50,4 +50,7 @@ export const useInterview = async () =>
       setLoading(false);
     }
   }
+  
+  
+  return {Report,loading,Reports,handleGenerateInterviewReport,handleGetInterviewById,handleGetAllInterviewReports}
 }

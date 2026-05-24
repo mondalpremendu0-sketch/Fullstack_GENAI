@@ -2,6 +2,7 @@ const { GoogleGenAI } = require("@google/genai");
 const { z } = require("zod");
 
 const interviewReportSchema = z.object({
+    title:z.string(),
     matchScore: z.number().min(0).max(100),
     technicalQuestions: z.array(z.object({
         question: z.string(),
@@ -22,7 +23,7 @@ const interviewReportSchema = z.object({
         focus: z.string(),
         tasks: z.array(z.string())
     })),
-    title:z.string()
+    
 });
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -43,6 +44,7 @@ ${jobDescription}
 Return EXACTLY this JSON structure with NO extra text, NO markdown, NO code blocks:
 
 {
+   "title":"Backend Enginner",
   "matchScore": <number 0-100>,
   "technicalQuestions": [
     {
@@ -71,7 +73,7 @@ Return EXACTLY this JSON structure with NO extra text, NO markdown, NO code bloc
       "tasks": ["<task 1>", "<task 2>", "<task 3>"]
     }
   ],
-  "title":"Backend Developer"
+ 
 }
 
 Rules:
@@ -93,7 +95,7 @@ Rules:
             }
         });
 
-        //console.log("RAW GEMINI:", response.text);
+       // console.log("RAW GEMINI:", response.text);
 
         // Striping any accidental markdown fences
         const cleaned = response.text
@@ -105,6 +107,7 @@ Rules:
 
         // Safely map with fallbacks
         const formattedData = {
+          title:typeof parsedData.title === "string" ? parsedData.title: "",
             matchScore: typeof parsedData.matchScore === "number"
                 ? parsedData.matchScore
                 : 80,
@@ -145,7 +148,7 @@ Rules:
             console.error("Validation errors:", validatedData.error.format());
             throw new Error("Invalid AI response structure");
         }
-
+//console.log(validatedData.data);
         return validatedData.data;
 
     } catch (err) {

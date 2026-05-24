@@ -1,20 +1,23 @@
 import axios from "axios";
 
 const interviewApi = new axios.create({
-  baseUrl : "http://localhost:3000",
-  withCrendials: true,
+  baseURL : "http://localhost:3000",
+  withCredentials:true
 })
 
 
 export const generateInterviewReport = async ({jobDescription, selfDescription,resumeFile}) => 
 {
-  const fromData = new FormData();
-  fromData.append("jobDescription",jobDescription);
-  fromData.append("selfDescription",selfDescription);
-  fromData.append("resume",resumeFile);
+  //console.log("resumeFile",resumeFile);
+  const formData = new FormData();
+  formData.append("jobDescription",jobDescription);
+  formData.append("selfDescription",selfDescription);
+  formData.append("resume",resumeFile);
+  
+  //console.log(fromData);
   try {
 
-    const response = await interviewApi.post("/api/interview/",fromData,{
+    const response = await interviewApi.post("/api/interview/",formData,{
     headers:{
       "Content-Type":"multipart/form-data"
     }
