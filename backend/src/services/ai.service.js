@@ -21,7 +21,8 @@ const interviewReportSchema = z.object({
         day: z.number(),
         focus: z.string(),
         tasks: z.array(z.string())
-    }))
+    })),
+    title:z.string()
 });
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -69,7 +70,8 @@ Return EXACTLY this JSON structure with NO extra text, NO markdown, NO code bloc
       "focus": "<focus topic>",
       "tasks": ["<task 1>", "<task 2>", "<task 3>"]
     }
-  ]
+  ],
+  "title":"Backend Developer"
 }
 
 Rules:
