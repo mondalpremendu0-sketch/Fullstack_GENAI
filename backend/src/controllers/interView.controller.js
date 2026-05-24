@@ -59,13 +59,13 @@ async function interviewController(req, res, next) {
 async function getInterviewByIdController(req,res,next) {
   
   const { interviewId } = req.params;
-  console.log(interviewId);
+  
   if (!interviewId) {
     return next(new AppError("Id not found",404))
   }
   const interviewReport = await InterViewReportModel.findOne({
     _id:interviewId
-  }).select("-__v,-createdAt,-updatedAt");
+  }).select("-__v -createdAt -updatedAt");
   
   if (!interviewReport) {
     return next(new AppError("You don't have any report",400))
@@ -86,7 +86,7 @@ async function getAllInterViewReportsController(req,res,next) {
   
   const interviewReports = await InterViewReportModel.find({
     user:req.user.id
-  }).select("-resume,-jobDescription,-resumeText,-selfDescription,-technicalQuestions,-behavioralQuestions,-skillGaps,-preparationPlan,-__v,-createdAt,-updatedAt")
+  }).select("-resume -jobDescription -resumeText -selfDescription -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan -__v,-createdAt -updatedAt")
   
   if (!interviewReports) {
     return next(new AppError("Reports not found!",400))
@@ -99,5 +99,6 @@ async function getAllInterViewReportsController(req,res,next) {
   });
   
 }
+
 
 module.exports = {interviewController,getInterviewByIdController,getAllInterViewReportsController};
