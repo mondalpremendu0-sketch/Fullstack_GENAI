@@ -5,13 +5,10 @@ const GenerateInterviewReport = require('../services/ai.service.js');
 
 async function interviewController(req, res, next) {
     try {
-
-        // BUG FIX 1: Check file BEFORE destructuring
         if (!req.file) {
             return next(new AppError("You must upload your CV/resume", 400));
         }
 
-        // BUG FIX 2: PDFParser is a function, not a class — call it directly
         const resumeContent = new PDFParse({ data: req.file.buffer });
         const resumedata = await resumeContent.getText();
 
@@ -33,7 +30,7 @@ async function interviewController(req, res, next) {
             jobDescription
         });
 
-        console.log(aiReport);
+        //console.log(aiReport);
 
         const interViewReport = await InterViewReportModel.create({
             jobDescription,
@@ -54,7 +51,6 @@ async function interviewController(req, res, next) {
 });
 
     } catch (err) {
-        // BUG FIX 3: console.log was AFTER return, so it never ran
         console.error("Error:", err.message);
         return next(new AppError(err.message, 500));
     }
@@ -63,14 +59,16 @@ async function interviewController(req, res, next) {
 async function getInterviewByIdController(req,res,next) {
   
   const { interviewId } = req.params;
+  console.log(interviewId);
   if (!interviewId) {
     return next(new AppError("Id not found",404))
   }
   const interviewReport = await InterViewReportModel.findOne({
-    _id:interviewId,user:req.user.id
-  }).select("-__v,-createdAt,");
+    _id:interviewId
+  }).select("-__v,-createdAt,-updatedAt");
+  
   if (!interviewReport) {
-    return next(new AppError("You don't have any report",404))
+    return next(new AppError("You don't have any report",400))
   }
   
   res.status(200).json({ 
@@ -82,7 +80,23 @@ async function getInterviewByIdController(req,res,next) {
 
 async function getAllInterViewReportsController(req,res,next) {
   
+  if(!req.user.id){
+    return next(new AppError("User Id not found",400))
+  }
   
+  const interviewReports = await InterViewReportModel.find({
+    user:req.user.id
+  }).select("-resume,-jobDescription,-resumeText,-selfDescription,-technicalQuestions,-behavioralQuestions,-skillGaps,-preparationPlan,-__v,-createdAt,-updatedAt")
+  
+  if (!interviewReports) {
+    return next(new AppError("Reports not found!",400))
+  }
+  
+  res.status(200).json({ 
+    success:true,
+    message:"Reports fetched!",
+    report:interviewReports
+  });
   
 }
 
