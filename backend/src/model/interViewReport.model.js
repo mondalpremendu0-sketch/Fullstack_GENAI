@@ -92,6 +92,10 @@ const InterViewReportSchema = new mongoose.Schema({
   user:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Fullstack_GenAi_user"
+  },
+  title:{
+    type:String,
+    reuired:[true,"Title is required"]
   }
   
 },{timestamps:true});
