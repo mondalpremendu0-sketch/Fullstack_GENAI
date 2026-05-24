@@ -1,11 +1,11 @@
 import {useContext} from "react";
 import {generateInterviewReport,getInerviewById,getAllInterviewReport} from '../services/interView.api.js'
-import {interViewContext} from '../interView.context.jsx'
+import {interviewContext} from '../interView.context.jsx'
 
 
 export const useInterview = async () => 
 {
-  const context = useContext(interViewContext);
+  const context = useContext(interviewContext);
   const {Report,setReport,loading,setLoading} = context;
   
   const handleGenerateInterviewReport = async ({jobDescription,selfDescription,resume})=> 
@@ -44,7 +44,7 @@ export const useInterview = async () =>
       const data = await getAllInterviewReport();
       setReport(data.reports)
     } catch (err) {
-      console.error('Error:', err);
+     // console.error('Error:', err);
       
     } finally {
       setLoading(false);

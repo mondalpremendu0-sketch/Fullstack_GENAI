@@ -1,16 +1,17 @@
 import {createContext,useState} from "react";
 
-export const interViewContext = createContext();
+export const interviewContext = createContext();
 
-export const interViewProvider = ({children}) => {
+export const interviewProvider = ({children}) => {
   
   const [Report,setReport] = useState(null);
+  const [Reports,setReports] = useState([]);
   const [loading,setLoading] = useState(false);
   
   
   return  (
-    <interViewContext.Provider value={{Report,setReport,loading,setLoading}} >
+    <interviewContext.Provider value={{Report,setReport,loading,setLoading,Reports,setReports}} >
       {children}
-    </interViewContext.Provider>
+    </interviewContext.Provider>
     )
 }
