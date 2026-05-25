@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {useInterview} from '../hooks/useInterviewContext.js'
+import Loadingui from '../components/Loading.jsx'
 import '../styles/interview.scss';
 
 // ─── Sample data (replace with API response) ──────────────────────────────────
@@ -116,13 +117,13 @@ import '../styles/interview.scss';
 };*/
 
 // ─── Nav sections ─────────────────────────────────────────────────────────────
-/*const NAV = [
+const NAV = [
   { id: "overview",   label: "Overview",             icon: "📊" },
-  { id: "technical",  label: "Technical Questions",  icon: "⚙️",  count: REPORT.technicalQuestions.length },
-  { id: "behavioral", label: "Behavioral Questions", icon: "🧠",  count: REPORT.behavioralQuestions.length },
-  { id: "roadmap",    label: "Road Map",              icon: "🗺️",  count: REPORT.preparationPlan.length },
-  { id: "skillgaps",  label: "Skill Gaps",            icon: "⚡",  count: REPORT.skillGaps.length },
-];*/
+  { id: "technical",  label: "Technical Questions",  icon: "⚙️",  count: 5 },
+  { id: "behavioral", label: "Behavioral Questions", icon: "🧠",  count: 5 },
+  { id: "roadmap",    label: "Road Map",              icon: "🗺️",  count: 5 },
+  { id: "skillgaps",  label: "Skill Gaps",            icon: "⚡",  count: 5},
+];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function scoreLabel(s) {
@@ -186,18 +187,28 @@ function QCard({ q, index }) {
 }
 
 
+// Helper function to get ring colors based on score
+function getRingColors(score) {
+  if (score >= 85) return { c1: "#34d399", c2: "#10b981" }; // Green (Excellent Match)
+  if (score >= 70) return { c1: "#f5e92bfb", c2: "#f5e92bfb" }; // Blue (Good Match)
+  if (score >= 55) return { c1: "#fbbf24", c2: "#f59e0b" }; // Orange (Fair Match)
+  return { c1: "#f87171", c2: "#ef4444" };                   // Red (Needs Work)
+}
+
 function ScoreRing({ score }) {
   const r = 40;
   const circ = 2 * Math.PI * r;
   const offset = circ - (score / 100) * circ;
+  const colors = getRingColors(score);
 
   return (
     <div className="ir__score-ring">
       <svg viewBox="0 0 100 100">
         <defs>
           <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#6c63ff" />
-            <stop offset="100%" stopColor="#a78bfa" />
+            {/* The colors now update dynamically based on the score */}
+            <stop offset="0%" stopColor={colors.c1} />
+            <stop offset="100%" stopColor={colors.c2} />
           </linearGradient>
         </defs>
         <circle className="ring-bg" cx="50" cy="50" r={r} />
@@ -228,6 +239,9 @@ function ScoreRing({ score }) {
 // ─── Main Component----
 export default function Interview() {
   const {loading,Report} = useInterview();
+  if(loading){
+    return(<Loadingui />);
+  }
   const report = Report;
   
   const [activeSection, setActiveSection] = useState("overview");
