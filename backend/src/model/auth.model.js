@@ -7,11 +7,11 @@ const authSchema = mongoose.Schema({
   },
   lastname:{
     type:String,
-    required: [true,"Last name is required"]
+    required: [true,"Last name is required"],
   },
   email:{
     type:String,
-    unique: [true,"This email is already taken"],
+    unique: true,
     required: [true,"Email is required"],
     match:[/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,"Email is invaild"]
   },

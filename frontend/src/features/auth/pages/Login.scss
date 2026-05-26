@@ -1,64 +1,63 @@
-// ... inside .neo-card { ... }
-
-  .login-actions {
+.login-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 13px;
     padding: 0 5px;
-    margin-top: -5px; // Pulls it slightly closer to the password field
+    margin-top: -5px;
 
     .remember-me {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-main);
-      cursor: pointer;
-      font-weight: 500;
-      transition: color 0.3s ease;
-
-      input[type="checkbox"] {
-        appearance: none;
-        -webkit-appearance: none;
-        width: 18px;
-        height: 18px;
-        border-radius: 6px;
-        background-color: var(--bg-color);
-        // Inset shadow makes the checkbox look like a tiny pressed groove
-        box-shadow: inset 3px 3px 5px 0 var(--shadow-dark), 
-                    inset -3px -3px 5px 0 var(--shadow-light);
-        cursor: pointer;
         display: flex;
         align-items: center;
-        justify-content: center;
-        outline: none;
-        transition: all 0.2s ease;
+        gap: 8px;
+        color: var(--text-main);
+        cursor: pointer;
+        font-weight: 500;
+        transition: color 0.3s ease;
 
-        // Custom checkmark using a pseudo-element
-        &::after {
-          content: '';
-          width: 5px;
-          height: 10px;
-          border: solid var(--accent-color);
-          border-width: 0 2px 2px 0;
-          transform: rotate(45deg) scale(0);
-          transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 6px;
+            background-color: var(--bg-color);
 
-        &:checked::after {
-          transform: rotate(45deg) scale(1);
+            box-shadow:
+                inset 3px 3px 5px 0 var(--shadow-dark),
+                inset -3px -3px 5px 0 var(--shadow-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+            transition: all 0.2s ease;
+
+            &::after {
+                content: "";
+                width: 5px;
+                height: 10px;
+                border: solid var(--accent-color);
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg) scale(0);
+                transition: transform 0.2s
+                    cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+
+            &:checked::after {
+                transform: rotate(45deg) scale(1);
+            }
         }
-      }
     }
 
     .forgot-link {
-      color: var(--text-main);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s ease;
+        color: var(--text-main);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
 
-      &:hover {
-        color: var(--accent-active);
-      }
+        &:hover {
+            color: var(--accent-active);
+        }
     }
-  }
+}

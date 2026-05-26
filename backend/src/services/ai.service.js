@@ -78,9 +78,9 @@ Return EXACTLY this JSON structure with NO extra text, NO markdown, NO code bloc
 }
 
 Rules:
-- technicalQuestions: exactly 7 objects
-- behavioralQuestions: exactly 7 objects
-- skillGaps: exactly 7 objects, severity must be "low", "medium", or "high"
+- technicalQuestions: exactly 5 objects
+- behavioralQuestions: exactly 5 objects
+- skillGaps: exactly 5 objects, severity must be "low", "medium", or "high"
 - preparationPlan: exactly 7 objects with day numbers 1 to 7
 - Every field must be a plain string
 - Do NOT nest arrays inside tasks, tasks must be flat strings
