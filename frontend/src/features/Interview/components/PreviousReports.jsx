@@ -123,27 +123,21 @@ const ReportCard = ({ report, expanded, onToggle }) => {
 };
 
 export default function PreviousReports() {
-  const { Reports, loading } = useInterview();
+  const { Reports } = useInterview();
   const [expandedId, setExpandedId] = useState(null);
 
 
 
   const toggle = (id) => setExpandedId((prev) => (prev === id ? null : id));
 
-  if (loading) {
-    return (
-      <div className="reports-section reports-section--centered">
-        <span className="reports-section__loading">Loading reports...</span>
-      </div>
-    );
-  }
+  
 
   return (
     <div className="reports-section">
       <div className="reports-header">
         <div className="reports-header__title-group">
           <div className="reports-header__icon">🕐</div>
-          <span className="reports-header__title">Previous Reports</span>
+          <span className="reports-header__title">Previous Interview Reports</span>
         </div>
 
         <span className="reports-header__count">

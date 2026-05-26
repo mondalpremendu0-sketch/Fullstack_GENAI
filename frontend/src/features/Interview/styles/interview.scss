@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap");
 
-// ─── Variables (Restored Original Colors) ────────────────────────────────────
+// ─── Variables ────────────────────────────────────
 :root {
     --ink: #08080f;
     --ink-2: #0e0e1c;
@@ -9,44 +9,53 @@
     --surface-3: #20203a;
     --border: rgba(255, 255, 255, 0.07);
     --border-2: rgba(255, 255, 255, 0.12);
+
     --accent: #6c63ff;
     --accent-2: #a78bfa;
     --accent-glow: rgba(108, 99, 255, 0.25);
+
     --gold: #f59e0b;
     --gold-dim: rgba(245, 158, 11, 0.15);
     --teal: #2dd4bf;
     --teal-dim: rgba(45, 212, 191, 0.12);
     --rose: #fb7185;
     --rose-dim: rgba(251, 113, 133, 0.12);
+
     --success: #10b981;
     --success-dim: rgba(16, 185, 129, 0.12);
     --warn: #f59e0b;
     --warn-dim: rgba(245, 158, 11, 0.12);
     --danger: #ef4444;
     --danger-dim: rgba(239, 68, 68, 0.12);
+
     --text-1: #eeeeff;
     --text-2: rgba(238, 238, 255, 0.55);
     --text-3: rgba(238, 238, 255, 0.3);
     --text-4: rgba(238, 238, 255, 0.18);
+
     --font-display: "Syne", sans-serif;
     --font-body: "DM Sans", sans-serif;
     --font-mono: "JetBrains Mono", monospace;
+
     --sidebar-w: 240px;
-    --right-w: 220px;
+    --right-w: 260px;
     --nav-h: 56px;
 }
 
-// ─── Reset ────────────────────────────────────────────────────────────────────
+// ─── Reset & Core ─────────────────────────────────
 *,
 *::before,
 *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
 }
+
 html {
     scroll-behavior: smooth;
 }
+
 body {
     font-family: var(--font-body);
     background: var(--ink);
@@ -55,10 +64,20 @@ body {
     overflow-x: hidden;
     min-height: 100vh;
 }
+
+button {
+    font-family: inherit;
+    border: none;
+    background: none;
+    cursor: pointer;
+    outline: none;
+}
+
 ::selection {
     background: var(--accent);
     color: #fff;
 }
+
 ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
@@ -71,7 +90,7 @@ body {
     border-radius: 4px;
 }
 
-// ─── Layout Shell ─────────────────────────────────────────────────────────────
+// ─── Layout Shell ──────────────────────────────────
 .ir {
     display: flex;
     flex-direction: column;
@@ -79,7 +98,6 @@ body {
     background: var(--ink);
     position: relative;
 
-    // Subtle grid bg
     &::before {
         content: "";
         position: fixed;
@@ -97,7 +115,7 @@ body {
     }
 }
 
-// ─── Top Nav Bar (Mobile only) ────────────────────────────────────────────────
+// ─── Top Nav Bar (Mobile only) ─────────────────────
 .ir__topbar {
     position: sticky;
     top: 0;
@@ -116,8 +134,6 @@ body {
     @media (min-width: 768px) {
         padding: 0 24px;
     }
-
-    // Hide entirely on desktop for the 3-column layout
     @media (min-width: 1024px) {
         display: none;
     }
@@ -130,7 +146,8 @@ body {
     min-width: 0;
 }
 
-.ir__back {
+.ir__back,
+.ir__menu-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,11 +157,10 @@ body {
     background: var(--surface-2);
     border: 1px solid var(--border);
     color: var(--text-2);
-    cursor: pointer;
-    flex-shrink: 0;
     transition:
         background 0.15s,
         color 0.15s;
+    user-select: none;
 
     &:hover {
         background: var(--surface-3);
@@ -162,13 +178,10 @@ body {
     font-weight: 700;
     color: var(--text-1);
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 
     @media (min-width: 480px) {
         font-size: 15px;
     }
-
     span {
         color: var(--accent-2);
     }
@@ -202,53 +215,19 @@ body {
         font-size: 15px;
         color: var(--text-1);
     }
-
     @media (min-width: 480px) {
         font-size: 13px;
     }
 }
 
-.ir__menu-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    color: var(--text-2);
-    cursor: pointer;
-    transition:
-        background 0.15s,
-        color 0.15s;
-
-    &:hover {
-        background: var(--surface-3);
-        color: var(--text-1);
-    }
-    svg {
-        width: 16px;
-        height: 16px;
-    }
-
-    // Hide on desktop
-    @media (min-width: 900px) {
-        display: none;
-    }
-}
-
-// ─── Body: The 3-Column Grid setup ───────────────────────────────────────────
+// ─── Body Layout (3 Columns on Desktop) ─────────────
 .ir__body {
     position: relative;
     z-index: 1;
-
-    // Mobile/Tablet: Stacked Flexbox
     display: flex;
     flex-direction: column;
     flex: 1;
 
-    // Desktop: Strict 3-Column Grid matching the wireframe
     @media (min-width: 1024px) {
         display: grid;
         grid-template-columns: var(--sidebar-w) minmax(0, 1fr) var(--right-w);
@@ -257,7 +236,7 @@ body {
     }
 }
 
-// ─── Left Sidebar (Nav) ───────────────────────────────────────────────────────
+// ─── Left Sidebar ───────────────────────────────────
 .ir__sidebar {
     position: fixed;
     top: var(--nav-h);
@@ -271,22 +250,20 @@ body {
     padding: 20px 0;
     overflow-y: auto;
     z-index: 90;
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-
-    // Mobile: hidden by default, slides in
     transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 
     &.open {
         transform: translateX(0);
     }
 
-    // Desktop: Locked in place
     @media (min-width: 1024px) {
         transform: translateX(0);
         position: sticky;
         top: 0;
         height: 100vh;
         flex-shrink: 0;
+        background: transparent;
     }
 }
 
@@ -309,20 +286,18 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 10px;
+    padding: 10px;
     border-radius: 10px;
     font-size: 13px;
     font-weight: 500;
     color: var(--text-2);
-    cursor: pointer;
-    border: none;
-    background: none;
     width: 100%;
     text-align: left;
     transition:
         background 0.15s,
         color 0.15s;
     position: relative;
+    user-select: none;
 
     .nav-icon {
         width: 30px;
@@ -387,7 +362,7 @@ body {
     margin: 10px 12px;
 }
 
-// Sidebar overlay (mobile)
+// ─── Overlay (Mobile) ───────────────────────────────
 .ir__overlay {
     display: none;
     position: fixed;
@@ -399,91 +374,64 @@ body {
     &.open {
         display: block;
     }
-
-    @media (min-width: 900px) {
+    @media (min-width: 1024px) {
         display: none !important;
     }
 }
 
-// ─── Main Content (Center Panel) ──────────────────────────────────────────────
+// ─── Main Content Area ──────────────────────────────
 .ir__main {
     flex: 1;
     min-width: 0;
-    padding: 20px 16px;
+    padding: 24px 16px;
     display: flex;
     flex-direction: column;
-    align-items: center; // Center content max-width
+    align-items: center;
 
     @media (min-width: 480px) {
-        padding: 24px 20px;
+        padding: 32px 20px;
     }
-
     @media (min-width: 1024px) {
-        margin: 0; // Grid handles positioning
-        padding: 32px 40px;
+        margin: 0;
+        padding: 40px;
     }
 }
 
 .ir__section {
     width: 100%;
     max-width: 800px;
-    margin-bottom: 36px;
-
+    margin-bottom: 48px;
     &:last-child {
         margin-bottom: 0;
     }
 }
 
-// ─── Right Panel ──────────────────────────────────────────────────────────────
-.ir__right {
-    display: none; // Hidden on mobile
-
-    @media (min-width: 1024px) {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        flex-shrink: 0;
-        overflow-y: auto;
-        padding: 32px 24px;
-        border-left: 1px solid var(--border);
-        background: rgba(13, 13, 28, 0.5);
-    }
-}
-
-// ─── Section Heading ──────────────────────────────────────────────────────────
 .ir__section-head {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    padding-bottom: 14px;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
     border-bottom: 1px solid var(--border);
 }
 
 .ir__section-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 9px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 18px;
     flex-shrink: 0;
 }
 
 .ir__section-title {
     font-family: var(--font-display);
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--text-1);
     letter-spacing: -0.3px;
-
-    @media (min-width: 480px) {
-        font-size: 17px;
-    }
 }
 
 .ir__section-count {
@@ -494,22 +442,22 @@ body {
     color: var(--text-3);
     background: var(--surface-2);
     border: 1px solid var(--border);
-    padding: 3px 8px;
+    padding: 4px 10px;
     border-radius: 100px;
+    white-space: nowrap;
 }
 
-// ─── Score Hero ───────────────────────────────────────────────────────────────
+// ─── Score Hero ─────────────────────────────────────
 .ir__score-hero {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     text-align: center;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 20px;
     padding: 28px 20px;
-    margin-bottom: 28px;
     position: relative;
     overflow: hidden;
 
@@ -525,26 +473,25 @@ body {
         pointer-events: none;
     }
 
-    @media (min-width: 480px) {
+    @media (min-width: 600px) {
         flex-direction: row;
         text-align: left;
-        gap: 20px;
-        padding: 28px 32px;
+        gap: 24px;
+        padding: 32px;
     }
 }
 
 .ir__score-ring {
     position: relative;
     flex-shrink: 0;
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
 
     svg {
         width: 100%;
         height: 100%;
         transform: rotate(-90deg);
     }
-
     .ring-bg {
         fill: none;
         stroke: var(--surface-3);
@@ -555,7 +502,6 @@ body {
         stroke: url(#scoreGrad);
         stroke-width: 8;
         stroke-linecap: round;
-        transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .ring-label {
@@ -566,20 +512,18 @@ body {
         align-items: center;
         justify-content: center;
     }
-
     .ring-number {
         font-family: var(--font-display);
-        font-size: 24px;
+        font-size: 26px;
         font-weight: 700;
         color: var(--text-1);
-        line-height: 1.5;
+        line-height: 1.1;
     }
-
     .ring-unit {
         font-size: 10px;
         color: var(--text-3);
         font-weight: 500;
-        letter-spacing: 1.5px;
+        letter-spacing: 1px;
     }
 }
 
@@ -589,18 +533,13 @@ body {
 
     h3 {
         font-family: var(--font-display);
-        font-size: 18px;
+        font-size: 20px;
         font-weight: 700;
         color: var(--text-1);
-        margin-bottom: 6px;
-
-        @media (min-width: 480px) {
-            font-size: 20px;
-        }
+        margin-bottom: 8px;
     }
-
     p {
-        font-size: 13px;
+        font-size: 14px;
         color: var(--text-2);
         line-height: 1.6;
         font-weight: 300;
@@ -610,12 +549,12 @@ body {
 .ir__score-tag {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    font-size: 11px;
+    gap: 6px;
+    font-size: 12px;
     font-weight: 600;
-    padding: 3px 10px;
+    padding: 4px 12px;
     border-radius: 100px;
-    margin-top: 10px;
+    margin-top: 14px;
 
     &--high {
         background: var(--success-dim);
@@ -634,15 +573,11 @@ body {
     }
 }
 
-// ─── Question Cards ───────────────────────────────────────────────────────────
+// ─── Question Cards ─────────────────────────────────
 .ir__q-list {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-
-    @media (min-width: 600px) {
-        gap: 16px;
-    }
+    gap: 16px;
 }
 
 .ir__q-card {
@@ -651,7 +586,6 @@ body {
     border-radius: 16px;
     overflow: hidden;
     transition: border-color 0.2s;
-
     &:hover {
         border-color: var(--border-2);
     }
@@ -664,9 +598,8 @@ body {
     padding: 16px;
     cursor: pointer;
     user-select: none;
-
     @media (min-width: 480px) {
-        padding: 18px 20px;
+        padding: 20px;
     }
 }
 
@@ -685,12 +618,10 @@ body {
 
 .ir__q-text {
     flex: 1;
-    min-width: 0;
     font-size: 14px;
     font-weight: 500;
     color: var(--text-1);
-    line-height: 1.55;
-
+    line-height: 1.6;
     @media (min-width: 480px) {
         font-size: 15px;
     }
@@ -702,10 +633,10 @@ body {
     flex-shrink: 0;
     color: var(--text-3);
     margin-top: 2px;
-    transition: transform 0.25s ease;
-
+    transition: transform 0.3s ease;
     &.open {
         transform: rotate(180deg);
+        color: var(--text-1);
     }
 }
 
@@ -718,15 +649,14 @@ body {
     display: flex;
     flex-direction: column;
     gap: 12px;
-
     @media (min-width: 480px) {
-        padding: 0 20px 18px;
+        padding: 0 20px 20px;
     }
 }
 
 .ir__q-block {
-    border-radius: 10px;
-    padding: 12px 14px;
+    border-radius: 12px;
+    padding: 14px 16px;
 
     &--intention {
         background: var(--teal-dim);
@@ -739,11 +669,11 @@ body {
 }
 
 .ir__q-block-label {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 
     .ir__q-block--intention & {
         color: var(--teal);
@@ -754,21 +684,16 @@ body {
 }
 
 .ir__q-block-text {
-    font-size: 13px;
+    font-size: 13.5px;
     color: var(--text-2);
-    line-height: 1.65;
+    line-height: 1.6;
     font-weight: 300;
-
-    @media (min-width: 480px) {
-        font-size: 13.5px;
-    }
 }
 
-// ─── Road Map ─────────────────────────────────────────────────────────────────
+// ─── Road Map ───────────────────────────────────────
 .ir__roadmap {
     display: flex;
     flex-direction: column;
-    gap: 0;
     position: relative;
 }
 
@@ -776,20 +701,17 @@ body {
     display: flex;
     gap: 16px;
     position: relative;
+    
 
-    // Vertical timeline line
     &:not(:last-child)::before {
         content: "";
         position: absolute;
-        left: 15px;
-        top: 40px;
+        left: 25px;
+        top: 57px;
         bottom: 0;
-        width: 1px;
-        background: var(--border);
-
-        @media (min-width: 480px) {
-            left: 17px;
-        }
+        width: 2px;
+        background: #f95feba4;
+        
     }
 }
 
@@ -798,92 +720,82 @@ body {
     flex-direction: column;
     align-items: center;
     flex-shrink: 0;
-    padding-top: 12px;
+    padding-top: 4px;
 }
 
 .ir__day-dot {
-    width: 32px;
-    height: 32px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: var(--font-mono);
     font-size: 11px;
-    font-weight: 600;
-    color: var(--text-1);
-    flex-shrink: 0;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    box-shadow: 0 0 16px var(--accent-glow);
-    position: relative;
+    font-weight: 700;
+    white-space: nowrap;
     z-index: 1;
 
-    @media (min-width: 480px) {
-        width: 36px;
-        height: 36px;
-        font-size: 12px;
-    }
+    color: #ee14da;
+    background: rgba(45, 212, 191, 0.1);
+    border: 1px solid #ee14da;
+    box-shadow: 0 0 12px #ee14da;
 }
 
 .ir__day-content {
     flex: 1;
-    min-width: 0;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 14px;
-    padding: 14px 16px;
-    margin-bottom: 14px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
     transition: border-color 0.2s;
-
     &:hover {
         border-color: var(--border-2);
-    }
-
-    @media (min-width: 480px) {
-        padding: 16px 18px;
     }
 }
 
 .ir__day-focus {
     font-family: var(--font-display);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--text-1);
-    margin-bottom: 10px;
-    letter-spacing: -0.2px;
-
-    @media (min-width: 480px) {
-        font-size: 15px;
-    }
+    margin-bottom: 12px;
 }
 
 .ir__day-tasks {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 8px;
 }
 
 .ir__day-task {
     display: flex;
     align-items: flex-start;
-    gap: 8px;
-    font-size: 13px;
+    gap: 10px;
+    font-size: 13.5px;
     color: var(--text-2);
-    line-height: 1.55;
+    line-height: 1.5;
     font-weight: 300;
 
     .task-bullet {
         width: 5px;
         height: 5px;
         border-radius: 50%;
-        background: var(--accent-2);
+        background: #ee14da;
         flex-shrink: 0;
-        margin-top: 7px;
+        margin-top: 8px;
         opacity: 0.7;
     }
 }
 
-// ─── Skill Gaps ───────────────────────────────────────────────────────────────
+// ─── Mobile Skill Gaps (Hidden on Desktop) ──────────
+.ir__mobile-gaps {
+    @media (min-width: 1024px) {
+        display: none;
+    }
+}
+
 .ir__gaps {
     display: flex;
     flex-direction: column;
@@ -897,12 +809,7 @@ body {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 12px 14px;
-    transition: border-color 0.2s;
-
-    &:hover {
-        border-color: var(--border-2);
-    }
+    padding: 14px 16px;
 }
 
 .ir__gap-dot {
@@ -910,37 +817,92 @@ body {
     height: 8px;
     border-radius: 50%;
     flex-shrink: 0;
-
     &--high {
         background: var(--danger);
-        box-shadow: 0 0 8px var(--danger);
+        box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
     }
     &--medium {
         background: var(--warn);
         box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
     }
     &--low {
-        background: var(--teal);
-        box-shadow: 0 0 8px rgba(45, 212, 191, 0.5);
+        background: var(--success);
+        box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
     }
 }
 
 .ir__gap-name {
     flex: 1;
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 500;
     color: var(--text-1);
-    line-height: 1.4;
 }
 
 .ir__gap-badge {
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    padding: 3px 8px;
+    padding: 4px 8px;
     border-radius: 100px;
-    flex-shrink: 0;
+
+    &--high {
+        background: var(--danger-dim);
+        color: var(--danger);
+    }
+    &--medium {
+        background: var(--warn-dim);
+        color: var(--warn);
+    }
+    &--low {
+        background: var(--success-dim);
+        color: var(--success);
+    }
+}
+
+// ─── Right Panel (Desktop only) ─────────────────────
+.ir__right {
+    display: none;
+
+    @media (min-width: 1024px) {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        flex-shrink: 0;
+        overflow-y: auto;
+        padding: 40px 24px;
+        border-left: 1px solid var(--border);
+        background: transparent;
+    }
+}
+
+.ir__right-heading {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-4);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.ir__gap-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ir__gap-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 100px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 
     &--high {
         background: var(--danger-dim);
@@ -953,71 +915,8 @@ body {
         border: 1px solid rgba(245, 158, 11, 0.2);
     }
     &--low {
-        background: var(--teal-dim);
-        color: var(--teal);
-        border: 1px solid rgba(45, 212, 191, 0.2);
+        background: var(--success-dim);
+        color: var(--success);
+        border: 1px solid rgba(16, 185, 129, 0.2);
     }
-}
-
-// Mobile skill gaps shown below main content (hidden on Desktop Grid)
-.ir__mobile-gaps {
-    @media (min-width: 1024px) {
-        display: none;
-    }
-}
-
-// ─── Right panel tags & components ────────────────────────────────────────────
-.ir__right-heading {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--text-4);
-    margin-bottom: 10px;
-}
-
-.ir__gap-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-}
-
-.ir__gap-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 5px 10px;
-    border-radius: 8px;
-    cursor: default;
-    transition: opacity 0.15s;
-
-    &:hover {
-        opacity: 0.8;
-    }
-
-    &--high {
-        background: var(--danger-dim);
-        color: var(--rose);
-        border: 1px solid rgba(251, 113, 133, 0.2);
-    }
-    &--medium {
-        background: var(--warn-dim);
-        color: var(--gold);
-        border: 1px solid rgba(245, 158, 11, 0.2);
-    }
-    &--low {
-        background: var(--teal-dim);
-        color: var(--teal);
-        border: 1px solid rgba(45, 212, 191, 0.2);
-    }
-}
-
-// ─── Empty / loading states ───────────────────────────────────────────────────
-.ir__empty {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--text-3);
-    font-size: 14px;
 }
