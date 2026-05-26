@@ -61,7 +61,6 @@ async function interviewController(req, res, next) {
 async function getInterviewByIdController(req,res,next) {
   
   const { interviewId } = req.params;
-  console.log(interviewId);
   if (!interviewId) {
     return next(new AppError("Id not found",400))
   }

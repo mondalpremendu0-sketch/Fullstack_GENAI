@@ -1,5 +1,6 @@
 const { GoogleGenAI } = require("@google/genai");
 const { z } = require("zod");
+const AppError = require('../utils/error.utils.js')
 
 const interviewReportSchema = z.object({
     title:z.string(),
@@ -77,10 +78,10 @@ Return EXACTLY this JSON structure with NO extra text, NO markdown, NO code bloc
 }
 
 Rules:
-- technicalQuestions: exactly 5 objects
-- behavioralQuestions: exactly 5 objects
-- skillGaps: exactly 4 objects, severity must be "low", "medium", or "high"
-- preparationPlan: exactly 5 objects with day numbers 1 to 10
+- technicalQuestions: exactly 7 objects
+- behavioralQuestions: exactly 7 objects
+- skillGaps: exactly 7 objects, severity must be "low", "medium", or "high"
+- preparationPlan: exactly 7 objects with day numbers 1 to 7
 - Every field must be a plain string
 - Do NOT nest arrays inside tasks, tasks must be flat strings
 - Return ONLY the JSON object, nothing else
@@ -95,9 +96,6 @@ Rules:
             }
         });
 
-       // console.log("RAW GEMINI:", response.text);
-
-        // Striping any accidental markdown fences
         const cleaned = response.text
             .replace(/```json/g, "")
             .replace(/```/g, "")
@@ -140,19 +138,17 @@ Rules:
             }))
         };
 
-       // console.log("FORMATTED:", JSON.stringify(formattedData, null, 2));
-
         const validatedData = interviewReportSchema.safeParse(formattedData);
 
         if (!validatedData.success) {
             console.error("Validation errors:", validatedData.error.format());
             throw new Error("Invalid AI response structure");
         }
-//console.log(validatedData.data);
+        
         return validatedData.data;
 
     } catch (err) {
-        console.error("Gemini Error:", err);
+        return next(new AppError(err.message,500));
         throw err;
     }
 }
