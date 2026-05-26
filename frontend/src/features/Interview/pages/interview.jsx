@@ -323,7 +323,7 @@ export default function Interview() {
                   transition={{ duration: 0.4, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <div className="ir__day-marker">
-                    <div className="ir__day-dot">{day.day}</div>
+                    <div className="ir__day-dot">Day-{day.day}</div>
                   </div>
                   <div className="ir__day-content">
                     <div className="ir__day-focus">{day.focus}</div>

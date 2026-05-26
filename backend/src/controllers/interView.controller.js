@@ -5,8 +5,7 @@ const GenerateInterviewReport = require('../services/ai.service.js');
 
 async function interviewController(req, res, next) {
     try {
-     // console.log(req.file);
-     // console.log(req.body);
+
         if (!req.file) {
             return next(new AppError("You must upload your CV/resume", 400));
         }
@@ -80,14 +79,14 @@ async function getInterviewByIdController(req,res,next) {
 }
 
 async function getAllInterViewReportsController(req,res,next) {
-  
+  //console.log(req.user.id);
   if(!req.user.id){
     return next(new AppError("User Id not found",400))
   }
   
   const interviewReports = await InterViewReportModel.find({
     user:req.user.id
-  }).select("-resume -jobDescription -resumeText -selfDescription -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan -__v,-createdAt -updatedAt")
+  }).select("-resume -jobDescription -resumeText -selfDescription -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan -__v  -updatedAt")
   
   if (!interviewReports) {
     return next(new AppError("Reports not found!",400))

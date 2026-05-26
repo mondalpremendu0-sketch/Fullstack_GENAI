@@ -3,6 +3,7 @@ import {useNavigate} from "react-router"
 import { motion, AnimatePresence } from 'framer-motion';
 import {useInterview} from '../hooks/useInterviewContext.js'
 import LoadingUi from '../components/Loading.jsx'
+import PreviousReports from '../components/PreviousReports.jsx'
 import '../styles/Homepage.scss';
 
 // --- Framer Motion Animation Variants ---
@@ -308,7 +309,7 @@ export default  function HomePage() {
                 whileHover={{ scale: 1.02, backgroundColor: "#8B6FFF" }}
                 whileTap={{ scale: 0.98 }}
               >
-                {loading ? "Generating...":"Generate Report"}
+                {loading ? "Generating...":"Generate My Interview Strategy"}
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
               </motion.button>
             </motion.form>
@@ -347,6 +348,7 @@ export default  function HomePage() {
               </div>
             </motion.div>
           </motion.div>
+         <PreviousReports />
 
         </div>
       </main>

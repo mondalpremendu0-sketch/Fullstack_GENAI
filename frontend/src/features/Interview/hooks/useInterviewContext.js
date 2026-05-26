@@ -1,6 +1,6 @@
 import {useContext,useEffect} from "react";
 import {useParams} from 'react-router'
-import {generateInterviewReport,getInerviewById,getAllInterviewReport} from '../services/interView.api.js'
+import {generateInterviewReport,getInerviewById,getAllInterviewReports} from '../services/interView.api.js'
 import {interviewContext} from '../interView.context.jsx'
 
 
@@ -46,9 +46,10 @@ export const useInterview =  () =>
   {
       setLoading(true);
     try {
-      const data = await getAllInterviewReport();
+      const data = await getAllInterviewReports();
       setReports(data.reports)
-      return data.report;
+      //console.log(data);
+      return data.reports;
     } catch (err) {
      // console.error('Error:', err);
       
@@ -56,21 +57,20 @@ export const useInterview =  () =>
       setLoading(false);
     }
   }
-  
-  
-/*  useEffect(async() => {
-    setLoading(true)
-    try {
-      const data = await handleGetInterviewById(interviewId)
-      setReport(data.report)
-    } catch (err) {
-      //console.error('Error:', err);
-      
-    } finally {
-      setLoading(false)
-    }
-  },[interviewId])*/
-  
+  useEffect(() => {
+        const getAndSetUser = async () => {
+            try {
+                const data = await getAllInterviewReports();
+                setReports(data.reports);
+           console.log(data);
+            } catch (err) {
+                //console.error('Error:', err);
+            } 
+        };
+
+        getAndSetUser();
+        console.log(Reports);
+    }, []);
   
   
   

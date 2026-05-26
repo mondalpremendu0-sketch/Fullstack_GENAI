@@ -43,13 +43,13 @@ export const getInerviewById = async (interviewId) =>
   }
 }
 
-export const getAllInterviewReport = async () =>
+export const getAllInterviewReports = async () =>
 {
   try {
     const response = await interviewApi.get("/api/interview/allInterviewReports");
     
     return response.data;
-    
+    console.log("from api",response);
   } catch (err) {
     console.error('Error:', err);
   }
