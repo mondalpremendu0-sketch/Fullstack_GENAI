@@ -124,13 +124,11 @@ export default  function HomePage() {
         resumeFile:formData.resume
       })
       
-      console.log("apiData",data);
-      navigate(`/interview/${data._id}`);
+      //console.log("apiData",data);
+      navigate(`/report/${data._id}`);
       } catch (err) {
-        console.error('Error:', err);
+        //console.error('Error:', err);
       }
-
-     
     }
   };
    if(loading){

@@ -29,9 +29,6 @@ export const generateInterviewReport = async ({jobDescription, selfDescription,r
     console.error('Error:', err);
   }
   
-  
-  
-  
 }
 
 export const getInerviewById = async (interviewId) =>
@@ -44,8 +41,6 @@ export const getInerviewById = async (interviewId) =>
   } catch (err) {
     console.error('api Error:', err);
   }
-  
-  
 }
 
 export const getAllInterviewReport = async () =>

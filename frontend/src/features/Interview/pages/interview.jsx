@@ -1,122 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {useParams} from "react-router"
 import {useInterview} from '../hooks/useInterviewContext.js'
 import Loadingui from '../components/Loading.jsx'
 import '../styles/interview.scss';
 
-// ─── Sample data (replace with API response) ──────────────────────────────────
-/*const REPORT = {
-  matchScore: 93,
-  technicalQuestions: [
-    {
-      question: "Can you explain the main differences between controlled and uncontrolled components in React, and when would you choose one over the other?",
-      intention: "To assess understanding of fundamental React concepts, state management, and practical application in forms within a MERN context.",
-      answer: "Ideal answer defines both, explains how state is managed (React vs. DOM), provides use cases for each, and discusses advantages like easier validation with controlled vs. simpler third-party integration with uncontrolled."
-    },
-    {
-      question: "How do you handle error management and input validation effectively across your API endpoints to ensure robustness and security?",
-      intention: "To evaluate backend development practices — robust error handling, security, and maintainable API design for production-ready applications.",
-      answer: "Discuss using middleware for global error handling, validation libraries like Joi or express-validator, and sending appropriate HTTP status codes with clear error messages."
-    },
-    {
-      question: "Could you describe the architecture of how you integrated Socket.io with your MERN stack? How did you handle authentication and message persistence?",
-      intention: "To delve into project experience — assessing understanding of real-time communication, secure auth integration, and MongoDB data modeling.",
-      answer: "Explain server-side Socket.io setup, client connection, passing JWT tokens during handshake, and persisting chat messages in MongoDB with a schema including sender, receiver, content, and timestamp."
-    },
-    {
-      question: "When designing your MongoDB database, how do you decide between embedding documents and using references?",
-      intention: "To test database design skills, understanding of MongoDB's document model, and ability to make informed decisions for performance and scalability.",
-      answer: "Explain embedding pros (performance, single query) vs. referencing (flexibility, consistency), with a concrete example from a project based on access patterns."
-    },
-    {
-      question: "Describe your debugging process for a full-stack MERN application when the issue could be on either frontend or backend.",
-      intention: "To assess problem-solving methodology, debugging skills, and familiarity with developer tools — essential for an intern role.",
-      answer: "Describe checking browser console/network tab, using React DevTools, inspecting backend logs, VS Code debugger, Postman for API testing, and systematic isolation of the problem."
-    }
-  ],
-  behavioralQuestions: [
-    {
-      question: "Tell me about a time you faced a significant technical challenge and how you approached solving it. What did you learn?",
-      intention: "To evaluate problem-solving skills, resilience, and ability to learn from difficulties — aligning with the job's focus on growth mindset.",
-      answer: "Describe a specific problem, the steps taken to diagnose and resolve it (research, debugging, asking for help), and key takeaways or skills acquired."
-    },
-    {
-      question: "Collaboration is important in this role. Describe a project where you worked closely with others. What was your role and how did you contribute?",
-      intention: "To assess teamwork and communication skills, ability to work collaboratively, and understanding of individual contribution to a shared goal.",
-      answer: "Detail a group project, define specific responsibilities, explain communication methods, conflict resolution if any, and how the team achieved its objectives."
-    },
-    {
-      question: "Give an example of a time you had to learn a new technology rapidly for a project. How did you approach that learning process?",
-      intention: "To gauge the ability to learn quickly and adapt to new technologies — a critical skill for an intern in a dynamic environment.",
-      answer: "Identify a specific technology, explain why it needed to be learned quickly, outline the learning strategy, and demonstrate successful application."
-    },
-    {
-      question: "How do you prioritize your work when you have multiple deadlines or competing demands?",
-      intention: "To understand time management and organizational skills — crucial for success in an internship with varied responsibilities.",
-      answer: "Describe a prioritization method (urgent/important matrix, impact assessment), mention tools used, and provide an example of managing competing demands."
-    },
-    {
-      question: "What excites you about this role, and how do you see it contributing to your long-term goal of becoming a skilled software engineer?",
-      intention: "To assess motivation, alignment with the company's offerings, and how the candidate connects this opportunity to their career aspirations.",
-      answer: "Articulate specific aspects of the job that resonate (real-world projects, mentorship, scalable apps), linking them to long-term goals of building impactful products."
-    }
-  ],
-  skillGaps: [
-    { skill: "TypeScript", severity: "medium" },
-    { skill: "State Management (Redux, Zustand)", severity: "medium" },
-    { skill: "Cloud Deployment (Vercel, Render)", severity: "medium" },
-    { skill: "Advanced Performance Optimization", severity: "low" }
-  ],
-  preparationPlan: [
-    {
-      day: 1, focus: "React & Frontend Fundamentals",
-      tasks: [
-        "Review React Hooks (useState, useEffect, useContext, useRef, useMemo, useCallback)",
-        "Practice building reusable atomic components with clear props and state",
-        "Understand the virtual DOM and reconciliation for performance implications",
-        "Reinforce responsive design principles with Tailwind CSS"
-      ]
-    },
-    {
-      day: 2, focus: "Backend API Design & Authentication",
-      tasks: [
-        "Review Express.js middleware, routing, and error handling best practices",
-        "Deep dive into JWT for authentication and authorization flow",
-        "Implement role-based access control in a sample Express API",
-        "Practice secure coding: input sanitization, rate limiting"
-      ]
-    },
-    {
-      day: 3, focus: "MongoDB & Database Operations",
-      tasks: [
-        "Review MongoDB CRUD and Mongoose schema design best practices",
-        "Learn MongoDB indexing strategies for query optimization",
-        "Practice aggregation pipelines for complex data retrieval",
-        "Understand embedding vs. referencing and when to use each"
-      ]
-    },
-    {
-      day: 4, focus: "TypeScript & State Management",
-      tasks: [
-        "Complete a TypeScript fundamentals tutorial (types, interfaces, enums)",
-        "Refactor a React component to use TypeScript for props and state",
-        "Explore Redux Toolkit or Zustand — install, basic store setup, actions",
-        "Understand trade-offs of state management libraries in large apps"
-      ]
-    },
-    {
-      day: 5, focus: "Deployment & Interview Prep",
-      tasks: [
-        "Learn deploying MERN apps to Vercel (frontend) and Render (backend)",
-        "Prepare to articulate architecture of both your projects",
-        "Practice explaining code decisions, data models, and API designs",
-        "Review common MERN interview questions and behavioral aspects"
-      ]
-    }
-  ]
-};*/
 
-// ─── Nav sections ─────────────────────────────────────────────────────────────
+// ─── Nav sections
 const NAV = [
   { id: "overview",   label: "Overview",             icon: "📊" },
   { id: "technical",  label: "Technical Questions",  icon: "⚙️",  count: 5 },
@@ -125,7 +15,7 @@ const NAV = [
   { id: "skillgaps",  label: "Skill Gaps",            icon: "⚡",  count: 5},
 ];
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ─── Helpers
 function scoreLabel(s) {
   if (s >= 85) return "Excellent Match";
   if (s >= 70) return "Good Match";
@@ -138,7 +28,7 @@ function scoreVariant(s) {
   return "low";
 }
 
-// ─── Animated question card ───────────────────────────────────────────────────
+// ─── Animated question card
 function QCard({ q, index }) {
   const [open, setOpen] = useState(false);
 
@@ -238,12 +128,9 @@ function ScoreRing({ score }) {
 
 // ─── Main Component----
 export default function Interview() {
-  const {loading,Report} = useInterview();
-  if(loading){
-    return(<Loadingui />);
-  }
+  const {loading,Report,handleGetInterviewById} = useInterview();
+  const {interviewId} = useParams()
   const report = Report;
-  
   const [activeSection, setActiveSection] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sectionRefs = useRef({});
@@ -261,6 +148,15 @@ export default function Interview() {
     Object.values(sectionRefs.current).forEach(el => el && observer.observe(el));
     return () => observer.disconnect();
   }, []);
+  useEffect(() => {
+    if(interviewId){
+      handleGetInterviewById(interviewId)
+    }
+  },[interviewId])
+  if(loading || !report){
+      return(<Loadingui />);
+    }
+
 
   const scrollTo = (id) => {
     sectionRefs.current[id]?.scrollIntoView({ behavior: "smooth", block: "start" });
