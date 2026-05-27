@@ -183,9 +183,9 @@ IMPORTANT RULES:
 - Do NOT add extra text before or after the HTML.
 - Use inline CSS only.
 - Make the layout modern, clean, and professional.
+- CRITICAL FOR REACT/PDF: Do NOT place your main styles (font-family, color, background-color) on the <body> tag. You MUST wrap the entire resume content inside a main <div style="font-family: Arial, sans-serif; background-color: #ffffff; color: #333333; padding: 20px;"> to ensure styles are not lost when rendered in the frontend.
 - Optimize the resume for the following job title:
   "${jobTitle}"
-- The HTML should be ready for PDF conversion.
 
 Candidate Resume Information:
 ${resumeText}
@@ -203,7 +203,7 @@ Generate a complete HTML document starting with <!DOCTYPE html>.
         });
         
         let html = `${response.text}`;
-        // html = html.replace(/^```html\n?/, '').replace(/\n?```$/, '').trim()
+         html = html.replace(/^```html\n?/, '').replace(/\n?```$/, '').trim()
         return html;
     } catch (error) {
         console.error("Resume HTML Generation Error:", error);

@@ -1,6 +1,8 @@
 import {useContext,useEffect} from "react";
 import {useParams} from 'react-router'
-import {generateInterviewReport,getInerviewById,getAllInterviewReports} from '../services/interView.api.js'
+import {generateInterviewReport,getInerviewById,getAllInterviewReports,
+  gethtmlforResume
+} from '../services/interView.api.js'
 import {interviewContext} from '../interView.context.jsx'
 
 
@@ -56,6 +58,24 @@ export const useInterview =  () =>
       setLoading(false);
     }
   }
+  
+  const handlegetHtml = async (interviewId) => {
+    
+    try {
+      
+      const data = await gethtmlforResume(interviewId)
+      
+      return data.htmlData
+    } catch (err) {
+      console.error('Error:', err);
+      
+    }
+    
+  }
+  
+  
+  
+  
   useEffect(() => {
         const getAllReportsAndset = async () => {
             try {
@@ -72,5 +92,5 @@ export const useInterview =  () =>
   
   
   
-  return {Report,loading,setLoading,Reports,handleGenerateInterviewReport,handleGetInterviewById,handleGetAllInterviewReports}
+  return {Report,loading,setLoading,Reports,handleGenerateInterviewReport,handleGetInterviewById,handleGetAllInterviewReports,handlegetHtml}
 }

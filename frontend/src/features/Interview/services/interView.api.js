@@ -52,4 +52,14 @@ export const getAllInterviewReports = async () =>
   }
 }
 
+export const gethtmlforResume = async(interviewId) => {
+  try {
+    const response = await interviewApi.post(`/api/interview/resume/pdf/${interviewId}`,interviewId);
+    
+    return response.data;
+  } catch (err) {
+    console.error('html Error:', err);
+  }
+  
+}
 

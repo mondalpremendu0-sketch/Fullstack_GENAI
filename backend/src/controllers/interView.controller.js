@@ -105,15 +105,27 @@ async function getAllInterViewReportsController(req, res, next) {
 
 async function generateResumeHtmlController(req, res, next) {
     const { interviewId } = req.params;
+    if (!interviewId) {
+      return next(new AppError("Cannot find interview id",400))
+    }
+    
     const interviewReport = await InterViewReportModel.findById(interviewId);
+    
+    if (!interviewReport) {
+      return next(new AppError("Cannot find Interview Report",400))
+    }
     
     const { resumeText, selfDescription, jobDescription } = interviewReport;
     
     const htmlText = await generateResumeHTML(resumeText, selfDescription, jobDescription)
-    console.log("html text in con: ",htmlText);
+    //console.log("html text in con: ",htmlText);
+    if (!htmlText) {
+      return next(new AppError("AI is busy",400))
+    }
+    
     res.status(201).json({ 
       message:"html created",
-      html:htmlText
+      htmlData:htmlText
     });
 }
 

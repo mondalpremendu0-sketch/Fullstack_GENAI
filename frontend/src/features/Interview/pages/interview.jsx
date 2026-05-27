@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {useParams} from "react-router"
 import {useInterview} from '../hooks/useInterviewContext.js'
 import Loadingui from '../components/Loading.jsx'
+import ResumeDownloadButton from '../components/ResumePdf.jsx'
 import '../styles/interview.scss';
 
 
@@ -439,6 +440,7 @@ export default function Interview() {
             </div>
           </div>
         </aside>
+          <ResumeDownloadButton />
       </div>
     </div>
   );
