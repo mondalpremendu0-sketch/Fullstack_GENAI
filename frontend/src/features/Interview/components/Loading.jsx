@@ -74,7 +74,7 @@ export default function AILoadingScreen() {
         animate={{ opacity: [0.7, 1, 0.7] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       >
-        Building Your Report
+        Building Your Interview Report
       </motion.h2>
 
       <div className="loading-status">

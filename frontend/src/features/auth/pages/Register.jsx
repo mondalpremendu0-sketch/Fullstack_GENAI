@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import InfiniteLoader from "../components/InfiniteLoader.jsx";
 import { useAuth } from "../hooks/useAuthContext.js";
 import "./Register.scss";
+import "../styles/global.scss";
 
 // SVG Icons
 const IconUser = () => (

@@ -166,7 +166,7 @@ export default  function HomePage() {
           </motion.h1>
           
           <motion.p variants={fadeUpVariants} initial="hidden" animate="show" transition={{ delay: 0.2 }}>
-            Upload your resume, describe your background, and get a personalized interview prep report powered by AI — in seconds.
+            Upload your resume, describe your background, and get a personalized interview prep strategy powered by AI — in seconds.
           </motion.p>
         </header>
 
@@ -174,7 +174,7 @@ export default  function HomePage() {
           {/* LEFT: FORM */}
           <motion.div className="form-card" initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.3 }}>
             <div className="form-header">
-              <h2>Generate Your Interview Report</h2>
+              <h2>Generate Your Interview Strategy</h2>
               <p>Fill in the details below — the more context you give, the better your report.</p>
             </div>
 

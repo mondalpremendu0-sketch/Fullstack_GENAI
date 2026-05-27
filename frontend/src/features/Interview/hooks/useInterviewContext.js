@@ -48,7 +48,6 @@ export const useInterview =  () =>
     try {
       const data = await getAllInterviewReports();
       setReports(data.reports)
-      //console.log(data);
       return data.reports;
     } catch (err) {
      // console.error('Error:', err);
@@ -58,18 +57,17 @@ export const useInterview =  () =>
     }
   }
   useEffect(() => {
-        const getAndSetUser = async () => {
+        const getAllReportsAndset = async () => {
             try {
                 const data = await getAllInterviewReports();
                 setReports(data.reports);
-           console.log(data);
+
             } catch (err) {
                 //console.error('Error:', err);
             } 
         };
 
-        getAndSetUser();
-        console.log(Reports);
+        getAllReportsAndset();
     }, []);
   
   

@@ -8,6 +8,8 @@ import InfiniteLoader from "../components/InfiniteLoader.jsx";
 import { useAuth } from "../hooks/useAuthContext.js";
 
 import "./Login.scss";
+import "../styles/global.scss";
+
 // SVG Icons
 
 const IconEmail = () => (

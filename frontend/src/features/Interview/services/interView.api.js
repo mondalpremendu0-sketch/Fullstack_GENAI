@@ -8,13 +8,11 @@ const interviewApi = new axios.create({
 
 export const generateInterviewReport = async ({jobDescription, selfDescription,resumeFile}) => 
 {
-  //console.log("resumeFile",resumeFile);
   const formData = new FormData();
   formData.append("jobDescription",jobDescription);
   formData.append("selfDescription",selfDescription);
   formData.append("resume",resumeFile);
   
-  //console.log(fromData);
   try {
 
     const response = await interviewApi.post("/api/interview/",formData,{
@@ -49,12 +47,9 @@ export const getAllInterviewReports = async () =>
     const response = await interviewApi.get("/api/interview/allInterviewReports");
     
     return response.data;
-    console.log("from api",response);
   } catch (err) {
     console.error('Error:', err);
   }
-  
-  
 }
 
 
