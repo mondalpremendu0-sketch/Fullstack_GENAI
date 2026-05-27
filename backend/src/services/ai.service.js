@@ -1,35 +1,46 @@
 const { GoogleGenAI } = require("@google/genai");
 const { z } = require("zod");
-const AppError = require('../utils/error.utils.js')
+const AppError = require("../utils/error.utils.js");
 
 const interviewReportSchema = z.object({
-    title:z.string(),
+    title: z.string(),
     matchScore: z.number().min(0).max(100),
-    technicalQuestions: z.array(z.object({
-        question: z.string(),
-        intention: z.string(),
-        answer: z.string()
-    })),
-    behavioralQuestions: z.array(z.object({
-        question: z.string(),
-        intention: z.string(),
-        answer: z.string()
-    })),
-    skillGaps: z.array(z.object({
-        skill: z.string(),
-        severity: z.enum(["low", "medium", "high"])
-    })),
-    preparationPlan: z.array(z.object({
-        day: z.number(),
-        focus: z.string(),
-        tasks: z.array(z.string())
-    })),
-    
+    technicalQuestions: z.array(
+        z.object({
+            question: z.string(),
+            intention: z.string(),
+            answer: z.string()
+        })
+    ),
+    behavioralQuestions: z.array(
+        z.object({
+            question: z.string(),
+            intention: z.string(),
+            answer: z.string()
+        })
+    ),
+    skillGaps: z.array(
+        z.object({
+            skill: z.string(),
+            severity: z.enum(["low", "medium", "high"])
+        })
+    ),
+    preparationPlan: z.array(
+        z.object({
+            day: z.number(),
+            focus: z.string(),
+            tasks: z.array(z.string())
+        })
+    )
 });
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-async function GenerateInterviewReport({ resume, selfDescription, jobDescription }) {
+async function GenerateInterviewReport({
+    resume,
+    selfDescription,
+    jobDescription
+}) {
     const prompt = `
 You are an expert technical interview coach. Analyze the candidate and return ONLY a valid JSON object.
 
@@ -105,22 +116,27 @@ Rules:
 
         // Safely map with fallbacks
         const formattedData = {
-          title:typeof parsedData.title === "string" ? parsedData.title: "",
-            matchScore: typeof parsedData.matchScore === "number"
-                ? parsedData.matchScore
-                : 80,
+            title: typeof parsedData.title === "string" ? parsedData.title : "",
+            matchScore:
+                typeof parsedData.matchScore === "number"
+                    ? parsedData.matchScore
+                    : 80,
 
-            technicalQuestions: (parsedData.technicalQuestions || []).map(q => ({
-                question: q.question || "",
-                intention: q.intention || "Evaluate technical knowledge",
-                answer: q.answer || "Explain with practical examples."
-            })),
+            technicalQuestions: (parsedData.technicalQuestions || []).map(
+                q => ({
+                    question: q.question || "",
+                    intention: q.intention || "Evaluate technical knowledge",
+                    answer: q.answer || "Explain with practical examples."
+                })
+            ),
 
-            behavioralQuestions: (parsedData.behavioralQuestions || []).map(q => ({
-                question: q.question || "",
-                intention: q.intention || "Evaluate communication skills",
-                answer: q.answer || "Explain with practical examples."
-            })),
+            behavioralQuestions: (parsedData.behavioralQuestions || []).map(
+                q => ({
+                    question: q.question || "",
+                    intention: q.intention || "Evaluate communication skills",
+                    answer: q.answer || "Explain with practical examples."
+                })
+            ),
 
             skillGaps: (parsedData.skillGaps || []).map(s => ({
                 skill: s.skill || "",
@@ -129,13 +145,16 @@ Rules:
                     : "medium"
             })),
 
-            preparationPlan: (parsedData.preparationPlan || []).map((plan, index) => ({
-                day: index + 1,
-                focus: plan.focus || "Preparation",
-                tasks: Array.isArray(plan.tasks) && plan.tasks.length > 0
-                    ? plan.tasks.map(t => String(t))
-                    : ["Review and practice"]
-            }))
+            preparationPlan: (parsedData.preparationPlan || []).map(
+                (plan, index) => ({
+                    day: index + 1,
+                    focus: plan.focus || "Preparation",
+                    tasks:
+                        Array.isArray(plan.tasks) && plan.tasks.length > 0
+                            ? plan.tasks.map(t => String(t))
+                            : ["Review and practice"]
+                })
+            )
         };
 
         const validatedData = interviewReportSchema.safeParse(formattedData);
@@ -144,13 +163,52 @@ Rules:
             console.error("Validation errors:", validatedData.error.format());
             throw new Error("Invalid AI response structure");
         }
-        
-        return validatedData.data;
 
+        return validatedData.data;
     } catch (err) {
-        return next(new AppError(err.message,500));
+        return next(new AppError(err.message, 500));
         throw err;
     }
 }
 
-module.exports = GenerateInterviewReport;
+async function generateResumeHTML(resumeText, jobTitle, selfDescription) {
+    const prompt = `
+Generate a professional ATS-friendly resume using ONLY pure HTML and inline CSS.
+
+IMPORTANT RULES:
+- Return ONLY valid HTML.
+- Do NOT return markdown.
+- Do NOT use \`\`\`
+- Do NOT explain anything.
+- Do NOT add extra text before or after the HTML.
+- Use inline CSS only.
+- Make the layout modern, clean, and professional.
+- Optimize the resume for the following job title:
+  "${jobTitle}"
+- The HTML should be ready for PDF conversion.
+
+Candidate Resume Information:
+${resumeText}
+
+Additional Self Description:
+${selfDescription}
+
+Generate a complete HTML document starting with <!DOCTYPE html>.
+`;
+
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
+        });
+        
+        let html = `${response.text}`;
+        // html = html.replace(/^```html\n?/, '').replace(/\n?```$/, '').trim()
+        return html;
+    } catch (error) {
+        console.error("Resume HTML Generation Error:", error);
+        throw new Error("Failed to generate resume HTML");
+    }
+}
+
+module.exports = {GenerateInterviewReport,generateResumeHTML};
