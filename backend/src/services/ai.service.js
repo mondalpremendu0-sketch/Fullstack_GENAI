@@ -173,27 +173,37 @@ Rules:
 
 async function generateResumeHTML(resumeText, jobTitle, selfDescription) {
     const prompt = `
-Generate a professional ATS-friendly resume using ONLY pure HTML and inline CSS.
+You are an expert ATS resume writer and frontend web developer. Your task is to generate a professional, one-page ATS-friendly resume using ONLY pure HTML and inline CSS.
 
-IMPORTANT RULES:
-- Return ONLY valid HTML.
-- Do NOT return markdown.
-- Do NOT use \`\`\`
-- Do NOT explain anything.
-- Do NOT add extra text before or after the HTML.
-- Use inline CSS only.
-- Make the layout modern, clean, and professional.
-- CRITICAL FOR REACT/PDF: Do NOT place your main styles (font-family, color, background-color) on the <body> tag. You MUST wrap the entire resume content inside a main <div style="font-family: Arial, sans-serif; background-color: #ffffff; color: #333333; padding: 20px;"> to ensure styles are not lost when rendered in the frontend.
-- Optimize the resume for the following job title:
-  "${jobTitle}"
+### CRITICAL OUTPUT RULES:
+1. Return ONLY valid HTML. 
+2. Do NOT wrap the output in markdown code blocks (no \`\`\`html).
+3. Do NOT include any conversational text, explanations, or filler. 
 
-Candidate Resume Information:
+### REACT & PDF COMPATIBILITY RULES:
+- Do NOT place any styles (font-family, color, background-color) on the <html> or <body> tags. 
+- You MUST wrap the entire resume in a master container: <div style="font-family: Arial, Helvetica, sans-serif; max-width: 794px; background-color: #ffffff; color: #333333; padding: 40px; margin: 0 auto; line-height: 1.5; box-sizing: border-box;">
+- Use precise CSS to ensure it fits on exactly one page. Keep margins tight and font sizes professional (e.g., 14px to 16px for body text).
+
+### ATS (APPLICANT TRACKING SYSTEM) RULES:
+- Use semantic HTML tags strictly in order: <h1> for the name, <h2> for section headers, <h3> for job/project titles. ATS bots rely on these tags to parse information.
+- Do NOT use HTML <table> tags for layout. Use simple CSS Flexbox for sections like "Skills".
+- Do NOT use complex CSS grids, absolute positioning, or multi-column layouts for the main text flow. Keep the reading order logical from top to bottom.
+
+### CONTENT & DESIGN RULES:
+- Enforce strict brevity to guarantee a one-page layout. Condense verbose descriptions into punchy, impact-driven bullet points.
+- Section Headers (<h2>) must have a clean bottom border accent (e.g., border-bottom: 2px solid #0056b3; display: inline-block;).
+- Highlight key technologies and metrics using a subtle accent color (e.g., <strong style="color: #0056b3;">).
+- Optimize the layout and phrasing specifically for the target job title: "${jobTitle}"
+
+### CANDIDATE DATA:
+Resume Core Content:
 ${resumeText}
 
-Additional Self Description:
+Candidate Self Description:
 ${selfDescription}
 
-Generate a complete HTML document starting with <!DOCTYPE html>.
+Generate the complete HTML document now.
 `;
 
     try {
