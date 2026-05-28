@@ -153,7 +153,7 @@ const Login = () => {
             reset();
             navigate("/");
         }
-        console.log(e);
+        
         e.preventDefault();
     };
 

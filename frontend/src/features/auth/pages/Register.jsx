@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
-import { motion,AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { useAuth } from "../hooks/useAuthContext.js";
 import "./Register.scss";
@@ -127,8 +127,8 @@ const IconMoon = () => (
 );
 
 const Register = () => {
-    const { user, loading, handleRegister ,authError} = useAuth();
-    
+    const { user, loading, handleRegister, authError } = useAuth();
+
     let navigate = useNavigate();
     const [theme, setTheme] = useState(
         localStorage.getItem("neo-theme") || "light"
@@ -156,15 +156,14 @@ const Register = () => {
         setTheme(prev => (prev === "light" ? "dark" : "light"));
     };
 
-    const onSubmit = async (data,e) => {
+    const onSubmit = async (data, e) => {
         const success = await handleRegister(data);
         if (success) {
-          reset();
-          navigate("/login");
+            reset();
+            navigate("/login");
         }
         e.preventDefault();
     };
-    
 
     const containerVariants = {
         hidden: { opacity: 0, y: 30 },
@@ -240,10 +239,7 @@ const Register = () => {
                             </motion.div>
                         )}
                     </AnimatePresence>
-                  
-                  
-                  
-                  
+
                     <motion.div className="input-row" variants={itemVariants}>
                         <div className="input-group">
                             <label>First Name</label>
@@ -350,7 +346,7 @@ const Register = () => {
                         )}
                     </motion.div>
 
-                <motion.button
+                    <motion.button
                         type="submit"
                         className="neo-button"
                         variants={itemVariants}
