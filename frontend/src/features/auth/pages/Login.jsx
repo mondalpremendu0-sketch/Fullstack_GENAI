@@ -116,12 +116,19 @@ const IconMoon = () => (
 // Main Login Component
 
 const Login = () => {
-    const { loading, handleLogin, authError } = useAuth();
+    const { loading, handleLogin, authError,user } = useAuth();
     const navigate = useNavigate();
     const [theme, setTheme] = useState(
         localStorage.getItem("neo-theme") || "light"
     );
     const [showPassword, setShowPassword] = useState(false);
+    
+    useEffect(() => {
+      if (user) {
+        navigate("/");
+      }
+    },[user,navigate]);
+
 
     const {
         register,

@@ -740,6 +740,14 @@ export default function HomePage() {
                     <PreviousReports />
                 </div>
             </main>
+
+            {/* ✅ ADD THE MODAL HERE */}
+            <ErrorModal
+                isOpen={!!aiError} // Converts the string to a boolean (true if error exists)
+                onClose={() => setAiError(null)} // Clears the error, closing the modal
+                title="Generation Failed"
+                message={aiError}
+            />
         </div>
     );
 }
