@@ -5,6 +5,17 @@ const api = axios.create({
     withCredentials: true
 });
 
+// Helper function to standardize errors
+const handleApiError = (err, defaultMessage) => {
+    const customError = {
+        status: err.response?.status || 500,
+        message: err.response?.data?.message || err.message || defaultMessage,
+    };
+    // THROW the error so the Hooks layer can catch it!
+    throw customError; 
+};
+
+
 export const register = async ({ firstname, lastname, email, password }) => {
     try {
         const response = await api.post("/api/auth/register", {
@@ -16,7 +27,7 @@ export const register = async ({ firstname, lastname, email, password }) => {
 
         return response.data;
     } catch (err) {
-        console.error("reg-Error:", err);
+        handleApiError(err,"Failed to Register User");
     }
 };
 export const login = async ({ email, password }) => {
@@ -27,7 +38,7 @@ export const login = async ({ email, password }) => {
         });
         return response.data;
     } catch (err) {
-        console.error("Error:", err.response.data);
+        handleApiError(err,"Failed to login");
     }
 };
 export const getMe = async () => {
@@ -36,7 +47,7 @@ export const getMe = async () => {
 
         return response.data;
     } catch (err) {
-        console.error("Error:", err);
+        handleApiError(err,"Failed to fetched User");
     }
 };
 export const logout = async () => {
@@ -44,6 +55,6 @@ export const logout = async () => {
         const response = await api.get("/api/auth/logout");
         return response.data;
     } catch (err) {
-        console.error("Error:", err);
+        handleApiError(err,"Failed to logout");
     }
 };

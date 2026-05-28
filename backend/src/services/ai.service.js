@@ -175,26 +175,89 @@ async function generateResumeHTML(resumeText, jobTitle, selfDescription) {
     const prompt = `
 You are an expert ATS resume writer and frontend web developer. Your task is to generate a professional, one-page ATS-friendly resume using ONLY pure HTML and inline CSS.
 
-### CRITICAL OUTPUT RULES:
-1. Return ONLY valid HTML. 
-2. Do NOT wrap the output in markdown code blocks (no \`\`\`html).
-3. Do NOT include any conversational text, explanations, or filler. 
+### CRITICAL OUTPUT RULES (STRICTLY ENFORCED):
+1. Return ONLY valid HTML. Do NOT wrap the output in markdown code blocks (no \`\`\`html).
+2. Do NOT use Markdown for text formatting. Absolutely NO asterisks (**text**) for bolding. You MUST use the HTML <strong> tag to bold text.
+3. Do NOT include any conversational text, explanations, or filler. Just the HTML.
+4. The design MUST strictly replicate a classic, serif professional template. Black and white ONLY.
+5. STRICT TYPOGRAPHY RULE: You MUST strictly use 'Times New Roman'. Do NOT add 'font-family' inline styles to ANY inner elements (like h1, h2, p, span, or div). Let all text inherit the serif font directly from the master container.
 
-### REACT & PDF COMPATIBILITY RULES:
-- Do NOT place any styles (font-family, color, background-color) on the <html> or <body> tags. 
-- You MUST wrap the entire resume in a master container: <div style="font-family: Arial, Helvetica, sans-serif; max-width: 794px; background-color: #ffffff; color: #333333; padding: 40px; margin: 0 auto; line-height: 1.5; box-sizing: border-box;">
-- Use precise CSS to ensure it fits on exactly one page. Keep margins tight and font sizes professional (e.g., 14px to 16px for body text).
+### 1-PAGE FULL-LENGTH SCALING RULES (CRITICAL):
+- You MUST wrap the entire resume in this exact master container:
+  <div style="font-family: 'Times New Roman', Times,; width: 794px; height: 1122px; background-color: #ffffff; color: #000000; padding: 40px 50px; margin: 0 auto; box-sizing: border-box; font-size: 12.5px; line-height: 1.5; overflow: hidden;">
 
-### ATS (APPLICANT TRACKING SYSTEM) RULES:
-- Use semantic HTML tags strictly in order: <h1> for the name, <h2> for section headers, <h3> for job/project titles. ATS bots rely on these tags to parse information.
-- Do NOT use HTML <table> tags for layout. Use simple CSS Flexbox for sections like "Skills".
-- Do NOT use complex CSS grids, absolute positioning, or multi-column layouts for the main text flow. Keep the reading order logical from top to bottom.
+### STRICT LENGTH CONSTRAINTS (CRITICAL TO PREVENT OVERFLOW):
+- **Professional Summary:** MUST be exactly ONE paragraph, spanning strictly 3 to 4 lines.
+- **Projects:** Dynamically generate project blocks based on the candidate's data (maximum 3 projects). Generate EXACTLY 3 to 4 bullet points per project. Make them detailed (1 to 2 lines each) explaining architecture and impact, but ensure they do not push the Education section off the page.
+- **Education:** This section MUST remain visible at the very bottom of the document.
 
-### CONTENT & DESIGN RULES:
-- Enforce strict brevity to guarantee a one-page layout. Condense verbose descriptions into punchy, impact-driven bullet points.
-- Section Headers (<h2>) must have a clean bottom border accent (e.g., border-bottom: 2px solid #0056b3; display: inline-block;).
-- Highlight key technologies and metrics using a subtle accent color (e.g., <strong style="color: #0056b3;">).
-- Optimize the layout and phrasing specifically for the target job title: "${jobTitle}"
+### STRICT HTML SKELETON:
+
+<!-- HEADER -->
+<div style="text-align: center; margin-bottom: 24px;">
+    <h1 style="margin: 0 0 4px 0; font-size: 28px; text-transform: uppercase;">[CANDIDATE NAME]</h1>
+    <div style="font-size: 12px;">[Location] | [Phone] | [Email] | [LinkedIn] | [GitHub]</div>
+</div>
+
+<!-- PROFESSIONAL SUMMARY -->
+<div style="margin-bottom: 22px;">
+    <h2 style="font-size: 15px; text-transform: uppercase; font-weight: bold; border-bottom: 1px solid #000; margin: 0 0 8px 0; padding-bottom: 4px;">Professional Summary</h2>
+    <p style="margin: 0; text-align: justify;">Your concise, 3-4 line summary goes here based on the candidate data.</p>
+</div>
+
+<!-- TECHNICAL SKILLS -->
+<div style="margin-bottom: 22px;">
+    <h2 style="font-size: 15px; text-transform: uppercase; font-weight: bold; border-bottom: 1px solid #000; margin: 0 0 8px 0; padding-bottom: 4px;">Technical Skills</h2>
+    <!-- Dynamically group skills based on candidate data -->
+    <div style="margin-bottom: 4px;"><strong>[Category 1, e.g., Languages]:</strong> [Skills]</div>
+    <div style="margin-bottom: 4px;"><strong>[Category 2, e.g., Frontend]:</strong> [Skills]</div>
+    <div style="margin-bottom: 4px;"><strong>[Category 3, e.g., Backend]:</strong> [Skills]</div>
+    <div style="margin-bottom: 0;"><strong>[Category 4, e.g., Tools]:</strong> [Skills]</div>
+</div>
+
+<!-- PROJECTS -->
+<div style="margin-bottom: 22px;">
+    <h2 style="font-size: 15px; text-transform: uppercase; font-weight: bold; border-bottom: 1px solid #000; margin: 0 0 8px 0; padding-bottom: 4px;">Projects</h2>
+    
+    <!-- REPEAT THIS BLOCK FOR EACH PROJECT IN THE CANDIDATE DATA -->
+    <!-- Note: For the very last project block, change margin-bottom to 0 -->
+    <div style="margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; font-weight: bold;">
+            <span style="font-size: 14px;">[Project Name]</span>
+            <span>[Tech Stack Summary]</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-style: italic; margin-bottom: 6px; font-size: 12px;">
+            <span>[Role / Title]</span>
+            <span>[Date / Remote]</span>
+        </div>
+        <ul style="margin: 0 0 0 20px; padding: 0;">
+            <li style="margin-bottom: 4px;">Detailed, 1-2 line bullet point explaining architecture using HTML <strong>[Key Tech]</strong> tags.</li>
+            <li style="margin-bottom: 4px;">Detailed, 1-2 line bullet point explaining a complex challenge, implementation, or feature.</li>
+            <li style="margin-bottom: 4px;">Detailed, 1-2 line bullet point focusing on performance, metrics, or user impact.</li>
+            <!-- Optional 4th bullet point if it fits the length constraints -->
+        </ul>
+    </div>
+    <!-- END REPEAT -->
+
+</div>
+
+<!-- EDUCATION -->
+<div style="margin-bottom: 0;">
+    <h2 style="font-size: 15px; text-transform: uppercase; font-weight: bold; border-bottom: 1px solid #000; margin: 0 0 8px 0; padding-bottom: 4px;">Education</h2>
+    
+    <!-- REPEAT FOR EACH DEGREE/INSTITUTION -->
+    <div style="margin-bottom: 8px;">
+        <div style="display: flex; justify-content: space-between; font-weight: bold;">
+            <span style="font-size: 14px;">[Degree Name]</span>
+            <span>[Start Year - End Year]</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-style: italic; font-size: 12px;">
+            <span>[University / Institution Name]</span>
+            <span>[Location]</span>
+        </div>
+    </div>
+    <!-- END REPEAT -->
+</div>
 
 ### CANDIDATE DATA:
 Resume Core Content:
@@ -203,17 +266,19 @@ ${resumeText}
 Candidate Self Description:
 ${selfDescription}
 
-Generate the complete HTML document now.
+Generate the complete HTML document now mapping the candidate data to the skeleton placeholders.
 `;
-
     try {
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: prompt,
+            contents: prompt
         });
-        
+
         let html = `${response.text}`;
-         html = html.replace(/^```html\n?/, '').replace(/\n?```$/, '').trim()
+        html = html
+            .replace(/^```html\n?/, "")
+            .replace(/\n?```$/, "")
+            .trim();
         return html;
     } catch (error) {
         console.error("Resume HTML Generation Error:", error);
@@ -221,4 +286,4 @@ Generate the complete HTML document now.
     }
 }
 
-module.exports = {GenerateInterviewReport,generateResumeHTML};
+module.exports = { GenerateInterviewReport, generateResumeHTML };
