@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router";
 
 import GoogleSignInButton from "../components/GoogleSignInButton.jsx";
@@ -117,7 +117,7 @@ const IconMoon = () => (
 // Main Login Component
 
 const Login = () => {
-    const { loading, handleLogin,authError } = useAuth();
+    const { loading, handleLogin, authError } = useAuth();
     const navigate = useNavigate();
     const [theme, setTheme] = useState(
         localStorage.getItem("neo-theme") || "light"
@@ -147,12 +147,12 @@ const Login = () => {
     };
 
     // Standard Email/Password Submission
-    const onSubmit = async (data,e) => {
+    const onSubmit = async (data, e) => {
         //------ API call -----
         const success = await handleLogin(data);
         if (success) {
-          reset();
-        navigate("/");
+            reset();
+            navigate("/");
         }
         console.log(e);
         e.preventDefault();
@@ -204,22 +204,44 @@ const Login = () => {
                 <motion.h2 variants={itemVariants}>Welcome Back</motion.h2>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  {/* Display Backend Authentication Errors */}
+                    {/* Display Backend Authentication Errors */}
+                    <AnimatePresence>
+                        {authError && (
+                            <motion.div
+                                initial={{
+                                    opacity: 0,
+                                    height: 0,
+                                    marginBottom: 0
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    height: "auto",
+                                    marginBottom: 24
+                                }}
+                                exit={{
+                                    opacity: 0,
+                                    height: 0,
+                                    marginBottom: 0
+                                }}
+                                transition={{
+                                    duration: 0.3,
+                                    ease: "easeInOut"
+                                }}
+                                style={{ overflow: "hidden" }} // <-- CRITICAL: Hides text while container grows
+                            >
+                                {/* We put the class on an inner div so the padding 
+               doesn't mess up the height: 0 animation 
+            */}
+                                <div
+                                    className="auth-error-banner"
+                                    style={{ marginBottom: 0 }}
+                                >
+                                    {authError}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
 
-{authError && (
-    <motion.div 
-        className="auth-error-banner" 
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.3 }}
-    >
-        {authError}
-    </motion.div>
-)}
-                  
-                  
-                  
                     <motion.div className="input-group" variants={itemVariants}>
                         <label>Email Address</label>
                         <div className="input-wrapper">
@@ -294,25 +316,25 @@ const Login = () => {
                             First Register
                         </a>
                     </motion.div>
-{/* ✅ UPDATE THIS */}
-<motion.button
-    type="submit"
-    className="neo-button"
-    variants={itemVariants}
-    disabled={loading} // Prevents double-clicking
-    whileTap={!loading ? { scale: 0.975 } : {}} 
-    transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 20
-    }}
-    style={{
-        opacity: loading ? 0.7 : 1,
-        cursor: loading ? 'not-allowed' : 'pointer'
-    }}
->
-    {loading ? "SIGNING IN..." : "SIGN IN"}
-</motion.button>
+                    {/* ✅ UPDATE THIS */}
+                    <motion.button
+                        type="submit"
+                        className="neo-button"
+                        variants={itemVariants}
+                        disabled={loading} // Prevents double-clicking
+                        whileTap={!loading ? { scale: 0.975 } : {}}
+                        transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 20
+                        }}
+                        style={{
+                            opacity: loading ? 0.7 : 1,
+                            cursor: loading ? "not-allowed" : "pointer"
+                        }}
+                    >
+                        {loading ? "SIGNING IN..." : "SIGN IN"}
+                    </motion.button>
 
                     {/*  Google Component */}
                     <GoogleSignInButton
