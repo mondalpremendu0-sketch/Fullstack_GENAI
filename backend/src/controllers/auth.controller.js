@@ -60,7 +60,7 @@ async function login_controller(req,res,next) {
   const userInfo = await authModel.findOne({email}).select("+password");
   
   if (!userInfo) {
-    return next(new AppError("User not found",401));
+    return next(new AppError("User not found/Invalid userId",401));
   };
   
   const isPasswordValid = await bcrypt.compare(password,userInfo.password);

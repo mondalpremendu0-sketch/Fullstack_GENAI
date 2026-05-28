@@ -1,3 +1,32 @@
+
+.auth-error-banner {
+    background-color: #ffeaea; /* Soft pale red background */
+    color: #e53e3e; /* Deep red text */
+    padding: 12px 16px;
+    border-radius: 12px; /* Matches your input fields */
+    margin-bottom: 24px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(229, 62, 62, 0.2); /* Subtle red border */
+
+    /* Optional: Add a subtle glow/shadow to match the neumorphic theme */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure the dark theme doesn't make the text unreadable if you toggle to dark mode */
+.dark-theme .auth-error-banner {
+    background-color: rgba(
+        229,
+        62,
+        62,
+        0.15
+    ); /* Translucent red for dark mode */
+    color: #ff6b6b; /* Lighter red text for better contrast */
+    border: 1px solid rgba(229, 62, 62, 0.3);
+}
 .login-actions {
     display: flex;
     justify-content: space-between;

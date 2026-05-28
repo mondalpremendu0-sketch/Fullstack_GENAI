@@ -19,6 +19,7 @@ export const useAuth = () => {
             });
 
             setUser(data.user);
+            return true
         } catch (err) {
           setAuthError(err.message);
           return false;
@@ -34,6 +35,7 @@ export const useAuth = () => {
             const data = await login({ email, password });
 
             setUser(data.user);
+            return true
         } catch (err) {
           setAuthError(err.message);
           return false;
@@ -47,6 +49,7 @@ export const useAuth = () => {
             setLoading(true);
             const data = await logout();
             setUser(null);
+            return true
         } catch (err) {
             setGlobalErrors("failed to logout: ",err.message)
             
