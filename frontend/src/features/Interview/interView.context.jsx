@@ -1,6 +1,6 @@
 import {createContext,useState} from "react";
 
-export const interviewContext = createContext();
+export const InterviewContext = createContext();
 
 export const InterviewProvider = ({children}) => {
   
@@ -8,11 +8,11 @@ export const InterviewProvider = ({children}) => {
   const [Reports,setReports] = useState([]);
   const [loading,setLoading] = useState(false);
   
-  const [globalError,setGlobalError] = useState(false);
+  const [globalError,setGlobalError] = useState(null);
   
   return  (
-    <interviewContext.Provider value={{Report,setReport,loading,setLoading,Reports,setReports,globalError,setGlobalError}} >
+    <InterviewContext.Provider value={{Report,setReport,loading,setLoading,Reports,setReports,globalError,setGlobalError}} >
       {children}
-    </interviewContext.Provider>
+    </InterviewContext.Provider>
     );
 }
