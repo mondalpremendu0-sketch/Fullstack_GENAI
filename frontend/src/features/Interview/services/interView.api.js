@@ -5,6 +5,15 @@ const interviewApi = new axios.create({
   withCredentials:true
 })
 
+// Helper function to standardize errors
+const handleApiError = (err, defaultMessage) => {
+    const customError = {
+        status: err.response?.status || 500,
+        message: err.response?.data?.message || err.message || defaultMessage,
+    };
+    // THROW the error so the Hooks layer can catch it!
+    throw customError; 
+};
 
 export const generateInterviewReport = async ({jobDescription, selfDescription,resumeFile}) => 
 {
@@ -24,7 +33,7 @@ export const generateInterviewReport = async ({jobDescription, selfDescription,r
   return response.data;
     
   } catch (err) {
-    console.error('Error:', err);
+    handleApiError(err,"Failed to generate report");
   }
   
 }
@@ -37,7 +46,7 @@ export const getInerviewById = async (interviewId) =>
     return response.data;
     
   } catch (err) {
-    console.error('api Error:', err);
+    handleApiError(err,"Failed to fetched report");
   }
 }
 
@@ -48,7 +57,7 @@ export const getAllInterviewReports = async () =>
     
     return response.data;
   } catch (err) {
-    console.error('Error:', err);
+    handleApiError(err,"Failed to fetch report");
   }
 }
 
@@ -58,7 +67,7 @@ export const gethtmlforResume = async(interviewId) => {
     
     return response.data;
   } catch (err) {
-    console.error('html Error:', err);
+    handleApiError(err,"Failed to generate html");
   }
   
 }
