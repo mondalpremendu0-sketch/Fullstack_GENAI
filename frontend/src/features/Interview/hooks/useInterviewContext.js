@@ -3,12 +3,12 @@ import {useContext,useEffect,useState} from "react";
 import {generateInterviewReport,getInerviewById,getAllInterviewReports,
   gethtmlforResume
 } from '../services/interView.api.js'
-import {interviewContext} from '../interView.context.jsx'
+import {InterviewContext} from '../interView.context.jsx'
 
 
 export const useInterview =  () => 
 {
-  const context = useContext(interviewContext);
+  const context = useContext(InterviewContext);
   const {Report,setReport,loading,setLoading,Reports,setReports,setGlobalError} = context;
   
   const [aiError,setAiError] = useState(null);

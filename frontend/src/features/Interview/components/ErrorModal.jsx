@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "./ErrorModal.scss";
+import "../styles/ErrorModal.scss";
 
 // A clean, professional warning icon
 const WarningIcon = () => (
