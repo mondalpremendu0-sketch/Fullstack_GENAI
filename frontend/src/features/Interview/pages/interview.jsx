@@ -12,7 +12,7 @@ const NAV = [
   { id: "overview",   label: "Overview",             icon: "📊" },
   { id: "technical",  label: "Technical Questions",  icon: "⚙️",  count: 5 },
   { id: "behavioral", label: "Behavioral Questions", icon: "🧠",  count: 5 },
-  { id: "roadmap",    label: "Road Map",              icon: "🗺️",  count: 5 },
+  { id: "roadmap",    label: "Road Map",              icon: "🗺️",  count: 7 },
   { id: "skillgaps",  label: "Skill Gaps",            icon: "⚡",  count: 5},
 ];
 

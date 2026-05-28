@@ -741,7 +741,6 @@ export default function HomePage() {
                 </div>
             </main>
 
-            {/* ✅ ADD THE MODAL HERE */}
             <ErrorModal
                 isOpen={!!aiError} // Converts the string to a boolean (true if error exists)
                 onClose={() => setAiError(null)} // Clears the error, closing the modal
