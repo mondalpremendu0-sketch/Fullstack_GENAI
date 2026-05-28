@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router";
 
 import GoogleSignInButton from "../components/GoogleSignInButton.jsx";
-import InfiniteLoader from "../components/InfiniteLoader.jsx";
 import { useAuth } from "../hooks/useAuthContext.js";
 
 import "./Login.scss";
@@ -157,9 +156,7 @@ const Login = () => {
         console.log(e);
         e.preventDefault();
     };
-    // if (loading) {
-    //     return <InfiniteLoader />;
-    // }
+
 
     // Google Login Handler
     const handleGoogleLogin = () => {

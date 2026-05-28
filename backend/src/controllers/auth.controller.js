@@ -16,7 +16,7 @@ async function register_controller(req,res,next) {
   }
   const isUserExists = await authModel.findOne({email});
   if (isUserExists) {
-    return next(new AppError("User already Exists",200))
+    return next(new AppError("User already Exists",401))
   }
   const hashPassword = await bcrypt.hash(password,12);
   
@@ -24,7 +24,9 @@ async function register_controller(req,res,next) {
     firstname,lastname,email,
     password:hashPassword
   })
-  
+  if (!user) {
+    return next(new AppError("User could not created",401))
+  }
   user.password = undefined;
   
   

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
-import { motion } from "framer-motion";
+import { motion,AnimatePresence } from "framer-motion";
 
-import InfiniteLoader from "../components/InfiniteLoader.jsx";
 import { useAuth } from "../hooks/useAuthContext.js";
 import "./Register.scss";
 import "../styles/global.scss";
@@ -128,7 +127,8 @@ const IconMoon = () => (
 );
 
 const Register = () => {
-    const { user, loading, handleRegister } = useAuth();
+    const { user, loading, handleRegister ,authError} = useAuth();
+    
     let navigate = useNavigate();
     const [theme, setTheme] = useState(
         localStorage.getItem("neo-theme") || "light"
@@ -156,15 +156,15 @@ const Register = () => {
         setTheme(prev => (prev === "light" ? "dark" : "light"));
     };
 
-    const onSubmit = async data => {
-        await handleRegister(data);
-        //console.log("res",data);
-        reset();
-        navigate("/login");
+    const onSubmit = async (data,e) => {
+        const success = await handleRegister(data);
+        if (success) {
+          reset();
+          navigate("/login");
+        }
+        e.preventDefault();
     };
-    if (loading) {
-        return <InfiniteLoader />;
-    }
+    
 
     const containerVariants = {
         hidden: { opacity: 0, y: 30 },
@@ -204,6 +204,46 @@ const Register = () => {
                 <motion.h2 variants={itemVariants}>Sign Up</motion.h2>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
+                    <AnimatePresence>
+                        {authError && (
+                            <motion.div
+                                initial={{
+                                    opacity: 0,
+                                    height: 0,
+                                    marginBottom: 0
+                                }}
+                                animate={{
+                                    opacity: 1,
+                                    height: "auto",
+                                    marginBottom: 24
+                                }}
+                                exit={{
+                                    opacity: 0,
+                                    height: 0,
+                                    marginBottom: 0
+                                }}
+                                transition={{
+                                    duration: 0.3,
+                                    ease: "easeInOut"
+                                }}
+                                style={{ overflow: "hidden" }} // <-- CRITICAL: Hides text while container grows
+                            >
+                                {/* We put the class on an inner div so the padding 
+               doesn't mess up the height: 0 animation 
+            */}
+                                <div
+                                    className="auth-error-banner"
+                                    style={{ marginBottom: 0 }}
+                                >
+                                    {authError}
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                  
+                  
+                  
+                  
                     <motion.div className="input-row" variants={itemVariants}>
                         <div className="input-group">
                             <label>First Name</label>
@@ -310,18 +350,23 @@ const Register = () => {
                         )}
                     </motion.div>
 
-                    <motion.button
+                <motion.button
                         type="submit"
                         className="neo-button"
                         variants={itemVariants}
-                        whileTap={{ scale: 0.975 }}
+                        disabled={loading} // Prevents double-clicking
+                        whileTap={!loading ? { scale: 0.975 } : {}}
                         transition={{
                             type: "spring",
                             stiffness: 300,
                             damping: 20
                         }}
+                        style={{
+                            opacity: loading ? 0.7 : 1,
+                            cursor: loading ? "not-allowed" : "pointer"
+                        }}
                     >
-                        CREATE ACCOUNT
+                        {loading ? "SIGNING IN..." : "SIGN IN"}
                     </motion.button>
                 </form>
             </motion.div>
