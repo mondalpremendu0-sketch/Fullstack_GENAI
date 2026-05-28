@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const interviewApi = new axios.create({
+const interviewApi = axios.create({
   baseURL : "http://localhost:3000",
   withCredentials:true
 })
