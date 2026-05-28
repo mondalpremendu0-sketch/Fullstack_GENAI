@@ -1,5 +1,5 @@
 import {useContext,useEffect,useState} from "react";
-import {useParams} from 'react-router'
+
 import {generateInterviewReport,getInerviewById,getAllInterviewReports,
   gethtmlforResume
 } from '../services/interView.api.js'
@@ -10,7 +10,7 @@ export const useInterview =  () =>
 {
   const context = useContext(interviewContext);
   const {Report,setReport,loading,setLoading,Reports,setReports,setGlobalError} = context;
-  const {interviewId} = useParams();
+  
   const [aiError,setAiError] = useState(null);
   
   const handleGenerateInterviewReport = async ({jobDescription,selfDescription,resumeFile})=> 
@@ -22,10 +22,16 @@ export const useInterview =  () =>
       const data = await generateInterviewReport({jobDescription,selfDescription,resumeFile});
       setReport(data.report);
       return data.report;
+      return true;
     } catch (err) 
     {
-      setAiError(err.message)
-      return false;
+      // Smart Routing: Is it a user error (400) or a server crash (500)?
+      if (err.status >= 500) {
+          setGlobalError("The AI engine is currently overloaded. Please try again.");
+      } else {
+          setAiError(err.message);
+      }
+      return false; // Return false so UI knows it failed
     }  finally {
       setLoading(false);
     }
@@ -34,13 +40,16 @@ export const useInterview =  () =>
   
   const handleGetInterviewById = async (interviewId) => 
   {
-      setLoading(true);
     try {
+      setLoading(true);
       const data = await getInerviewById(interviewId);
       setReport(data.report);
       return data.report;
+      return true;
     } catch (err) {
-     // console.error('Error:', err);
+      // If we can't fetch a report, that's a global error that should show a toast/alert
+      setGlobalError(err.message || "Failed to load report.");
+      return false;
     } finally {
       setLoading(false);
     }
@@ -53,8 +62,10 @@ export const useInterview =  () =>
       const data = await getAllInterviewReports();
       setReports(data.reports)
       return data.reports;
+      return true;
     } catch (err) {
-     // console.error('Error:', err);
+      setGlobalError(err.message || "Failed to load your dashboard.");
+      return false;
       
     } finally {
       setLoading(false);
@@ -66,10 +77,10 @@ export const useInterview =  () =>
     try {
       
       const data = await gethtmlforResume(interviewId)
-      
       return data.htmlData
     } catch (err) {
-      console.error('Error:', err);
+      setGlobalError(err.message || "Failed to generate PDF layout.");
+      return false;
       
     }
     
@@ -94,5 +105,17 @@ export const useInterview =  () =>
   
   
   
-  return {Report,loading,setLoading,Reports,handleGenerateInterviewReport,handleGetInterviewById,handleGetAllInterviewReports,handlegetHtml}
+  return {
+    Report,
+    loading,
+    setLoading,
+    Reports,
+    handleGenerateInterviewReport,
+    handleGetInterviewById,
+    handleGetAllInterviewReports,
+    handlegetHtml,
+    aiError,
+    setAiError
+    
+  }
 }
