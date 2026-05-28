@@ -1,14 +1,16 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect ,useState} from "react";
 import { AuthContext } from "../auth.context.jsx";
 import { login, register, logout, getMe } from "../services/auth.api.js";
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
-    const { user, setUser, loading, setLoading } = context;
+    const { user, setUser, loading, setLoading,setGlobalErrors } = context;
+    const [authError,setAuthError] = useState(null);
 
     const handleRegister = async ({ firstname, lastname, email, password }) => {
         try {
             setLoading(true);
+            setAuthError(null)
             const data = await register({
                 firstname,
                 lastname,
@@ -18,7 +20,8 @@ export const useAuth = () => {
 
             setUser(data.user);
         } catch (err) {
-            // console.error('Error:', err);
+          setAuthError(err.message);
+          return false;
         } finally {
             setLoading(false);
         }
@@ -27,11 +30,13 @@ export const useAuth = () => {
     const handleLogin = async ({ email, password }) => {
         try {
             setLoading(true);
+            setAuthError(null);
             const data = await login({ email, password });
 
             setUser(data.user);
         } catch (err) {
-            //console.error('Error:', err);
+          setAuthError(err.message);
+          return false;
         } finally {
             setLoading(false);
         }
@@ -43,7 +48,8 @@ export const useAuth = () => {
             const data = await logout();
             setUser(null);
         } catch (err) {
-            //console.error('Error:', err);
+            setGlobalErrors("failed to logout: ",err.message)
+            
         } finally {
             setLoading(false);
         }
@@ -55,7 +61,12 @@ export const useAuth = () => {
                 const data = await getMe();
                 setUser(data.user);
             } catch (err) {
-                //console.error('Error:', err);
+                if (err.status === 401) {
+                    setUser(null); 
+                } else {
+                    setGlobalErrors("Could not connect to the authentication server.");
+                    setUser(null);
+                }
             } finally {
                 setLoading(false);
             }
@@ -64,5 +75,5 @@ export const useAuth = () => {
         getAndSetUser();
     }, []);
 
-    return { user, loading, handleRegister, handleLogin, handleLogout };
+    return { user, loading,authError ,handleRegister, handleLogin, handleLogout };
 };

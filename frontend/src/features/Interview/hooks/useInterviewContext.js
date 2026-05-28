@@ -9,21 +9,23 @@ import {interviewContext} from '../interView.context.jsx'
 export const useInterview =  () => 
 {
   const context = useContext(interviewContext);
-  const {Report,setReport,loading,setLoading,Reports,setReports} = context;
+  const {Report,setReport,loading,setLoading,Reports,setReports,setGlobalError} = context;
   const {interviewId} = useParams();
-  
+  const [aiError,setAiError] = useState(null);
   
   const handleGenerateInterviewReport = async ({jobDescription,selfDescription,resumeFile})=> 
   {
     try 
     {
       setLoading(true);
+      setAiError(null)
       const data = await generateInterviewReport({jobDescription,selfDescription,resumeFile});
       setReport(data.report);
       return data.report;
     } catch (err) 
     {
-      //console.error('Error:', err);
+      setAiError(err.message)
+      return false;
     }  finally {
       setLoading(false);
     }

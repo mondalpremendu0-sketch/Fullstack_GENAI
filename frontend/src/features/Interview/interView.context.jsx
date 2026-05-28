@@ -8,9 +8,10 @@ export const InterviewProvider = ({children}) => {
   const [Reports,setReports] = useState([]);
   const [loading,setLoading] = useState(false);
   
+  const [globalError,setGlobalError] = useState(false);
   
   return  (
-    <interviewContext.Provider value={{Report,setReport,loading,setLoading,Reports,setReports}} >
+    <interviewContext.Provider value={{Report,setReport,loading,setLoading,Reports,setReports,globalError,setGlobalError}} >
       {children}
     </interviewContext.Provider>
     );
