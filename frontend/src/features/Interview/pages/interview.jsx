@@ -530,6 +530,10 @@ export default function Interview() {
                                 </motion.div>
                             ))}
                         </div>
+                    
+                    <div className="ir__download-footer">
+              <ResumeDownloadButton />
+          </div>
                     </section>
                 </main>
 
@@ -688,7 +692,6 @@ export default function Interview() {
                         </div>
                     </div>
                 </aside>
-                <ResumeDownloadButton />
             </div>
         </div>
     );

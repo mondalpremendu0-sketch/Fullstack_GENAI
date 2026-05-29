@@ -1,22 +1,28 @@
-import React, { useState } from 'react';
-import html2pdf from 'html2pdf.js';
-import { useParams } from "react-router";
-import { useInterview } from '../hooks/useInterviewContext.js';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import {useParams} from 'react-router'
+import html2pdf from "html2pdf.js"
 
-const ResumeDownloadButton = ({ candidateId }) => {
-    const { handlegetHtml } = useInterview();
-    const { interviewId } = useParams();
-    const [isDownloading, setIsDownloading] = useState(false);
+import {useInterview} from '../hooks/useInterviewContext.js'
+import ErrorModal from '../components/ErrorModal.jsx'
+
+export default function ResumeDownloadButton() {
+    // State to track if the PDF is currently being generated
+    const {handlegetHtml} = useInterview();
+    const {interviewId} = useParams();
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [pdfError, setPdfError] = useState(null);
+    
 
     const handleDownload = async () => {
-        setIsDownloading(true);
-
+        setIsGenerating(true);
+        setPdfError(null);
         try {
             // 1. Fetch the HTML string
             const response = await handlegetHtml(interviewId);
             if (!response) {
-                alert("HTML not received!");
-                return;
+                setPdfError("We could not fetch your resume layout from the server. Please try again.");
+                return; 
             }
 
             const htmlString = `${response}`;
@@ -32,50 +38,87 @@ const ResumeDownloadButton = ({ candidateId }) => {
                 html2canvas: {
                     scale: 2, 
                     useCORS: true,
-                    // Force a desktop-sized width so mobile doesn't squash the layout
                     windowWidth: 800 
                 },
                 jsPDF: {
-                    // MUST be mm, in, or pt for standard paper formats
                     unit: "mm", 
                     format: "a4",
                     orientation: "portrait",
                 },
             };
 
-            // 3. Pass the raw HTML string directly into .from()
-            // No need for hidden refs or timeouts!
             await html2pdf()
                 .set(options)
                 .from(htmlString)
                 .save();
-
-        } catch (error) {
-            console.error(error);
-            alert("PDF generation failed");
+} 
+        catch (error) {
+            console.error("Failed to download PDF", error);
+            setPdfError("An unexpected error occurred while building your PDF file. Please try again.");
         } finally {
-            setIsDownloading(false);
+            setIsGenerating(false);
         }
     };
 
     return (
-        <div>
-            <button 
-                onClick={handleDownload} 
-                disabled={isDownloading}
-                style={{
-                    padding: '10px 20px',
-                    backgroundColor: isDownloading ? '#cccccc' : '#007bff',
-                    color: '#ffffff',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: isDownloading ? 'not-allowed' : 'pointer'
-                }}
-            >
-                {isDownloading ? 'Generating PDF...' : 'Download Resume PDF'}
-            </button>
-        </div>
+      <>
+        <button 
+            className="resume-download-btn" // Make sure this matches your SCSS
+            onClick={handleDownload}
+            disabled={isGenerating}
+            style={{
+                opacity: isGenerating ? 0.8 : 1,
+                cursor: isGenerating ? "not-allowed" : "pointer"
+            }}
+        >
+            {isGenerating ? (
+                // --- THE FLOATING DOT LOADER ---
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                    <span>Generating PDF</span>
+                    <motion.div 
+                        style={{ display: "flex", gap: "4px", paddingTop: "4px" }}
+                        initial="start"
+                        animate="start"
+                    >
+                        {/* Dot 1 */}
+                        <motion.span 
+                            style={{ width: "5px", height: "5px", backgroundColor: "#fff", borderRadius: "50%" }}
+                            animate={{ y: [0, -6, 0] }}
+                            transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut", delay: 0 }}
+                        />
+                        {/* Dot 2 */}
+                        <motion.span 
+                            style={{ width: "5px", height: "5px", backgroundColor: "#fff", borderRadius: "50%" }}
+                            animate={{ y: [0, -6, 0] }}
+                            transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut", delay: 0.15 }}
+                        />
+                        {/* Dot 3 */}
+                        <motion.span 
+                            style={{ width: "5px", height: "5px", backgroundColor: "#fff", borderRadius: "50%" }}
+                            animate={{ y: [0, -6, 0] }}
+                            transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+                        />
+                    </motion.div>
+                </div>
+            ) : (
+                // --- NORMAL BUTTON STATE ---
+                <>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    Download Resume PDF
+                </>
+            )}
+        </button>
+            <ErrorModal 
+                isOpen={!!pdfError} 
+                onClose={() => setPdfError(null)} 
+                title="Download Failed"
+                message={pdfError} 
+            />
+      </>
+        
     );
-};
-
-export default ResumeDownloadButton;
+}
