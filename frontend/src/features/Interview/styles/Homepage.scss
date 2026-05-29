@@ -111,22 +111,32 @@ body {
         }
     }
 
-    .status-badge {
+    // --- NEW: Actions Wrapper ---
+    .nav-actions {
         display: flex;
         align-items: center;
-        gap: 0.35rem;
-        background-color: $color-card;
-        border: 1px solid $color-border;
-        padding: 0.25rem 0.5rem;
-        border-radius: 9999px;
-        font-size: 0.65rem;
-        font-weight: 500;
-        color: #d1d5db;
+        gap: 0.75rem;
 
         @media (min-width: 768px) {
+            gap: 1rem;
+        }
+    }
+
+    // --- UPDATED: Status Badge (Hidden on mobile) ---
+    .status-badge {
+        display: none; // Hidden by default on mobile!
+
+        @media (min-width: 768px) {
+            display: flex; // Shows up on desktop
+            align-items: center;
             gap: 0.5rem;
+            background-color: $color-card;
+            border: 1px solid $color-border;
             padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
             font-size: 0.75rem;
+            font-weight: 500;
+            color: #d1d5db;
         }
 
         .dot {
@@ -140,6 +150,48 @@ body {
                 width: 6px;
                 height: 6px;
             }
+        }
+    }
+
+    // --- NEW: Logout Button (Responsive) ---
+    .logout-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-right: 0.7rem;
+        background: rgba(255, 255, 255, 0.03);
+        color: #94a3b8;
+        border: 1px solid $color-border; // Uses your variable!
+        padding: 0.6rem; // Perfect square on mobile
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+
+        @media (min-width: 768px) {
+            padding: 0.5rem 1rem; // Widens out on desktop
+        }
+
+        // Hide the text span on mobile
+        .btn-text {
+            display: none;
+
+            @media (min-width: 768px) {
+                display: block; // Show text on desktop
+            }
+        }
+
+        &:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: wait;
         }
     }
 }

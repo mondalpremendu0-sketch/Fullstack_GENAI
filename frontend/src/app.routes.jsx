@@ -4,6 +4,9 @@ import Login from "./features/auth/pages/Login.jsx";
 import HomePage from "./features/Interview/pages/Home.jsx";
 import InterViewPage from "./features/Interview/pages/interview.jsx";
 import Proceted from "./features/auth/components/Protected.jsx";
+import NotFoundPage from './features/Interview/pages/NotFound.jsx'
+
+
 
 const router = createBrowserRouter([
     { path: "/register", element: <Register /> },
@@ -23,7 +26,8 @@ const router = createBrowserRouter([
                 <InterViewPage />
             </Proceted>
         )
-    }
+    },
+    {path: "*", element: <NotFoundPage /> }
 ]);
 
 export { router };

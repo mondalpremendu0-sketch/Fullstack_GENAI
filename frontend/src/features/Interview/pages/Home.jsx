@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useInterview } from "../hooks/useInterviewContext.js";
 import PreviousReports from "../components/PreviousReports.jsx";
 import ErrorModal from "../components/ErrorModal.jsx";
+import Logoutbtn from '../../auth/components/Logout.jsx'
 import "../styles/Homepage.scss";
 
 // --- Framer Motion Animation Variants ---
@@ -152,27 +153,41 @@ export default function HomePage() {
         <div className="app-container">
             <div className="bg-glow"></div>
 
-            <nav className="max-w-wrapper navbar">
-                <motion.div
-                    className="logo"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="icon">AI</div>
-                    <span>PrepGenius</span>
-                </motion.div>
+           <nav className="max-w-wrapper navbar">
+    <motion.div
+        className="logo"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+    >
+        <div className="icon">AI</div>
+        <span>PrepGenius</span>
+    </motion.div>
 
-                <motion.div
-                    className="status-badge"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <div className="dot"></div>
-                    AI-Powered Analysis
-                </motion.div>
-            </nav>
+    {/* --- NEW WRAPPER GOUPS THESE TWO TOGETHER --- */}
+    <div className="nav-actions" style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        
+        <motion.div
+            className="status-badge"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+        >
+            <div className="dot"></div>
+            AI-Powered Analysis
+        </motion.div>
+        
+        {/* Added a motion wrapper to the logout button to match your entrance animations */}
+        <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+        >
+            <Logoutbtn />
+        </motion.div>
+
+    </div>
+</nav>
 
             <main className="max-w-wrapper">
                 <header className="hero">

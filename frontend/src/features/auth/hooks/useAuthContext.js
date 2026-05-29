@@ -47,12 +47,12 @@ export const useAuth = () => {
     const handleLogout = async () => {
         try {
             setLoading(true);
-            const data = await logout();
+             await logout();
             setUser(null);
             return true
         } catch (err) {
-            setGlobalErrors("failed to logout: ",err.message)
-            
+            setGlobalErrors("failed to logout properly",err.message)
+            return false;
         } finally {
             setLoading(false);
         }
