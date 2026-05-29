@@ -42,6 +42,6 @@ const googleCallback = (req, res,next) => {
     }
 };
 
-module.exports = {
+module.exports = 
     googleCallback
-};
+
