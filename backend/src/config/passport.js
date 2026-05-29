@@ -1,13 +1,11 @@
 const passport = require('passport');
 const { Strategy: GoogleStrategy } = require('passport-google-oauth20');
-
-// Import your unified auth model (adjust path if necessary based on your exact setup)
 const authModel = require('../model/auth.model.js')
 
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: '/auth/google/callback',
+  callbackURL: '/api/googleAuth/google/callback',
 }, async (accessToken, refreshToken, profile, done) => {
   try {
     // Extract the data from Google's profile payload
