@@ -91,7 +91,7 @@ describe("Interview Generation API", () => {
             .set("Cookie", authCookie) // Present the cookie to the bouncer
             .field("jobDescription", "Senior React Developer") // Send standard text fields
             .attach("resume", fakeResumeBuffer, "resume.pdf"); // Fake a file upload!
-        console.log("AI generate error: ", response.text);
+        
         // 1. Assert the request succeeded
         expect(response.status).toBe(201); // Based on your test, you expect a 201
 
@@ -109,5 +109,34 @@ describe("Interview Generation API", () => {
         // The bouncer should kick them out
 
         expect(response.status).toBe(401);
+    });
+    
+    // ... your existing POST /api/interview/ tests are up here ...
+
+    describe('GET /api/interview/ (User Dashboard)', () => {
+        
+        it('should fetch all interview reports for the authenticated user', async () => {
+            const response = await request(app)
+                .get('/api/interview/allInterviewReports')
+                .set('Cookie', authCookie); // Present the VIP card!
+
+            // 1. Assert the request succeeded
+            expect(response.status).toBe(200);
+            expect(response.body.success).toBe(true);
+            
+            // 2. Assert the payload shape
+            /*expect(response.body).toHaveProperty('count');
+            expect(response.body).toHaveProperty('data');
+            expect(Array.isArray(response.body.data)).toBe(true);
+            */
+        });
+
+        it('should block users who try to view the dashboard without being logged in', async () => {
+            const response = await request(app)
+                .get('/api/interview/allInterviewReports'); // Notice we do NOT attach the cookie here
+
+            // The bouncer should kick them out
+            expect(response.status).toBe(401);
+        });
     });
 });

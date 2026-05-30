@@ -117,7 +117,8 @@ async function login_controller(req, res, next) {
 }
 
 async function getMe_controller(req, res, next) {
-    if (!req.user) {
+  try {
+     if (!req.user) {
         return next(new AppError("Unauthorised!!", 400));
     }
     const userId = req.user.id;
@@ -143,9 +144,14 @@ async function getMe_controller(req, res, next) {
             email: userInfo.email
         }
     });
+  } catch (err) {
+    return next(new AppError(err.message, 500));
+  }
 }
 
 async function logout_controller(req, res, next) {
+  
+  try {
     const token = req.cookies.token;
     if (token) {
         await blackListModel.create({ token });
@@ -155,6 +161,10 @@ async function logout_controller(req, res, next) {
         success: true,
         message: "logout Successfully"
     });
+  } catch (err) {
+    return next(new AppError(err.message, 500));
+    
+  }
 }
 
 module.exports = {
