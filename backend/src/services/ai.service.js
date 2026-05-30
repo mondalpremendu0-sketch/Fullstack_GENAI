@@ -34,13 +34,14 @@ const interviewReportSchema = z.object({
     )
 });
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
 
 async function GenerateInterviewReport({
     resume,
     selfDescription,
     jobDescription
 }) {
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const prompt = `
 You are an expert technical interview coach. Analyze the candidate and return ONLY a valid JSON object.
 
