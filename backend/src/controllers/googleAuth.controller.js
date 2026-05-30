@@ -36,7 +36,6 @@ const googleCallback = (req, res,next) => {
         // 3. Redirect the user back to your frontend application dashboard
         res.redirect(`${process.env.FRONTEND_URL}/`);
     } catch (error) {
-        console.error("Error in googleCallback controller:", error);
         res.redirect(`${process.env.FRONTEND_URL}/login?error=ServerError`);
         return(new next(AppError("google authentication faild",401)))
     }

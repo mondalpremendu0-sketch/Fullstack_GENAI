@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const googleCallback = require('../controllers/googleAuth.controller.js');
-
+const {authLimiter} = require('../middleware/rateLimiter.middleware.js')
 
 
 
@@ -11,7 +11,7 @@ const GoogleRouter = express.Router();
 // 1. Trigger Google Login
 // Frontend should use an <a href="/api/auth/google"> tag to hit this route
 // ==========================================
-GoogleRouter.get('/google', 
+GoogleRouter.get('/google',authLimiter,
   passport.authenticate('google', { 
     scope: ['profile', 'email'],
     prompt: 'select_account' // Forces Google to show the account selector every time
