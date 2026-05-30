@@ -31,7 +31,7 @@ passport.use(new GoogleStrategy({
          user.profilePicture = picture;
       }
       
-      await authModel.save();
+      await user.save();
       return done(null, user);
     }
 

@@ -6,6 +6,7 @@ import { useInterview } from "../hooks/useInterviewContext.js";
 import PreviousReports from "../components/PreviousReports.jsx";
 import ErrorModal from "../components/ErrorModal.jsx";
 import Logoutbtn from '../../auth/components/Logout.jsx'
+
 import "../styles/Homepage.scss";
 
 // --- Framer Motion Animation Variants ---
@@ -148,6 +149,7 @@ export default function HomePage() {
             }
         }
     };
+
 
     return (
         <div className="app-container">

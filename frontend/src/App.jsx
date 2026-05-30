@@ -4,12 +4,14 @@ import { AuthProvider } from "./features/auth/auth.context.jsx";
 import { InterviewProvider } from "./features/Interview/interView.context.jsx";
 
 
+
+
 export default function App() {
     return (
         <>
             <AuthProvider>
                 <InterviewProvider>
-                    <RouterProvider router={router} />
+                    <RouterProvider router={router} />;
                 </InterviewProvider>
             </AuthProvider>
         </>

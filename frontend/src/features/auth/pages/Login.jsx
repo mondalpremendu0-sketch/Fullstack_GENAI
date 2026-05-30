@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 
 import GoogleSignInButton from "../components/GoogleSignInButton.jsx";
 import { useAuth } from "../hooks/useAuthContext.js";
+import Infinitloader from '../components/InfiniteLoader.jsx'
 
 import "./Login.scss";
 import "../styles/global.scss";
@@ -117,7 +118,9 @@ const IconMoon = () => (
 
 const Login = () => {
     const { loading, handleLogin, authError,user } = useAuth();
+    
     const navigate = useNavigate();
+    
     const [theme, setTheme] = useState(
         localStorage.getItem("neo-theme") || "light"
     );
@@ -164,11 +167,13 @@ const Login = () => {
         e.preventDefault();
     };
 
-
     // Google Login Handler
-    const handleGoogleLogin = () => {
+    const handleGoogleLogin = (e) => {
+     e.preventDefault();
+      window.location.href = 'http://localhost:3000/api/googleAuth/google';
         console.log("google btn was clicked");
     };
+
 
     // Framer Motion Animation Settings
     const containerVariants = {

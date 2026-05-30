@@ -2,12 +2,42 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark">
+    <link rel="stylesheet" href="./src/Index.css" />
     <title>frontend</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+        <div class="app-shell-container">
+        <svg
+            width="200"
+            height="100"
+            viewBox="0 0 200 100"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M 40,50 C 40,20 80,20 100,50 C 120,80 160,80 160,50 C 160,20 120,20 100,50 C 80,80 40,80 40,50 Z"
+                fill="transparent"
+                stroke="#2a2d36"
+                stroke-width="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            />
+
+            <path
+                class="animated-infinity"
+                pathLength="100" 
+                d="M 40,50 C 40,20 80,20 100,50 C 120,80 160,80 160,50 C 160,20 120,20 100,50 C 80,80 40,80 40,50 Z"
+                fill="transparent"
+                stroke="#e81cff"
+                stroke-width="10"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            />
+        </svg>
+      </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
 

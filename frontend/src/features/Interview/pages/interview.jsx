@@ -4,6 +4,7 @@ import { useParams,useNavigate } from "react-router";
 import { useInterview } from "../hooks/useInterviewContext.js";
 import Loadingui from "../components/Loading.jsx";
 import ResumeDownloadButton from "../components/ResumePdf.jsx";
+import NotFoundPage from './NotFound.jsx'
 import "../styles/interview.scss";
 
 // ─── Nav sections
@@ -157,9 +158,12 @@ function ScoreRing({ score }) {
 
 // ─── Main Component----
 export default function Interview() {
-    const { loading, Report, handleGetInterviewById } = useInterview();
+    const { loading, Report,user, handleGetInterviewById } = useInterview();
     const navigate = useNavigate();
     const { interviewId } = useParams();
+    if(!interviewId || interviewId === undefined){
+      return (<NotFoundPage />);
+    }
     const report = Report;
     const [activeSection, setActiveSection] = useState("overview");
     const [sidebarOpen, setSidebarOpen] = useState(false);

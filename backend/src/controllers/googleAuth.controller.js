@@ -21,12 +21,12 @@ const googleCallback = (req, res,next) => {
                 email: user.email,
                 authProvider: user.authProvider
             },
-            process.env.JWT_SECRET,
+            process.env.JWT_SERECT,
             { expiresIn: "7d" } // Token expires in 7 days
         );
 
         // 2. Set the JWT in a secure HttpOnly cookie
-        res.cookie("session_token", token, {
+        res.cookie("token", token, {
             httpOnly: true, // JavaScript on the frontend CANNOT read this (prevents XSS)
             secure: process.env.NODE_ENV === "production", // Must be true in production (HTTPS only)
             sameSite: "Strict", // Protects against Cross-Site Request Forgery (CSRF)

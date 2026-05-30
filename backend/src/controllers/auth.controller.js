@@ -36,7 +36,10 @@ async function register_controller(req,res,next) {
     mail:user.email
   },process.env.JWT_SERECT)
   
-  res.cookie("token",token);
+  res.cookie("token",token,{
+    httpOnly:true,
+    maxAge: 5 * 24 * 60 * 60 * 1000
+  });
   res.status(201).json({ 
     success:true,
     message:"User registered Successfully",
@@ -51,20 +54,22 @@ async function register_controller(req,res,next) {
 }
 
 async function login_controller(req,res,next) {
-  try {
+  
     
     const { email , password } = req.body;
   
   if (!email || ! password) {
     return next(new AppError("All fields are required",401))
   }
-  
+  try {
   const userInfo = await authModel.findOne({email}).select("+password");
   
   if (!userInfo) {
     return next(new AppError("User not found/Invalid userId",401));
   };
-  
+  if (!userInfo.password) {
+    return next(new AppError("This account was created with Google. Please click 'Continue with Google' to log in.",400));
+  }
   const isPasswordValid = await bcrypt.compare(password,userInfo.password);
  
   if (!isPasswordValid) {
@@ -79,7 +84,10 @@ async function login_controller(req,res,next) {
     mail:userInfo.email
   }, process.env.JWT_SERECT);
   
-  res.cookie("token",token);
+  res.cookie("token",token,{
+    httpOnly:true,
+    maxAge: 5 * 24 * 60 * 60 * 1000
+  });
   //console.log(token);
   
   res.status(200).json({
