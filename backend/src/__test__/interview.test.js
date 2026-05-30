@@ -115,6 +115,19 @@ describe("Interview Generation API", () => {
 
     describe('GET /api/interview/ (User Dashboard)', () => {
         
+        let authCookie; // Declare it here!
+
+    beforeAll(async () => {
+        // Register and login a user just for the dashboard tests
+        await request(app).post('/api/auth/register').send({
+            firstname: "Dashboard", lastname: "User", email: "dash@example.com", password: "password123"
+        });
+        const loginRes = await request(app).post('/api/auth/login').send({
+            email: "dash@example.com", password: "password123"
+        });
+        authCookie = loginRes.headers['set-cookie']; // Grab the VIP pass!
+    });
+    
         it('should fetch all interview reports for the authenticated user', async () => {
             const response = await request(app)
                 .get('/api/interview/allInterviewReports')

@@ -37,10 +37,9 @@ const googleCallback = (req, res,next) => {
         res.redirect(`${process.env.FRONTEND_URL}/`);
     } catch (error) {
         res.redirect(`${process.env.FRONTEND_URL}/login?error=ServerError`);
-        return(new next(AppError("google authentication faild",401)))
+        return(next(new AppError("google authentication faild",401)))
     }
 };
 
-module.exports = 
-    googleCallback
+module.exports = googleCallback;
 

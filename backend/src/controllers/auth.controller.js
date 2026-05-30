@@ -118,9 +118,7 @@ async function login_controller(req, res, next) {
 
 async function getMe_controller(req, res, next) {
   try {
-     if (!req.user) {
-        return next(new AppError("Unauthorised!!", 400));
-    }
+     
     const userId = req.user.id;
 
     if (!userId) {
@@ -153,9 +151,7 @@ async function logout_controller(req, res, next) {
   
   try {
     const token = req.cookies.token;
-    if (token) {
-        await blackListModel.create({ token });
-    }
+    await blackListModel.create({ token });
     res.clearCookie("token", undefined);
     res.status(200).json({
         success: true,

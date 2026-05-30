@@ -3,6 +3,7 @@ const app = require("../app.js");
 const jwt = require('jsonwebtoken');
 const db = require("./setup/db.js"); // Import our new RAM database helpers
 const UserModel = require("../model/auth.model.js"); // Ensure this path is correct!
+const blackListModel = require('../model/blacklist.model.js')
 // --- JEST LIFECYCLE HOOKS ---
 // Start the RAM database before any tests run
 beforeAll(async () => {
@@ -323,6 +324,105 @@ describe("Auth API Endpoints", () => {
         // Adjust the expected status to match whichever one fires first!
         expect([400, 401]).toContain(response.status); 
     });
+    
+    it('should trigger the catch block and return 500 if the database crashes while fetching the profile', async () => {
+    // 1. THE HIJACK: Force the chained Mongoose query to violently crash
+    const fatalErrorMock = jest.spyOn(UserModel, 'findById').mockReturnValue({
+        select: jest.fn().mockRejectedValue(new Error("Profile DB Crash!"))
+    });
+
+    // 2. Make the request using the valid authCookie
+    const response = await request(app)
+        .get('/api/auth/getMe')
+        .set('Cookie', authCookie);
+
+    // 3. Assert that your error handler caught the crash
+    expect(response.status).toBe(500);
+    expect(response.body.message).toBe("Profile DB Crash!");
+
+    // 4. CRITICAL: Clean up the hijack!
+    fatalErrorMock.mockRestore();
 });
+    
+    
+});
+    
+    describe('GET /api/auth/logout', () => {
+
+      let authCookie; // 1. Declare the variable so all tests inside can use it
+
+    beforeAll(async () => {
+        // 2. Register a real user into the test database
+        await request(app).post('/api/auth/register').send({
+            firstname: "Profile",
+            lastname: "Tester",
+            email: "profile@example.com",
+            password: "password123"
+        });
+
+        // 3. Log them in to receive the JWT cookie
+        const loginRes = await request(app).post('/api/auth/login').send({
+            email: "profile@example.com",
+            password: "password123"
+        });
+
+        // 4. Save the cookie to our variable!
+        authCookie = loginRes.headers['set-cookie'];
+    });
+    
+    // 1. HAPPY PATH: User logs out WITH a token
+    it('should blacklist the token, clear the cookie, and return 200', async () => {
+        const createMock = jest.spyOn(blackListModel, 'create').mockResolvedValue({});
+
+        const response = await request(app)
+            .get('/api/auth/logout') 
+            // CHANGE THIS LINE: Use the real cookie!
+            .set('Cookie', authCookie); 
+
+        expect(response.status).toBe(200);
+        expect(response.body.success).toBe(true);
+        expect(response.body.message).toBe("logout Successfully");
+
+        // Assert that the controller told the browser to clear the cookie!
+        // Express sends a 'set-cookie' header with an empty string and an expired date to delete it.
+        const cookies = response.headers['set-cookie'];
+        expect(cookies).toBeDefined();
+        expect(cookies[0]).toMatch(/token=;/); 
+
+        createMock.mockRestore();
+    });
+
+    // 2. BRANCH COVERAGE: User logs out WITHOUT a token
+    // 2. BRANCH COVERAGE: User tries to log out WITHOUT a token
+    it('should be blocked by middleware and return 401 if no token was provided', async () => {
+        const createMock = jest.spyOn(blackListModel, 'create');
+
+        const response = await request(app)
+            .get('/api/auth/logout'); // No cookie!
+
+        // The middleware blocks it, so we expect 401 Unauthorised!
+        expect(response.status).toBe(401);
+        
+        // Assert the database was skipped
+        expect(createMock).not.toHaveBeenCalled();
+
+        createMock.mockRestore();
+    });
+
+    // 3. THE CATCH BLOCK (The Server Disaster)
+    it('should trigger the catch block and return 500 if the database crashes during logout', async () => {
+        const fatalErrorMock = jest.spyOn(blackListModel, 'create').mockRejectedValue(new Error("Blacklist DB Crash!"));
+
+        const response = await request(app)
+            .get('/api/auth/logout')
+            .set('Cookie', authCookie); 
+
+        expect(response.status).toBe(500);
+        expect(response.body.message).toBe("Blacklist DB Crash!");
+
+        fatalErrorMock.mockRestore();
+    });
+});
+    
     
 });
