@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 // We explicitly name this database so it NEVER touches your real data!
 // Change the port if your local Mongo uses something other than 27017
-const TEST_URI = 'mongodb+srv://Premendu:NYMTwCRk3wlQEdBh@myfirstdatabase.e04azfr.mongodb.net/?appName=myFirstDatabase/PrepGenius_TEST_DB';
+const TEST_URI = 'mongodb+srv://Premendu:NYMTwCRk3wlQEdBh@myfirstdatabase.e04azfr.mongodb.net/PrepGenius_TEST_DB';
 
 module.exports.connect = async () => {
     // Connect Mongoose to the Test Database

@@ -34,14 +34,12 @@ const interviewReportSchema = z.object({
     )
 });
 
-
-
 async function GenerateInterviewReport({
     resume,
     selfDescription,
     jobDescription
 }) {
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const prompt = `
 You are an expert technical interview coach. Analyze the candidate and return ONLY a valid JSON object.
 
@@ -111,7 +109,7 @@ Rules:
         const cleaned = response.text
             .replace(/```json/g, "")
             .replace(/```/g, "")
-            .trim();
+            .trim(); 
 
         const parsedData = JSON.parse(cleaned);
 
@@ -167,7 +165,7 @@ Rules:
 
         return validatedData.data;
     } catch (err) {
-        return next(new AppError(err.message, 500));
+        
         throw err;
     }
 }

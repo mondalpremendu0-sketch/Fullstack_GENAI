@@ -47,6 +47,6 @@ const authSchema = mongoose.Schema(
     { timestamps: true }
 );
 
-const authModel = mongoose.model("Fullstack_GenAi_user", authSchema);
+const authModel = mongoose.model("Interview-AI_Users", authSchema);
 
 module.exports = authModel;

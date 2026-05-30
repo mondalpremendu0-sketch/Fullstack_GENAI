@@ -64,7 +64,6 @@ describe("Auth API Endpoints", () => {
                 email: "doesntexist@example.com",
                 password: "wrongpassword"
             });
-            console.log("logindata ",response.text);
 
             expect(response.status).toBe(401);
             

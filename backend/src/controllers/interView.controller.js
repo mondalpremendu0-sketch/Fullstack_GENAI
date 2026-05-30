@@ -55,8 +55,12 @@ async function interviewController(req, res, next) {
             report: interViewReport
         });
     } catch (err) {
-        console.error("Error:", err.message);
-        return next(new AppError(err.message, 500));
+        console.log("inter ", err);
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+            stack: err.stack // This will tell us the exact line number!
+        });
     }
 }
 
@@ -106,26 +110,30 @@ async function getAllInterViewReportsController(req, res, next) {
 async function generateResumeHtmlController(req, res, next) {
     const { interviewId } = req.params;
     if (!interviewId) {
-      return next(new AppError("Cannot find interview id",400))
+        return next(new AppError("Cannot find interview id", 400));
     }
-    
+
     const interviewReport = await InterViewReportModel.findById(interviewId);
-    
+
     if (!interviewReport) {
-      return next(new AppError("Cannot find Interview Report",400))
+        return next(new AppError("Cannot find Interview Report", 400));
     }
-    
+
     const { resumeText, selfDescription, jobDescription } = interviewReport;
-    
-    const htmlText = await generateResumeHTML(resumeText, selfDescription, jobDescription)
+
+    const htmlText = await generateResumeHTML(
+        resumeText,
+        selfDescription,
+        jobDescription
+    );
     //console.log("html text in con: ",htmlText);
     if (!htmlText) {
-      return next(new AppError("AI is busy",400))
+        return next(new AppError("AI is busy", 400));
     }
-    
-    res.status(201).json({ 
-      message:"html created",
-      htmlData:htmlText
+
+    res.status(201).json({
+        message: "html created",
+        htmlData: htmlText
     });
 }
 

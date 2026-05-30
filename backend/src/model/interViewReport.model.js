@@ -100,7 +100,7 @@ const InterViewReportSchema = new mongoose.Schema({
   
 },{timestamps:true});
 
-const InterViewReportModel = mongoose.model("InterViewreport",InterViewReportSchema);
+const InterViewReportModel = mongoose.model("InterView-AI_reports",InterViewReportSchema);
 
 
 
