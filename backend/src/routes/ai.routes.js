@@ -8,6 +8,8 @@ const {
 } = require("../controllers/interView.controller.js");
 const upload = require("../middleware/file.middleware.js");
 const { apiLimiter } = require("../middleware/rateLimiter.middleware.js");
+const { cacheAiResponse } = require("../middleware/cache.middleware.js");
+
 
 const interViewrouter = express.Router();
 
@@ -16,6 +18,7 @@ interViewrouter.post(
     apiLimiter,
     isLogedIn,
     upload.single("resume"),
+    cacheAiResponse,
     interviewController
 );
 interViewrouter.get(

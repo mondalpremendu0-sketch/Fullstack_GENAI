@@ -197,19 +197,39 @@ export default function Interview() {
 
     // Show a fallback UI if the fetch finished but no data was found
     if (!loading && !report) {
-        return (
-            <div
-                className="ir__error-container"
-                style={{ textAlign: "center", padding: "50px", color: "white" }}
+    return (
+        <div className="ir__error-wrapper">
+            <motion.div
+                className="ir__error-card"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
             >
+                {/* Glowing Missing Document Icon */}
+                <div className="icon-glow">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                </div>
+
                 <h2>Report Not Found</h2>
-                <p>We couldn't load this interview strategy.</p>
-                <button className="neo-button" onClick={() => navigate("/")}>
-                    Return to Dashboard
-                </button>
-            </div>
-        );
-    }
+                <p>We couldn't track down this specific interview strategy. It may have been deleted or the link is invalid.</p>
+
+                <motion.button 
+                    className="neo-button" 
+                    onClick={() => user ? navigate("/") : navigate("/login")}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                >
+                    {/* Dynamic text based on authentication state */}
+                    {user ? "Return to Dashboard" : "Log In to Continue"}
+                </motion.button>
+            </motion.div>
+        </div>
+    );
+}
 
     const scrollTo = id => {
         sectionRefs.current[id]?.scrollIntoView({

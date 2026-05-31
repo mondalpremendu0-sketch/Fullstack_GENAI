@@ -11,7 +11,7 @@ export default function App() {
         <>
             <AuthProvider>
                 <InterviewProvider>
-                    <RouterProvider router={router} />;
+                    <RouterProvider router={router} />
                 </InterviewProvider>
             </AuthProvider>
         </>

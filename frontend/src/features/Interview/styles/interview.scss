@@ -701,7 +701,6 @@ button {
     display: flex;
     gap: 16px;
     position: relative;
-    
 
     &:not(:last-child)::before {
         content: "";
@@ -711,7 +710,6 @@ button {
         bottom: 0;
         width: 2px;
         background: #f95feba4;
-        
     }
 }
 
@@ -798,50 +796,58 @@ button {
 
 /* ─── Sticky Download Footer ─── */
 .ir__download-footer {
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  /* Creates a smooth fade into your dark background so content scrolls underneath gracefully */
-  background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 50%, rgba(15, 23, 42, 0));
-  backdrop-filter: blur(4px); /* Slight glass effect */
-  padding: 30px 16px 20px 16px;
-  display: flex;
-  justify-content: center;
-  z-index: 40;
-  margin-top: 20px;
-
-  /* Target the button inside your ResumePdf.jsx component */
-  button {
-    /* Matches the purple from your header/match pill */
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    color: #ffffff;
-    border: none;
-    border-radius: 12px; /* Matches your other cards */
-    padding: 16px 32px;
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    position: sticky;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    max-width: 400px;
-    cursor: pointer;
-    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-    transition: all 0.2s ease;
+    /* Creates a smooth fade into your dark background so content scrolls underneath gracefully */
+    background: linear-gradient(
+        to top,
+        rgba(15, 23, 42, 0.95) 50%,
+        rgba(15, 23, 42, 0)
+    );
+    backdrop-filter: blur(4px); /* Slight glass effect */
+    padding: 30px 16px 20px 16px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    gap: 10px;
+    z-index: 40;
+    margin-top: 20px;
 
-    &:hover {
-      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
-    }
+    /* Target the button inside your ResumePdf.jsx component */
+    button {
+        /* Matches the purple from your header/match pill */
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px; /* Matches your other cards */
+        padding: 16px 32px;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        width: 100%;
+        max-width: 400px;
+        cursor: pointer;
+        box-shadow:
+            0 8px 20px rgba(99, 102, 241, 0.3),
+            inset 0 1px 1px rgba(255, 255, 255, 0.2);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
 
-    &:active {
-      transform: translateY(1px);
-      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+        &:hover {
+            box-shadow:
+                0 10px 25px rgba(99, 102, 241, 0.4),
+                inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        &:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+        }
     }
-  }
 }
 .ir__gaps {
     display: flex;
@@ -965,5 +971,81 @@ button {
         background: var(--success-dim);
         color: var(--success);
         border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+}
+
+/* --- Missing Report Error State --- */
+
+.ir__error-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh; /* Keeps it centered without taking up the whole screen */
+    padding: 2rem;
+    width: 100%;
+}
+
+.ir__error-card {
+    background: linear-gradient(
+        145deg,
+        rgba(30, 41, 59, 0.4),
+        rgba(15, 23, 42, 0.6)
+    );
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle top highlight */
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 420px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+
+    .icon-glow {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba(99, 102, 241, 0.1);
+        color: #8b5cf6; /* Matches your premium purple accent */
+        margin-bottom: 20px;
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+    }
+
+    h2 {
+        color: #f8fafc;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        letter-spacing: -0.02em;
+    }
+
+    p {
+        color: #94a3b8;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 32px;
+    }
+
+    .neo-button {
+        width: 100%; /* Makes the button stretch nicely across the card */
+        display: block;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: #ffffff;
+        border: none;
+        padding: 14px 24px;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow:
+            0 4px 15px rgba(99, 102, 241, 0.3),
+            inset 0 1px 1px rgba(255, 255, 255, 0.2);
+
+        /* If you already have a general .neo-button class elsewhere, 
+           you only need the width: 100% and display: block here! */
     }
 }

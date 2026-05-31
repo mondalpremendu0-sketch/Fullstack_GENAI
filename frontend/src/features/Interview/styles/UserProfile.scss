@@ -1,0 +1,59 @@
+/* --- User Profile Component --- */
+.user-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin-right: 8px; /* Spacing between profile and logout button */
+
+    .avatar-container {
+        width: 36px;
+        height: 36px;
+        border-radius: 100%;
+        overflow: hidden;
+        border: 2px solid rgba(139, 92, 246, 0.4); /* Subtle purple border */
+        box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.05);
+        transition: border-color 0.3s ease;
+
+        &:hover {
+            border-color: rgba(139, 92, 246, 0.8);
+        }
+    }
+
+    .avatar-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .default-avatar {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #475569 0%, #334155 100%);
+        color: #e2e8f0;
+
+        svg {
+            width: 22px;
+            height: 22px;
+            margin-top: 2px;
+        }
+    }
+
+    .user-name {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #94a3b8;
+        max-width: 80px; /* Prevents long emails from breaking the layout */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Adds '...' if the name is too long */
+    }
+}

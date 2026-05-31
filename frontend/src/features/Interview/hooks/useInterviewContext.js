@@ -88,8 +88,6 @@ export const useInterview =  () =>
   }
   
   
-  
-  
   useEffect(() => {
         const getAllReportsAndset = async () => {
             try {
@@ -97,13 +95,12 @@ export const useInterview =  () =>
                 setReports(data.reports);
 
             } catch (err) {
-                //console.error('Error:', err);
+                setGlobalError("Can't fetched reports!")
             } 
         };
 
         getAllReportsAndset();
     }, []);
-  
   
   
   return {

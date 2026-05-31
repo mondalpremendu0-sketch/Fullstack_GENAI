@@ -91,7 +91,9 @@ const InterViewReportSchema = new mongoose.Schema({
   },
   user:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"Fullstack_GenAi_user"
+    ref:"Interview-AI_Users",
+    required:true,
+    index: true
   },
   title:{
     type:String,

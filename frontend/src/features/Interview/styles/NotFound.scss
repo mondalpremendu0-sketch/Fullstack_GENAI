@@ -1,9 +1,10 @@
 /* NotFound.scss */
-
 .not-found-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 2.5rem;
     min-height: 100vh;
     width: 100vw;
     background-color: #0f172a; /* Matches your dark slate background */
@@ -29,49 +30,6 @@
         pointer-events: none;
     }
 }
-
-.not-found-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-}
-
-.error-code {
-    font-size: 8rem;
-    font-weight: 800;
-    margin: 0;
-    line-height: 1;
-    /* Glassy gradient text effect */
-    background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 10px 20px rgba(255, 255, 255, 0.1));
-
-    @media (max-width: 768px) {
-        font-size: 6rem;
-    }
-}
-
-.error-title {
-    color: #f8fafc;
-    font-size: 1.75rem;
-    font-weight: 600;
-    margin: 10px 0 16px 0;
-    letter-spacing: -0.02em;
-}
-
-.error-text {
-    color: #94a3b8;
-    font-size: 1rem;
-    max-width: 400px;
-    margin: 0 0 32px 0;
-    line-height: 1.6;
-}
-
 .back-home-btn {
     display: flex;
     align-items: center;
@@ -79,7 +37,7 @@
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     color: #ffffff;
     border: none;
-    padding: 14px 28px;
+    padding: 10px 20px;
     border-radius: 12px;
     font-size: 1rem;
     font-weight: 600;

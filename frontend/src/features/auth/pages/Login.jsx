@@ -322,7 +322,7 @@ const Login = () => {
                             Remember me
                         </label>
                         <a href="/register" className="forgot-link">
-                            First Register
+                            <u>Create New Account</u>
                         </a>
                     </motion.div>
                     {/* ✅ UPDATE THIS */}

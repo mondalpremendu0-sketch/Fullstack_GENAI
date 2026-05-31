@@ -109,7 +109,8 @@ async function login_controller(req, res, next) {
             user: {
                 firstname: userInfo.firstname,
                 lastname: userInfo.lastname,
-                email: userInfo.email
+                email: userInfo.email,
+                profilePicture:userInfo.profilePicture
             }
         });
     } catch (err) {
@@ -140,7 +141,8 @@ async function getMe_controller(req, res, next) {
         user: {
             firstname: userInfo.firstname,
             lastname: userInfo.lastname,
-            email: userInfo.email
+            email: userInfo.email,
+            profilePicture:userInfo.profilePicture
         }
     });
   } catch (err) {

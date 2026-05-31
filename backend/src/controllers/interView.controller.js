@@ -5,50 +5,52 @@ const {
     GenerateInterviewReport,
     generateResumeHTML
 } = require("../services/ai.service.js");
+const {aiCache} = require('../middleware/cache.middleware.js')
 
 async function interviewController(req, res, next) {
     try {
-      
         if (!req.file) {
             return next(new AppError("You must upload your CV/resume", 400));
         }
-let resumeContent;
-    let resumedata;
-
-    // 🚨 THE TEST OVERRIDE: Bypass the real parser completely during Jest tests!
-    if (process.env.NODE_ENV === 'test') {
-        // Convert the buffer to a string so we can read it
-        const fileString = req.file.buffer.toString();
         
-        // THE FIX: Use .includes() so it ignores any weird Supertest formatting!
-        if (fileString.includes('TRIGGER_EMPTY_PDF')) {
-            resumedata = "   "; // Force the ghost spaces to test the 400 block
-        } else {
-            resumedata = "Valid fake resume text"; // Force success for all other tests
+/*
+        // 🚨 THE TEST OVERRIDE: Bypass the real parser completely during Jest tests!
+        if (process.env.NODE_ENV === "test") {
+            // Convert the buffer to a string so we can read it
+            const fileString = req.file.buffer.toString();
+
+            // THE FIX: Use .includes() so it ignores any weird Supertest formatting!
+            if (fileString.includes("TRIGGER_EMPTY_PDF")) {
+                resumedata = "   "; // Force the ghost spaces to test the 400 block
+            } else {
+                resumedata = "Valid fake resume text"; // Force success for all other tests
+            }
+
+            resumeContent = { text: resumedata };
+        } 
+*/
+
+
+       const  resumeContent = new PDFParse({ data: req.file.buffer });
+        const  resumedata = await resumeContent.getText();
+          console.log(resumedata);
+        // Safely check the string!
+        if (
+            !resumeContent || !resumedata
+        ) {
+            return next(
+                new AppError("Can't read this file or it's empty", 400)
+            );
         }
-        
-        resumeContent = { text: resumedata }; 
-    } 
-    else {
-        // This is your REAL code. It ONLY runs in dev/production!
-        resumeContent = new PDFParse({ data: req.file.buffer });
-        resumedata = await resumeContent.getText();
-    }
 
-    // Safely check the string!
-    if (!resumeContent || !resumedata || typeof resumedata !== 'string' || resumedata.trim() === '') {
-        return next(new AppError("Can't read this file or it's empty", 400));
-    }
-        
         /*
          resumeContent = new PDFParse({ data: req.file.buffer });
         
          resumedata = await resumeContent.getText();
         
         */
-        
-        
-       /* if (!resumeContent || !resumedata || typeof resumedata !== "string" ) {
+
+        /* if (!resumeContent || !resumedata || typeof resumedata !== "string" ) {
             return next(
                 new AppError("Can't read this file or it's empty", 400)
             );
@@ -82,6 +84,16 @@ let resumeContent;
             return next(new AppError("Can't generate report", 400));
         }
 
+        const responseData = {
+            success: true,
+            message: "Interview report generated successfully",
+            report: interViewReport
+        };
+        
+        if (req.cacheKey) {
+          aiCache.set(req.cacheKey, responseData);
+        }
+        
         return res.status(201).json({
             success: true,
             message: "Interview report generated successfully",
@@ -95,7 +107,7 @@ let resumeContent;
 async function getInterviewByIdController(req, res, next) {
     try {
         const { interviewId } = req.params;
-        
+
         if (!interviewId) {
             return next(new AppError("Id not found", 400));
         }
@@ -120,7 +132,6 @@ async function getInterviewByIdController(req, res, next) {
 async function getAllInterviewReportsController(req, res, next) {
     //console.log(req.user.id);
     try {
-        
         const interviewReports = await InterViewReportModel.find({
             user: req.user.id
         }).select(

@@ -6,6 +6,7 @@ import { useInterview } from "../hooks/useInterviewContext.js";
 import PreviousReports from "../components/PreviousReports.jsx";
 import ErrorModal from "../components/ErrorModal.jsx";
 import Logoutbtn from '../../auth/components/Logout.jsx'
+import UserProfile from '../components/UserProfile.jsx'
 
 import "../styles/Homepage.scss";
 
@@ -141,11 +142,9 @@ export default function HomePage() {
                     selfDescription: formData.aboutYourself,
                     resumeFile: formData.resume
                 });
-
-                console.log("apiData",data);
                 navigate(`/report/${data._id}`);
             } catch (err) {
-                //console.error('Error:', err);
+
             }
         }
     };
@@ -177,6 +176,14 @@ export default function HomePage() {
         >
             <div className="dot"></div>
             AI-Powered Analysis
+        </motion.div>
+        {/* ✅ THE NEW USER PROFILE ✅ */}
+        <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+        >
+            <UserProfile />
         </motion.div>
         
         {/* Added a motion wrapper to the logout button to match your entrance animations */}
