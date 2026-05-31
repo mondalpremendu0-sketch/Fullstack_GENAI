@@ -6,6 +6,7 @@ const cors = require("cors");
 const passport = require("passport");
 const compression = require("compression");
 const helmet = require("helmet");
+const mongoSanitize = require("express-mongo-sanitize");
 
 //require from folder
 const authRouter = require("./routes/auth.routes.js");
@@ -22,9 +23,6 @@ const app = express();
 
 app.use(compression());
 app.use(helmet());
-app.use(express.json());
-app.use(cookieParser());
-app.use(morgan("dev"));
 app.use(
     cors({
         origin: "http://localhost:5173" || "http://localhost:5173/",
@@ -32,6 +30,21 @@ app.use(
         credentials: true
     })
 );
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
+app.use((req, res, next) => {
+    // Manually sanitize body and params, skipping the read-only query object
+    if (req.body) {
+        req.body = mongoSanitize.sanitize(req.body, { replaceWith: '_' });
+    }
+    if (req.params) {
+        req.params = mongoSanitize.sanitize(req.params, { replaceWith: '_' });
+    }
+    next();
+});
+app.use(cookieParser());
+app.use(morgan("dev"));
+
 
 // 2. Initialize passport
 app.use(passport.initialize());

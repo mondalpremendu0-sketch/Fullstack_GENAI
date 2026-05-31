@@ -5,15 +5,15 @@ const {
     GenerateInterviewReport,
     generateResumeHTML
 } = require("../services/ai.service.js");
-const {aiCache} = require('../middleware/cache.middleware.js')
+const { aiCache } = require("../middleware/cache.middleware.js");
 
 async function interviewController(req, res, next) {
     try {
         if (!req.file) {
             return next(new AppError("You must upload your CV/resume", 400));
         }
-        
-/*
+
+        /*
         // 🚨 THE TEST OVERRIDE: Bypass the real parser completely during Jest tests!
         if (process.env.NODE_ENV === "test") {
             // Convert the buffer to a string so we can read it
@@ -30,34 +30,31 @@ async function interviewController(req, res, next) {
         } 
 */
 
-
-       const  resumeContent = new PDFParse({ data: req.file.buffer });
-        const  resumedata = await resumeContent.getText();
-          console.log(resumedata);
+        const resumeContent = new PDFParse({ data: req.file.buffer });
+        const resumedata = await resumeContent.getText();
         // Safely check the string!
-        if (
-            !resumeContent || !resumedata
-        ) {
+
+        if (!resumeContent || !resumedata || !resumedata.text) {
             return next(
                 new AppError("Can't read this file or it's empty", 400)
             );
         }
-
         /*
          resumeContent = new PDFParse({ data: req.file.buffer });
         
          resumedata = await resumeContent.getText();
         
         */
-
-        /* if (!resumeContent || !resumedata || typeof resumedata !== "string" ) {
+        /*
+         if (!resumeContent || !resumedata || typeof resumedata !== "string" ) {
             return next(
                 new AppError("Can't read this file or it's empty", 400)
             );
         }
-*/
+      */
+      
         const resumeText = resumedata.text;
-
+        console.log("resumeText",resumeText);
         const { jobDescription, selfDescription } = req.body;
 
         if (!jobDescription) {
@@ -89,11 +86,11 @@ async function interviewController(req, res, next) {
             message: "Interview report generated successfully",
             report: interViewReport
         };
-        
+
         if (req.cacheKey) {
-          aiCache.set(req.cacheKey, responseData);
+            aiCache.set(req.cacheKey, responseData);
         }
-        
+
         return res.status(201).json({
             success: true,
             message: "Interview report generated successfully",
