@@ -31,7 +31,8 @@ export const useInterview =  () =>
       } else {
           setAiError(err.message);
       }
-      return false; // Return false so UI knows it failed
+      console.log(err);
+      return false // Return false so UI knows it failed
     }  finally {
       setLoading(false);
     }

@@ -142,7 +142,7 @@ export default function HomePage() {
                     resumeFile: formData.resume
                 });
 
-                //console.log("apiData",data);
+                console.log("apiData",data);
                 navigate(`/report/${data._id}`);
             } catch (err) {
                 //console.error('Error:', err);

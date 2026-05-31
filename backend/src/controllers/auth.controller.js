@@ -12,7 +12,8 @@ async function register_controller(req, res, next) {
         if (!firstname || !lastname || !email || !password) {
             return next(new AppError("All fields are required", 401));
         }
-        const isUserExists = await authModel.findOne({ email });
+        const isUserExists = await authModel.findOne({ email:email });
+        
         if (isUserExists) {
             return next(new AppError("User already Exists", 400));
         }

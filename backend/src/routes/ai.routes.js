@@ -3,7 +3,7 @@ const isLogedIn = require("../middleware/auth.middleware.js");
 const {
     interviewController,
     getInterviewByIdController,
-    getAllInterViewReportsController,
+    getAllInterviewReportsController,
     generateResumeHtmlController
 } = require("../controllers/interView.controller.js");
 const upload = require("../middleware/file.middleware.js");
@@ -28,7 +28,7 @@ interViewrouter.get(
     "/allInterviewReports",
     apiLimiter,
     isLogedIn,
-    getAllInterViewReportsController
+    getAllInterviewReportsController
 );
 interViewrouter.post(
     "/resume/pdf/:interviewId",

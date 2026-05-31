@@ -1,26 +1,22 @@
 const request = require("supertest");
 const app = require("../app.js");
 const db = require("./setup/db.js");
+const InterviewReportModel = require("../model/interViewReport.model.js");
 
 // ---------------------------------------------------------
 // THE HIJACK: Intercept the Google GenAI SDK before it runs
 // ---------------------------------------------------------
-// 1. THE HIJACK: Intercept the Google GenAI SDK
 jest.mock("@google/genai", () => {
     return {
         GoogleGenAI: jest.fn().mockImplementation(() => {
             return {
                 models: {
                     generateContent: jest.fn().mockResolvedValue({
-                        // The new SDK exposes the text directly as a string property!
-                        // This string contains the fake markdown we need to test your .replace() logic
                         text: `\`\`\`json\n${JSON.stringify({
                             matchScore: 95,
                             prepRoadmap: "A fake study plan.",
                             questions: ["Fake Q1", "Fake Q2"]
                         })}\n\`\`\``,
-
-                        // Just in case your code uses the older response.text() format, we provide it here too:
                         response: {
                             text: () =>
                                 `\`\`\`json\n${JSON.stringify({
@@ -35,20 +31,9 @@ jest.mock("@google/genai", () => {
         })
     };
 });
-jest.mock("pdf-parse", () => {
-    return {
-        // We must export an object containing the PDFParse constructor
-        PDFParse: jest.fn().mockImplementation(() => {
-            return {
-                // When your controller calls await resumeContent.getText()
-                // it will instantly receive this fake data!
-                getText: jest.fn().mockResolvedValue({
-                    text: "This is the perfectly extracted text of a fake resume."
-                })
-            };
-        })
-    };
-});
+
+// Notice: We completely removed the jest.mock('pdf-parse') code! 
+// Your controller's process.env.NODE_ENV === 'test' block handles it now.
 
 // --- JEST LIFECYCLE HOOKS ---
 beforeAll(async () => await db.connect());
@@ -59,43 +44,38 @@ describe("Interview Generation API", () => {
     // We need a variable to store our auth cookie between tests
     let authCookie;
 
-    // Before we test the AI, we MUST create a user and log in to get past the bouncer
-    beforeEach(async () => {
-        const credentials = {
-            email: "ai_tester@example.com",
-            password: "password123",
-            firstname: "Tester",
-            lastname: "User"
-        };
+    beforeAll(async () => {
+        // 1. Generate a completely unique email every time this runs!
+        const uniqueEmail = `tester_${Date.now()}@example.com`;
 
-        // 1. Register the user
-        await request(app).post("/api/auth/register").send(credentials);
+        // 2. Register the unique user
+        await request(app).post('/api/auth/register').send({
+            firstname: "Bulletproof",
+            lastname: "Tester",
+            email: uniqueEmail,
+            password: "password123"
+        });
 
-        // 2. Log in and steal the cookie!
-        const loginRes = await request(app)
-            .post("/api/auth/login")
-            .send(credentials);
-        authCookie = loginRes.headers["set-cookie"]; // Grab the HttpOnly cookie
+        // 3. Log them in
+        const loginRes = await request(app).post('/api/auth/login').send({
+            email: uniqueEmail,
+            password: "password123"
+        });
+
+        // 4. Safely grab the cookie
+        authCookie = loginRes.headers['set-cookie'];
     });
 
     it("should generate an AI report instantly without using real API credits", async () => {
-        // Create a fake file in memory
-        const fakeResumeBuffer = Buffer.from(
-            "This is a fake resume for testing"
-        );
+        const fakeResumeBuffer = Buffer.from("This is a fake resume for testing");
 
         const response = await request(app)
-            // Make sure this route matches your actual route exactly!
-            // Your console log said '/api/interview/' so I used that here:
             .post("/api/interview/")
-            .set("Cookie", authCookie) // Present the cookie to the bouncer
-            .field("jobDescription", "Senior React Developer") // Send standard text fields
-            .attach("resume", fakeResumeBuffer, "resume.pdf"); // Fake a file upload!
-        
-        // 1. Assert the request succeeded
-        expect(response.status).toBe(201); // Based on your test, you expect a 201
+            .set("Cookie", authCookie)
+            .field("jobDescription", "Senior React Developer")
+            .attach("resume", fakeResumeBuffer, "resume.pdf");
 
-        // 2. Assert the AI returned our fake data, not a real Google response
+        expect(response.status).toBe(201); 
         expect(response.body.report).toHaveProperty("matchScore");
         expect(response.body.report.matchScore).toBe(95);
     });
@@ -103,53 +83,159 @@ describe("Interview Generation API", () => {
     it("should block users who do not have an auth cookie", async () => {
         const response = await request(app)
             .post("/api/interview/")
-            // Notice we do NOT attach the cookie here
             .send({ jobDescription: "...", resume: "..." });
-
-        // The bouncer should kick them out
 
         expect(response.status).toBe(401);
     });
-    
-    // ... your existing POST /api/interview/ tests are up here ...
 
-    describe('GET /api/interview/ (User Dashboard)', () => {
-        
-        let authCookie; // Declare it here!
+    it("should return 400 if no resume is uploaded", async () => {
+        const response = await request(app)
+            .post("/api/interview/")
+            .set("Cookie", authCookie)
+            .field("jobDescription", "React Developer");
 
-    beforeAll(async () => {
-        // Register and login a user just for the dashboard tests
-        await request(app).post('/api/auth/register').send({
-            firstname: "Dashboard", lastname: "User", email: "dash@example.com", password: "password123"
-        });
-        const loginRes = await request(app).post('/api/auth/login').send({
-            email: "dash@example.com", password: "password123"
-        });
-        authCookie = loginRes.headers['set-cookie']; // Grab the VIP pass!
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("You must upload your CV/resume");
     });
     
-        it('should fetch all interview reports for the authenticated user', async () => {
-            const response = await request(app)
-                .get('/api/interview/allInterviewReports')
-                .set('Cookie', authCookie); // Present the VIP card!
+    it("should return 400 if job description is missing", async () => {
+        const fakePdfBuffer = Buffer.from("fake pdf content");
 
-            // 1. Assert the request succeeded
+        const response = await request(app)
+            .post("/api/interview/")
+            .set("Cookie", authCookie)
+            .attach("resume", fakePdfBuffer, "resume.pdf");
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Job description is required");
+    });
+
+    it("should return 400 if the report cannot be generated", async () => {
+        const createMock = jest.spyOn(InterviewReportModel, "create").mockResolvedValue(null);
+
+        const response = await request(app)
+            .post("/api/interview/")
+            .set("Cookie", authCookie)
+            .field("jobDescription", "React Developer")
+            .attach("resume", Buffer.from("fake pdf"), "resume.pdf");
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Can't generate report");
+
+        createMock.mockRestore();
+    });
+
+    it("should return 500 if the server crashes during generation", async () => {
+        const crashMock = jest.spyOn(InterviewReportModel, "create").mockRejectedValue(new Error("AI Database Crash!"));
+
+        const response = await request(app)
+            .post("/api/interview/")
+            .set("Cookie", authCookie)
+            .field("jobDescription", "React Developer")
+            .attach("resume", Buffer.from("fake pdf"), "resume.pdf");
+
+        expect(response.status).toBe(500);
+        expect(response.body.success).toBe(false);
+        expect(response.body.message).toBe("AI Database Crash!");
+
+        crashMock.mockRestore();
+    });
+    
+    // 🔥 THE FIX: Using the secret password buffer instead of a variable!
+    it("should return 400 if the uploaded resume is empty or unreadable", async () => {
+        const emptyBuffer = Buffer.from("TRIGGER_EMPTY_PDF"); 
+
+        const response = await request(app)
+            .post('/api/interview/')
+            .set('Cookie', authCookie)
+            .field('jobDescription', 'React Developer')
+            .attach('resume', emptyBuffer, 'blank.pdf');
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Can't read this file or it's empty");
+    });
+
+    describe("GET /api/interview/report/:interviewId", () => {
+        it("should return 200 and the specific report", async () => {
+            const findMock = jest.spyOn(InterviewReportModel, "findOne").mockReturnValue({
+                select: jest.fn().mockResolvedValue({
+                    _id: "fake_id_123",
+                    jobDescription: "Senior React Dev"
+                })
+            });
+
+            const response = await request(app)
+                .get("/api/interview/report/fake_id_123")
+                .set("Cookie", authCookie);
+
             expect(response.status).toBe(200);
-            expect(response.body.success).toBe(true);
-            
-            // 2. Assert the payload shape
-            /*expect(response.body).toHaveProperty('count');
-            expect(response.body).toHaveProperty('data');
-            expect(Array.isArray(response.body.data)).toBe(true);
-            */
+            expect(response.body.message).toBe("Interview report fetched successfully");
+            expect(response.body.report.jobDescription).toBe("Senior React Dev");
+
+            findMock.mockRestore();
         });
 
-        it('should block users who try to view the dashboard without being logged in', async () => {
-            const response = await request(app)
-                .get('/api/interview/allInterviewReports'); // Notice we do NOT attach the cookie here
+        it("should return 400 if the report does not exist", async () => {
+            const findMock = jest.spyOn(InterviewReportModel, "findOne").mockReturnValue({
+                select: jest.fn().mockResolvedValue(null)
+            });
 
-            // The bouncer should kick them out
+            const response = await request(app)
+                .get("/api/interview/report/invalid_id_456")
+                .set("Cookie", authCookie);
+
+            expect(response.status).toBe(400);
+            expect(response.body.message).toBe("You don't have any report");
+
+            findMock.mockRestore();
+        });
+    });
+
+    describe("GET /api/interview/ (User Dashboard)", () => {
+        let authCookie; 
+
+        beforeAll(async () => {
+            const uniqueEmail = `dash_${Date.now()}@example.com`; // Unique email for dashboard user
+            await request(app).post("/api/auth/register").send({
+                firstname: "Dashboard",
+                lastname: "User",
+                email: uniqueEmail,
+                password: "password123"
+            });
+            const loginRes = await request(app).post("/api/auth/login").send({
+                email: uniqueEmail,
+                password: "password123"
+            });
+            authCookie = loginRes.headers["set-cookie"]; 
+        });
+
+        it("should fetch all interview reports for the authenticated user", async () => {
+            const response = await request(app)
+                .get("/api/interview/allInterviewReports")
+                .set("Cookie", authCookie);
+
+            expect(response.status).toBe(200);
+            expect(response.body.success).toBe(true);
+        });
+
+        it("should block users who try to view the dashboard without being logged in", async () => {
+            const response = await request(app).get("/api/interview/allInterviewReports");
             expect(response.status).toBe(401);
+        });
+        
+        it('should return 400 if Mongoose returns null for reports', async () => {
+            const nullMock = jest.spyOn(InterviewReportModel, 'find').mockReturnValue({
+                select: jest.fn().mockResolvedValue(null)
+            });
+
+            const response = await request(app)
+                .get('/api/interview/allInterviewReports')
+                .set('Cookie', authCookie);
+
+            expect(response.status).toBe(400);
+            expect(response.body.message).toBe("Reports not found!");
+
+            nullMock.mockRestore();
         });
     });
 });

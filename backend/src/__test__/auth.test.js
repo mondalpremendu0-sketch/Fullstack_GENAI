@@ -90,7 +90,6 @@ describe("Auth API Endpoints", () => {
             const response = await request(app)
                 .post("/api/auth/register")
                 .send(duplicateUser);
-
             // 4. Assert that your AppError correctly blocked them
             expect(response.status).toBe(400);
             expect(response.body.message).toBe("User already Exists"); // Must match your code exactly!
@@ -235,25 +234,29 @@ describe("Auth API Endpoints", () => {
     
     describe('GET /api/auth/getMe (User Profile)', () => {
 
-    let authCookie; // 1. Declare the variable so all tests inside can use it
+    let authCookie;
 
     beforeAll(async () => {
-        // 2. Register a real user into the test database
+        // 1. Generate a completely unique email every time this runs!
+        const uniqueEmail = `tester_${Date.now()}@example.com`;
+
+        // 2. Register the unique user
         await request(app).post('/api/auth/register').send({
-            firstname: "Profile",
+            firstname: "Bulletproof",
             lastname: "Tester",
-            email: "profile@example.com",
+            email: uniqueEmail, // Use the dynamic email here
             password: "password123"
         });
 
-        // 3. Log them in to receive the JWT cookie
+        // 3. Log them in
         const loginRes = await request(app).post('/api/auth/login').send({
-            email: "profile@example.com",
+            email: uniqueEmail, // And use it here!
             password: "password123"
         });
 
-        // 4. Save the cookie to our variable!
+        // 4. Safely grab the cookie
         authCookie = loginRes.headers['set-cookie'];
+        
     });
 
     // 1. THE HAPPY PATH
@@ -349,25 +352,31 @@ describe("Auth API Endpoints", () => {
     
     describe('GET /api/auth/logout', () => {
 
-      let authCookie; // 1. Declare the variable so all tests inside can use it
+      let authCookie;
 
     beforeAll(async () => {
-        // 2. Register a real user into the test database
+        // 1. Generate a completely unique email every time this runs!
+        const uniqueEmail = `tester_${Date.now()}@example.com`;
+
+        // 2. Register the unique user
         await request(app).post('/api/auth/register').send({
-            firstname: "Profile",
+            firstname: "Bulletproof",
             lastname: "Tester",
-            email: "profile@example.com",
+            email: uniqueEmail, // Use the dynamic email here
             password: "password123"
         });
 
-        // 3. Log them in to receive the JWT cookie
+        // 3. Log them in
         const loginRes = await request(app).post('/api/auth/login').send({
-            email: "profile@example.com",
+            email: uniqueEmail, // And use it here!
             password: "password123"
         });
 
-        // 4. Save the cookie to our variable!
+        // 4. Safely grab the cookie
         authCookie = loginRes.headers['set-cookie'];
+        
+        // Optional: If you want to prove to yourself this is working, uncomment the next line:
+        // console.log("Did we get the cookie?", authCookie ? "YES!" : "NOPE!");
     });
     
     // 1. HAPPY PATH: User logs out WITH a token
