@@ -163,6 +163,8 @@ const Login = () => {
             reset();
             navigate("/");
         }
+        console.log(data);
+        console.log(success);
         
     };
 
