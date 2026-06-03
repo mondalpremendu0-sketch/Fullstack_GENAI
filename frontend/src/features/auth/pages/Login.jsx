@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router";
+import { useNavigate ,Link} from "react-router";
 
 import GoogleSignInButton from "../components/GoogleSignInButton.jsx";
 import { useAuth } from "../hooks/useAuthContext.js";
-import Infinitloader from '../components/InfiniteLoader.jsx'
+//import Infinitloader from '../components/InfiniteLoader.jsx'
 
 import "./Login.scss";
 import "../styles/global.scss";
@@ -156,7 +156,7 @@ const Login = () => {
     };
 
     // Standard Email/Password Submission
-    const onSubmit = async (data, e) => {
+    const onSubmit = async (data) => {
         //------ API call -----
         const success = await handleLogin(data);
         if (success) {
@@ -164,14 +164,15 @@ const Login = () => {
             navigate("/");
         }
         
-        e.preventDefault();
     };
 
     // Google Login Handler
-    const handleGoogleLogin = (e) => {
-     e.preventDefault();
-      window.location.href = 'https://fullstackgenai-production.up.railway.app/api/googleAuth/google';
-    };
+    // Google Login Handler
+const handleGoogleLogin = (e) => {
+    e.preventDefault();
+    // Dynamically uses localhost in dev, and Railway in production!
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/googleAuth/google`;
+};
 
 
     // Framer Motion Animation Settings
@@ -320,9 +321,9 @@ const Login = () => {
                             />
                             Remember me
                         </label>
-                        <a href="/register" className="forgot-link">
+                        <Link to="/register" className="forgot-link">
                             <u>Create New Account</u>
-                        </a>
+                        </Link>
                     </motion.div>
                     {/* ✅ UPDATE THIS */}
                     <motion.button
