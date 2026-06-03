@@ -170,7 +170,7 @@ const Login = () => {
     // Google Login Handler
     const handleGoogleLogin = (e) => {
      e.preventDefault();
-      window.location.href = 'https://premendu.indevs.in/api/googleAuth/google';
+      window.location.href = 'https://fullstackgenai-production.up.railway.app/api/googleAuth/google';
     };
 
 

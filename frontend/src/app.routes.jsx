@@ -7,7 +7,7 @@ import Protected from "./features/auth/components/Protected.jsx";
 import NotFoundPage from "./features/Interview/pages/NotFound.jsx";
 
 const router = createBrowserRouter([
-    { path: "/api/auth/register", element: <Register /> },
+    { path: "/register", element: <Register /> },
     { path: "/login", element: <Login /> },
     {
         element: <Protected />, // The bouncer stands at the door here
