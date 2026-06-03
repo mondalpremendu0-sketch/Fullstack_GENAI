@@ -25,7 +25,7 @@ app.use(compression());
 app.use(helmet());
 app.use(
     cors({
-        origin: "https://premendu.indevs.in" || "https://premendu.indevs.in/",
+        origin: process.env.FRONTEND_URL,
         methods: ["GET", "POST"],
         credentials: true
     })
