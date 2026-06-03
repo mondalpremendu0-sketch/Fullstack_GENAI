@@ -28,13 +28,13 @@ const googleCallback = (req, res,next) => {
         // 2. Set the JWT in a secure HttpOnly cookie
         res.cookie("token", token, {
             httpOnly: true, // JavaScript on the frontend CANNOT read this (prevents XSS)
-            secure: process.env.NODE_ENV === "production", // Must be true in production (HTTPS only)
-            sameSite: "Strict", // Protects against Cross-Site Request Forgery (CSRF)
+            secure: true, // Must be true in production (HTTPS only)
+            sameSite: "none", // Protects against Cross-Site Request Forgery (CSRF)
             maxAge: 5 * 24 * 60 * 60 * 1000 // 5 days in milliseconds
         });
 
         // 3. Redirect the user back to your frontend application dashboard
-        res.redirect(`${process.env.FRONTEND_URL}/`);
+        res.redirect(process.env.FRONTEND_URL);
     } catch (error) {
         res.redirect(`${process.env.FRONTEND_URL}/login?error=ServerError`);
         return(next(new AppError("google authentication faild",401)))
