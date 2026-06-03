@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const interviewApi = axios.create({
-  baseURL: "https://premendu.indevs.in" || "https://premendu.indevs.in/",
+  baseURL: "https://premendu.indevs.in",
   withCredentials:true
 })
 
