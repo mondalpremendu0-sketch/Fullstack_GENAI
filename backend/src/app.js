@@ -32,6 +32,7 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
+app.set('trust proxy', 1);
 app.use((req, res, next) => {
     // Manually sanitize body and params, skipping the read-only query object
     if (req.body) {
