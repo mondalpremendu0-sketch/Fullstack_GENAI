@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "fullstackgenai-production.up.railway.app",
+    baseURL: "https://fullstackgenai-production.up.railway.app",
     withCredentials: true
 });
 
