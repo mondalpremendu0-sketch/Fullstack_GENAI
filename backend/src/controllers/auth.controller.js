@@ -41,6 +41,8 @@ async function register_controller(req, res, next) {
 
         res.cookie("token", token, {
             httpOnly: true,
+            secure: true,
+            sameSite: 'none',
             maxAge: 5 * 24 * 60 * 60 * 1000
         });
         res.status(201).json({
@@ -99,6 +101,8 @@ async function login_controller(req, res, next) {
 
         res.cookie("token", token, {
             httpOnly: true,
+            secure: true,
+            sameSite: 'none',
             maxAge: 5 * 24 * 60 * 60 * 1000
         });
         //console.log(token);
@@ -155,7 +159,7 @@ async function logout_controller(req, res, next) {
   try {
     const token = req.cookies.token;
     await blackListModel.create({ token });
-    res.clearCookie("token", undefined);
+    res.clearCookie("token");
     res.status(200).json({
         success: true,
         message: "logout Successfully"

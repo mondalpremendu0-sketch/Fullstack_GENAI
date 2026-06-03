@@ -171,9 +171,10 @@ const Login = () => {
     // Google Login Handler
     // Google Login Handler
 const handleGoogleLogin = (e) => {
-    e.preventDefault();
+    
     // Dynamically uses localhost in dev, and Railway in production!
     window.location.href = `${import.meta.env.VITE_API_URL}/api/googleAuth/google`;
+    e.preventDefault();
 };
 
 
