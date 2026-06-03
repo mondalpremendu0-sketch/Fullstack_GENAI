@@ -171,7 +171,6 @@ const Login = () => {
     const handleGoogleLogin = (e) => {
      e.preventDefault();
       window.location.href = 'http://localhost:3000/api/googleAuth/google';
-        console.log("google btn was clicked");
     };
 
 

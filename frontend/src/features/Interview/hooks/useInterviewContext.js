@@ -26,12 +26,12 @@ export const useInterview =  () =>
     } catch (err) 
     {
       // Smart Routing: Is it a user error (400) or a server crash (500)?
-      if (err.status >= 500) {
+      if (err.status <= 500) {
           setGlobalError("The AI engine is currently overloaded. Please try again.");
       } else {
-          setAiError(err.message);
+          setAiError(err.message.message);
       }
-      console.log(err);
+      //console.log(err);
       return false // Return false so UI knows it failed
     }  finally {
       setLoading(false);

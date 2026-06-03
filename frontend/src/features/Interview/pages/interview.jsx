@@ -213,9 +213,16 @@ export default function Interview() {
                         <line x1="9" y1="15" x2="15" y2="15"></line>
                     </svg>
                 </div>
-
-                <h2>Report Not Found</h2>
+                {interviewId === undefined ? ( 
+                <h2>
+                  I suppose you are not loged in
+                </h2>):(
+                <>
+                  <h2>Report Not Found</h2>
                 <p>We couldn't track down this specific interview strategy. It may have been deleted or the link is invalid.</p>
+                </>
+                )
+                }
 
                 <motion.button 
                     className="neo-button" 

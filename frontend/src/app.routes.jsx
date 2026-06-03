@@ -14,10 +14,8 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <HomePage /> // The Outlet renders this!
+                element: <HomePage />
             },
-            // You can add as many private routes as you want here
-            // { path: "/settings", element: <Settings /> },
             {
                 path: "/report/:interviewId",
                 element: <InterViewPage />

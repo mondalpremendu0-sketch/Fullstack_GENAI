@@ -168,7 +168,6 @@ Rules:
 
         return validatedData.data;
     } catch (err) {
-        
         throw err;
     }
 }
@@ -283,8 +282,7 @@ Generate the complete HTML document now mapping the candidate data to the skelet
             .trim();
         return html;
     } catch (error) {
-        console.error("Resume HTML Generation Error:", error);
-        throw new Error("Failed to generate resume HTML");
+      return next(new AppError(error.message, 500));
     }
 }
 

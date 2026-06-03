@@ -13,22 +13,6 @@ async function interviewController(req, res, next) {
             return next(new AppError("You must upload your CV/resume", 400));
         }
 
-        /*
-        // 🚨 THE TEST OVERRIDE: Bypass the real parser completely during Jest tests!
-        if (process.env.NODE_ENV === "test") {
-            // Convert the buffer to a string so we can read it
-            const fileString = req.file.buffer.toString();
-
-            // THE FIX: Use .includes() so it ignores any weird Supertest formatting!
-            if (fileString.includes("TRIGGER_EMPTY_PDF")) {
-                resumedata = "   "; // Force the ghost spaces to test the 400 block
-            } else {
-                resumedata = "Valid fake resume text"; // Force success for all other tests
-            }
-
-            resumeContent = { text: resumedata };
-        } 
-*/
 
         const resumeContent = new PDFParse({ data: req.file.buffer });
         const resumedata = await resumeContent.getText();
@@ -39,22 +23,8 @@ async function interviewController(req, res, next) {
                 new AppError("Can't read this file or it's empty", 400)
             );
         }
-        /*
-         resumeContent = new PDFParse({ data: req.file.buffer });
-        
-         resumedata = await resumeContent.getText();
-        
-        */
-        /*
-         if (!resumeContent || !resumedata || typeof resumedata !== "string" ) {
-            return next(
-                new AppError("Can't read this file or it's empty", 400)
-            );
-        }
-      */
       
         const resumeText = resumedata.text;
-        console.log("resumeText",resumeText);
         const { jobDescription, selfDescription } = req.body;
 
         if (!jobDescription) {
