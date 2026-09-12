@@ -6,19 +6,22 @@ A full-stack web application that leverages generative AI to conduct and evaluat
 
 ## 📋 Table of Contents
 
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Key Components](#key-components)
-- [Getting Started](#getting-started)
-- [Installation](#installation)
-- [Development](#development)
-- [Building for Production](#building-for-production)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Key Components](#-key-components)
+- [Getting Started](#-getting-started)
+- [Installation](#-installation)
+- [Development](#-development)
+- [Building for Production](#-building-for-production)
 - [Environment Variables](#environment-variables)
-- [API Documentation](#api-documentation)
-- [Security Features](#security-features)
-- [Contributing](#contributing)
-- [License](#license)
+- [API Documentation](#-api-documentation)
+- [Security Features](#-security-features)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Support & Troubleshooting](#-support--troubleshooting)
+
+---
 
 ## ✨ Features
 
@@ -33,6 +36,8 @@ A full-stack web application that leverages generative AI to conduct and evaluat
 - **💾 Report History** - Access previous interview reports and analysis
 - **⚡ Real-time Performance** - Optimized with caching and rate limiting
 - **🎨 Professional UI** - Modern design with gradient accents and glass morphism effects
+
+---
 
 ## 🛠️ Tech Stack
 
@@ -70,6 +75,8 @@ A full-stack web application that leverages generative AI to conduct and evaluat
 - **Caching**: node-cache 5.1.2
 - **Logging**: Morgan 1.10.1
 - **Testing**: Jest 30.4.2, Supertest 7.2.2
+
+---
 
 ## 📁 Project Structure
 
@@ -165,6 +172,8 @@ Fullstack_GENAI/
 └── 📄 .gitignore                          # Root .gitignore
 ```
 
+---
+
 ## 🔑 Key Components
 
 ### Frontend
@@ -204,6 +213,8 @@ Fullstack_GENAI/
 
 #### Services
 - **ai.service.js** - Google Generative AI integration and interview logic
+
+---
 
 ## 🚀 Getting Started
 
@@ -248,6 +259,8 @@ FRONTEND_URL=http://localhost:5173
 #### Frontend Setup
 The frontend connects to the backend via Axios. Update the API base URL if needed in your environment configuration.
 
+---
+
 ## 📦 Installation
 
 ### 1. Clone the Repository
@@ -274,6 +287,8 @@ npm install
 cp .env.example .env
 # Edit .env with your credentials
 ```
+
+---
 
 ## 💻 Development
 
@@ -303,6 +318,8 @@ cd frontend
 npm run lint
 ```
 
+---
+
 ## 🔨 Building for Production
 
 ### Build Frontend
@@ -324,6 +341,8 @@ cd backend
 npm start
 ```
 
+---
+
 ## 🌐 Deployment
 
 ### Frontend (Vercel)
@@ -343,6 +362,8 @@ Deploy to services like:
 - **Railway** - Connect GitHub repository
 - **Render** - Connect GitHub repository
 - **Vercel** - Serverless functions (requires conversion to serverless functions)
+
+---
 
 ## 📚 API Documentation
 
@@ -384,6 +405,8 @@ curl -X POST http://localhost:5000/api/ai/generate-interview \
 }
 ```
 
+---
+
 ## 🔒 Security Features
 
 - **JWT Authentication** - Secure token-based authentication with expiration
@@ -397,6 +420,8 @@ curl -X POST http://localhost:5000/api/ai/generate-interview \
 - **Data Validation** - Zod schema validation for all inputs
 - **Environment Secrets** - Sensitive data in .env files only
 
+---
+
 ## 🎯 User Flow
 
 1. **Registration/Login** - User creates account or logs in with email or Google OAuth
@@ -409,6 +434,8 @@ curl -X POST http://localhost:5000/api/ai/generate-interview \
    - Technical and behavioral questions
    - Day-by-day preparation roadmap
 5. **Report History** - Access previous reports anytime
+
+---
 
 ## 🤝 Contributing
 
@@ -426,9 +453,13 @@ Contributions are welcome! Please follow these steps:
 - Update documentation
 - Ensure all tests pass before submitting PR
 
+---
+
 ## 📄 License
 
 This project is open source and available under the **ISC License**.
+
+---
 
 ## 📞 Support & Troubleshooting
 
@@ -457,6 +488,8 @@ PORT=5001
 - Review inline code comments and documentation
 - Check backend logs for API errors
 
+---
+
 ## 🎓 Learning Resources
 
 - [React 19 Documentation](https://react.dev)
@@ -464,6 +497,8 @@ PORT=5001
 - [MongoDB Documentation](https://docs.mongodb.com)
 - [Google Generative AI Docs](https://ai.google.dev/docs)
 - [Framer Motion Tutorial](https://www.framer.com/motion)
+
+---
 
 ## 🚀 Future Enhancements
 
