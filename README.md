@@ -2,7 +2,7 @@
 
 A full-stack web application that leverages generative AI to conduct and evaluate personalized interview preparation. Built with React 19 on the frontend and Node.js/Express on the backend, deployed on Vercel.
 
-**Live Demo:** [https://fullstack-genai.vercel.app/](https://fullstack-genai.vercel.app/)
+**Live Demo:** [https://premendu.indevs.in](https://premendu.indevs.in)
 
 ## 📋 Table of Contents
 
@@ -517,4 +517,4 @@ PORT=5001
 
 **Repository**: [mondalpremendu0-sketch/Fullstack_GENAI](https://github.com/mondalpremendu0-sketch/Fullstack_GENAI)
 
-**Live Application**: [https://fullstack-genai.vercel.app/](https://fullstack-genai.vercel.app/)
+**Live Application**:[https://premendu.indevs.in](https://premendu.indevs.in)
