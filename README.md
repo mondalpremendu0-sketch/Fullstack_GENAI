@@ -2,7 +2,7 @@
 
 A full-stack web application that leverages generative AI to conduct and evaluate AI-powered interviews. Built with modern web technologies and deployed on Vercel.
 
-**Live Demo:** [https://fullstack-genai.vercel.app](https://premendu.indevs.in/)
+**Live Demo:** [https://premendu.indevs.in/](https://premendu.indevs.in/)
 
 ## 📋 Table of Contents
 
